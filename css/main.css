@@ -1,0 +1,662 @@
+/**
+* sjg - Carro CSS for Revmaker pages
+*/
+
+
+/*
+* the required and errorMessage are for yii error feedback,
+* removed from form.css as that changes too much to use.
+*/
+
+span.required
+{
+	color: red;
+}
+
+.errorMessage
+{
+	color: red;
+	font-size: 0.9em;
+}
+
+.error input,
+.error textarea,
+.error select,
+input.error,
+textarea.error,
+select.error
+{
+	background: #FFC0CB;
+}
+
+/*
+* End mods
+*/
+
+body {
+    background-color: #474747;
+    font-family: Arial, Helvetica, Verdana;
+    font-size: 14px;
+    color: #333;
+}
+
+p {
+    margin: 1em 0;
+}
+
+header {
+    border-top: 10px solid #ec1d25;
+    background-color: #fff;
+}
+
+.header_wrapper {
+    width: 940px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.header_logo {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+
+nav {
+    background: url('../images/nav-bg.png') repeat-x;
+    height: 40px;
+}
+
+nav ul {
+    width: 940px;
+    margin: 0 auto;
+}
+
+nav ul li {
+    display: inline-block;
+    vertical-align: top;
+    background: url('../images/nav-item-bg.png') repeat-y;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 15px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    height: 30px;
+    line-height: 1.5;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.nav_social {
+    padding: 0 0 0 80px;
+}
+
+.nav_social a {
+    padding: 10px 0 0 10px;
+}
+
+.wrapper {
+    background-color: #fff;
+}
+
+.landing_main {
+    position: relative;
+    height: 280px;
+    padding: 20px;
+    margin: 0 auto;
+    width: 900px;
+    background: url('../images/landing-main-bg.jpg') no-repeat;
+}
+
+.landing_main h1 {
+    position: absolute;
+    top: 30px;
+    left: 34px;
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.landing_main h2 {
+    position: absolute;
+    top: 100px;
+    font-style: italic;
+    font-size: 23px;
+    width: 500px;
+    color: #fff;
+    text-shadow: -1px -1px 0 rgba(0,0,0,.4)
+}
+
+.landing_main form {
+    position: absolute;
+    top: 175px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    width: 500px;
+    padding: 10px 20px 10px; // was 20px 20px 10px;
+}
+
+.landing_main fieldset {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/*
+*  yii's form for stateful forms adds a hidden
+*  field to the form for state id. The supplied
+*  css with first-child doesn't work as the first
+*  child ends up being the hidden field. Might be a 
+*  better way to just set and use the id of the fieldset
+*/
+.landing_main form #mm_selects { 
+    width: 295px;
+}
+
+/*
+* .landing_main form fieldset:first-child {
+*    width: 295px;
+* 
+*/
+
+.landing_main select {
+    border: 1px solid #999;
+    padding: 2px;
+    font-size: 16px;
+    width: 260px;
+    display: block;
+    margin: 0px 0 10px;  /* was 0 0 18px; Margin moved to top for field alignment on error messages */
+}
+
+.landing_main label {
+    font-weight: bold;
+}
+
+/*
+.landing_main input[type="tel"] {
+    width: 80px;
+    border: 1px solid #999;
+    padding: 3px;
+}
+*/
+
+/*
+* Added since the field in landing form is a zipcode
+* not a telephone, and better to use the the if
+* Note that yii id's are pagename_fieldname
+
+.landing_main input#LeadGen_zipcode {
+    width: 80px;
+    border: 1px solid #999;
+    padding: 3px;
+}
+*/
+
+/*
+* Use the text type for zipcode, note if any new text fields
+* are added this will affect them.
+*/
+
+.landing_main input[type="text"] {
+    width: 80px;
+    border: 1px solid #999;
+    padding: 3px;
+}
+
+.landing_main input[type="submit"] {
+    display: block;
+    background: url('../images/btn-getStarted.png') no-repeat;
+    width: 172px;
+    height: 44px;
+    cursor: pointer;
+    margin: 10px 0 0;
+}
+
+.landing_main input[type="submit"]:hover {
+    background-position: 0 -45px;
+}
+.landing_main input[type="submit"]:active {
+    background-position: 0 -91px;
+}
+
+.landing_overview {
+    width: 940px;
+    margin: 0 auto;
+    padding: 20px 0 80px;
+}
+
+.landing_overview h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.landing_price {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.landing_price span {
+    text-decoration: line-through;
+    color: #ec1d25;
+}
+
+.landing_overview_car {
+    float: right;
+    border: 1px solid #999;
+    width: 260px;
+    margin: 0 0 30px 30px;
+    text-align: center;
+    padding: 20px;
+}
+
+.landing_overview_car img {
+    width: 250px;
+    height: 150px;
+    margin: 0 0 10px;
+}
+
+.landing_overview_car h4,
+.landing_overview_makeCar h4 {
+    font-weight: bold;
+    font-size: 16px;
+    color: #d60008;
+}
+
+.landing_overview_makeCar {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #999;
+    width: 262px;
+    margin: 0 0 0 10px;
+    text-align: center;  
+    padding: 20px; 
+}
+
+.landing_overview_makeCar:first-child {
+    margin: 0;
+}
+
+
+
+/*-----------
+Quote form 
+------------*/
+.quote_wrapper {
+    width: 940px;
+    margin: 0 auto;
+    padding: 20px 0;
+    background-color: #fff;
+}
+
+.quote_wrapper ol {
+    background: url('../images/quote-steps-bg.png') no-repeat;
+    color: #fff;
+    height: 50px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.quote_wrapper ol li {
+    display: inline-block;
+    width: 310px;
+    line-height: 2.8;
+    text-align: center;
+}
+
+.quote_wrapper form {
+    display: table;
+    width: 100%;
+}
+
+.quote_column {
+    display: table-cell;
+    vertical-align: top;
+    width: 273px;
+    padding: 20px;
+    border-left: 1px solid #ccc;
+}
+
+.quote_column h2 {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 10px;
+}
+
+.quote_column img {
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.quote_column select,
+.quote_column input[type="text"],
+.quote_column input[type="tel"],
+.quote_column input[type="email"],
+.quote_column textarea
+{
+    padding: 3px;
+    border: 1px solid #999;
+    display: block;
+    font-size: 14px;
+    width: 267px;
+}
+
+.quote_column label {
+    display: block;
+    font-weight: bold;
+    margin: 20px 0 3px;
+}
+
+.quote_column label:first-child {
+    margin: 0 0 3px;
+}
+
+.quote_column input[type="submit"] {
+    background: url('../images/btn-getYourPriceNow.png') no-repeat;
+    height: 44px;
+    width: 270px;
+    display: block;
+    cursor: pointer;
+}
+
+.quote_column input[type="submit"]:hover {
+    background-position: 0 -45px;
+}
+.quote_column input[type="submit"]:active {
+    background-position: 0 -91px;
+}
+
+
+/* sjg added support for back to make model choice button */
+
+.quote_column #back {
+    background: url('../images/btn-getNewMakeModel.png') no-repeat;
+    height: 44px;
+    width: 270px;
+    display: block;
+    cursor: pointer;
+}
+
+.quote_column #back:hover {
+    background-position: 0 -45px;
+}
+.quote_column #back:active {
+    background-position: 0 -91px;
+}
+
+
+.quote_column:first-child {
+    border: 0;
+}
+
+.quote_column h3 {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 0 8px;
+}
+
+.quote_dealer div {
+    display: inline-block;
+    vertical-align: top;
+    padding: 5px 0 5px 5px;
+}
+
+.quote_special {
+    border: 1px solid #d0cb92;
+    background-color: #feffe6;
+    margin: 0 0 20px;
+}
+
+.quote_special .quote_dealer {
+    border-top: 1px solid #d0cb92;
+}
+
+.quote_special .quote_dealer:first-child,
+.quote_more_dealers .quote_dealer:first-child {
+    border: 0;
+}
+
+.quote_more_dealers {
+    max-height: 190px;
+    overflow: auto;
+    border: 1px solid #ccc;
+}
+
+.quote_more_dealers .quote_dealer {
+    border-top: 1px solid #ccc;
+}
+
+.quote_city {
+    font-weight: bold;
+}
+
+/*------------
+Confirmation
+-------------*/
+
+.confirm_wrapper {
+    width: 940px;
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+
+.confirm_wrapper h1 {
+    background: url('../images/thankyou-header-bg.png') no-repeat;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    height: 50px;
+    line-height: 2.8;
+    text-indent: 25px;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+}
+
+.confirm_message,
+.confirm_vehicle {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.confirm_message {
+    width: 600px;
+    margin: 0 20px 40px 0;
+}
+
+.confirm_vehicle {
+    border: 1px solid #999;
+    padding: 20px;
+    width: 260px;
+    text-align: center;
+}
+
+.confirm_vehicle h2 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.confirm_anotherQuote {
+    padding: 20px 0 0;
+    margin: 25px 0 0;
+    border-top: 1px solid #999;
+}
+
+.confirm_anotherQuote h2 {
+    font-weight: bold;
+    font-size: 19px;
+    margin: 0 10px 0 0;
+}
+
+.confirm_anotherQuote h2,
+.confirm_anotherQuote button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.confirm_anotherQuote button {
+    background: url('../images/btn-getAnotherQuote.png') no-repeat;
+    width: 242px;
+    height: 44px;
+    border: 0;
+    cursor: pointer;
+}
+
+.confirm_anotherQuote button:hover {
+    background-position: 0 -45px;
+}
+
+.confirm_anotherQuote button:active {
+    background-position: 0 -91px;
+}
+
+.confirm_affiliates {
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.confirm_affiliates h3 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0 0 30px;
+    text-transform: uppercase;
+}
+
+.confirm_affiliates h5 {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.confirm_affiliates p {
+    margin: 0 0 2em;
+}
+
+.confirm_affiliates span {
+    display: table;
+    width: 100%;
+}
+
+.confirm_affiliates span div {
+    display: table-cell;
+    width: 33%;
+    padding: 0 20px;
+    border-left: 1px solid #ccc;
+}
+
+.confirm_affiliates span div:first-child {
+    border: 0;
+}
+
+/*---------
+Footer
+---------*/
+
+footer {
+    background: #474747 url('../images/footer-bg.png') repeat-x;
+    color: #fff;
+    padding: 30px 0;
+}
+
+.footer_wrapper {
+    width: 940px;
+    margin: 0 auto;
+    display: table;
+}
+
+.footer_wrapper h5 {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 0 1em;
+}
+
+.footer_wrapper a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer_wrapper a:hover {
+    text-decoration: underline;
+}
+
+.footer_wrapper div {
+    display: table-cell;
+    border-left: 1px solid #333;
+    padding: 0 20px;
+    vertical-align: top;
+}
+
+.footer_wrapper div:first-child {
+    border: 0;
+    width: 320px;
+    font-size: 12px;
+    color: #ccc;
+}
+
+.footer_wrapper div:first-child p {
+    text-align: center;
+    padding: 10px 0 0;
+}
+
+.footer_wrapper li {
+    margin: 0 0 10px;
+}
+
+.footer_carro {
+    display: block;
+    border-bottom: 1px solid #333;
+    padding: 0 0 20px;
+    margin: 0 0 20px;
+}
+
+.footer_carro a {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+
+.footer_motorpress {
+    float: left;
+}
+
+.footer_social li {
+    height: 20px;
+}
+
+.footer_social li span {
+    float: left;
+    margin: 0 10px 0 0;
+    display: block;
+    width: 19px;
+    height: 20px;
+}
+
+.footer_rss,
+.footer_facebook,
+.footer_twitter,
+.footer_youtube,
+.footer_instagram {
+    background: url('../images/sprite-redes-sociais-peq.png') no-repeat;
+}
+
+.footer_facebook {
+    background-position: right top;
+}
+
+.footer_twitter {
+    background-position: left -20px;
+}
+
+.footer_youtube {
+    background-position: right -20px;
+}
+
+.footer_instagram {
+    background-position: left bottom;
+}
