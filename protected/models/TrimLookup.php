@@ -118,7 +118,7 @@ class TrimLookup extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ausstattung';
+		return '{{ausstattung}}';
 	}
 
 	/**

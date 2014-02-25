@@ -17,24 +17,24 @@
                     <fieldset id="mm_selects">
 
 					<?php 
-						if(!empty($model->attributes['make']))	// post vars are saved from page to page in the state, so pick up from here if EVER set
-							$make = $model->attributes['make'];
+						if(!empty($model->attributes['int_fabrikat']))	// (int_fabrikat == make) post vars are saved from page to page in the state, so pick up from here if EVER set
+							$make = $model->attributes['int_fabrikat'];
 					?>
 					
 					<?php $makes = CHtml::listData(MakeLookup::model()->findAll(array('order' => 'fab_bez')), 'fab_id', 'fab_bez');	// id and description, order by description
-						echo $form->dropDownList($model, 'make', $makes, array(
+						echo $form->dropDownList($model, 'int_fabrikat', $makes, array(
 							'prompt' =>  $this->LANG_MAKE_PROMPT,
 							'ajax' => array(
 									'type' => 'POST',
 									'url' => CController::createUrl('models'),
-									'update' =>   '#'. CHtml::activeId($model, 'model'), //selector to update - '#LeadGen_model'
+									'update' =>   '#'. CHtml::activeId($model, 'int_modell'), //selector to update - '#LeadGen_int_modell'
 									),			 
 									'onchange'=>'makeChanged();'
 							)
 					);
 					?>
-					<?php echo $form->error($model,'make'); ?>
-					
+					<?php echo $form->error($model,'int_fabrikat'); ?>
+				
 					<?php 
 						if(!empty($make))
 						{
@@ -47,15 +47,14 @@
 							$disable='disable';
 						}?>
 
-					<?php echo $form->dropDownList($model, 'model', $model_list, array('disabled' =>$disable, 'prompt' => $this->LANG_MODEL_PROMPT)); ?>
-					<?php echo $form->error($model,'model'); ?>
+					<?php echo $form->dropDownList($model, 'int_modell', $model_list, array('disabled' =>$disable, 'prompt' => $this->LANG_MODEL_PROMPT)); ?>
+					<?php echo $form->error($model,'int_modell'); ?>
 
                     </fieldset>
                     <fieldset id="zip_button">
-
-						<?php echo $form->labelEx($model,'zipcode'); ?>
-						<?php echo $form->textField($model,'zipcode'); ?>
-						<?php echo $form->error($model,'zipcode'); ?>
+						<?php echo $form->labelEx($model,'int_plz'); ?>
+						<?php echo $form->textField($model,'int_plz'); ?>
+						<?php echo $form->error($model,'int_plz'); ?>
 						<?php echo $form->hiddenField($model, 'model_year', array('value'=>'2014')); ?>
 						<?php echo CHtml::submitButton('', array('name'=>'quote')); ?>
                     </fieldset>
@@ -101,15 +100,15 @@ $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function makeChanged() 
  	{
-			$("#LeadGen_model").empty(); 
+			$("#LeadGen_int_modell").empty(); 
 
-			if($("#LeadGen_make").val() == "") 
+			if($("#LeadGen_int_fabrikat").val() == "") 
 			{
-				$("#LeadGen_model").prop("disabled", true);
+				$("#LeadGen_int_modell").prop("disabled", true);
 			}
 			else
 			{
-				$("#LeadGen_model").prop("disabled", false);
+				$("#LeadGen_int_modell").prop("disabled", false);
 			}
 		}',
   CClientScript::POS_END						// Script insert Position 

@@ -1,28 +1,81 @@
 <?php
 
 /**
- * This is the model class for table "lead_gen".
+ * This is the model class for table "{{interessenten}}".
  *
- * The followings are the available columns in table 'lead_gen':
- * @property integer $id_lead
- * @property integer $make
- * @property integer $model
- * @property integer $model_year
- * @property integer $color
- * @property integer $trim
- * @property string $user_comment
- * @property integer $status
- * @property string $first_name
- * @property string $last_name
- * @property string $phone
- * @property string $email
- * @property string $street_address
- * @property string $city
- * @property string $state
- * @property string $zipcode
- * @property string $params
- * @property string $update_date
+ * The followings are the available columns in table '{{interessenten}}':
+ * @property integer $int_id
+ * @property string $int_name
+ * @property string $int_vname
+ * @property string $int_plz
+ * @property string $int_ort
+ * @property string $int_str
+ * @property string $int_tel
+ * @property string $int_mobil
+ * @property string $int_mail
+ * @property integer $int_fabrikat
+ * @property integer $int_modell
+ * @property integer $int_bauart
+ * @property integer $int_ausstattung
+ * @property integer $int_farbe
+ * @property integer $int_kaufzeitpunkt
+ * @property integer $int_zahlungsart
+ * @property integer $int_kontakt
+ * @property integer $int_haendler
+ * @property string $int_anlage
+ * @property integer $int_suchmaschine
+ * @property integer $int_suchwort
+ * @property string $int_erreichbar
+ * @property integer $int_kenntnis
+ * @property string $int_text
+ * @property integer $int_bericht_ma
+ * @property integer $int_bericht_status
+ * @property string $int_bericht_wv
+ * @property integer $int_alt_ausstattung
+ * @property integer $int_grund
+ * @property integer $int_entfernung
+ * @property integer $int_kvs_status
+ * @property integer $int_mitarbeiter
+ * @property integer $int_premium_id
+ * @property integer $int_status
+ *
+ * German to English Translation
+ * int_id prospect id int(8)
+ * int_name name varchar(30)
+ * int_vname forename/firstname varchar(30)
+ * int_plz zip varchar(5)
+ * int_ort location varchar(30)
+ * int_str street address varchar(30)
+ * int_tel phone varchar(20)
+ * int_mobil cell phone varchar(20)
+ * int_mail Email varchar(64)
+ * int_fabrikat make id int(8)
+ * int_modell model id int(8)
+ * int_bauart type int(5)
+ * int_ausstattung trim id int(8)
+ * int_farbe int(8)
+ * int_kaufzeitpunkt purchase time smallint(2)
+ * int_zahlungsart payment method smallint(2)
+ * int_kontakt contact id smallint(2)
+ * int_haendler dealer id int(8)
+ * int_anlage creation date datetime
+ * int_suchmaschine search engine id int(8)
+ * int_suchwort keyword id int(8)
+ * int_erreichbar reachable varchar(40)
+ * int_kenntnis having regard terms smallint(1)
+ * int_text report text
+ * int_bericht_ma report user id (employee) int(8)
+ * int_bericht_status report status smallint(1)
+ * int_bericht_wv report reminder
+ * int_alt_ausstattung alternate trim smallint(1)
+ * int_grund reason for contact id (table x_.._entfernung) smallint(2)
+ * int_entfernung distance to dealer id (table x_.._entfernung) smallint(2)
+ * int_kvs_status smallint(1)
+ * int_mitarbeiter ???? smallint(4)
+ * int_premium_id ???? int(8)
+ * int_status smallint(1)
  */
+ 
 class LeadGen extends CActiveRecord
 {
 	/**
@@ -30,12 +83,13 @@ class LeadGen extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'lead_gen';
+		return '{{interessenten}}';
 	}
-	
+
+
 	public function init()
 	{
-		$this->model_year = 1962;	// default warning if this is seen in the database
+		$this->int_anlage = date("Y-m-d"); // get current date hack to default it for the db
 	}
 
 	/**
@@ -45,44 +99,58 @@ class LeadGen extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		
+
 		return array(
-		
-		// example below where 'on' defines the page or scenario for the rule.
-		//      array('first_name, last_name, gender, dob', 'required', 'on'=>'page1'),
-		//		array('address_1, city, state, country, phone_number_1, email_1', 'required', 'on'=>'page2'),
-	
-	
-		// sjg - messages need to be localized, should be broken out to each field as a rule
-		
-			array('make','required', 'on'=>'landing', 'message'=>'Please Select a Make'),
-			array('model','required', 'on'=>'landing', 'message'=>'Please Select a Model'),
-			array('zipcode','required', 'on'=>'landing', 'message'=>'Please Enter a Postal Code'),
-			
-			array('trim', 'required', 'on'=>'quote', 'message'=>'Please Select a Trim'),
-			array('color', 'required', 'on'=>'quote', 'message'=>'Please Select a Color'),
-			array('model_year, color, first_name, last_name, phone, email', 'required', 'on'=>'quote'),
-			array('email', 'email', 'on'=>'quote', 'message'=>'Invalid Email Address'),
 
-			array('make, model, model_year, color, trim, status', 'numerical', 'integerOnly'=>true),
-			
-			// regx for brazil postal code is to validate numbers in the format of 00000-000
-			
-			array('zipcode', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>'Invalid Format, use 00000-000'),
-			array('zipcode', 'length', 'max'=>9),	// specific for BR, format of 00000-000
+			// specify validations for each page
+			// Landing Page - Make, Model, Postal Code
 
-			array('phone', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>'Invalid Phone Number'),
-			array('phone', 'length', 'max'=>20),
+			array('int_fabrikat','required', 'on'=>'landing', 'message'=>'Please Select a Make'),
+			array('int_modell','required', 'on'=>'landing', 'message'=>'Please Select a Model'),
+			array('int_plz','required', 'on'=>'landing', 'message'=>'Please Enter a Postal Code'),
+			
+			// Quote Page - Trim, Color, Email
+			
+			array('int_ausstattung', 'required', 'on'=>'quote', 'message'=>'Please Select a Trim'),
+			array('int_farbe', 'required', 'on'=>'quote', 'message'=>'Please Select a Color'),
+			array('int_name', 'required', 'on'=>'quote', 'message'=>'Last Name Required'),
+			array('int_vname', 'required', 'on'=>'quote', 'message'=>'First Name Required'),
+			array('int_tel', 'required', 'on'=>'quote', 'message'=>'Telephone Required'),
+			array('int_mail', 'required', 'on'=>'quote', 'message'=>'Email Required'),
+
+			array('int_mail', 'email', 'on'=>'quote', 'message'=>'Invalid Email Address'),
+			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>'Invalid Phone Number'),
+			
+			// add each string field, int_name, int_vname, etc so each can have their own error message
 		
-			array('user_comment, params', 'length', 'max'=>255),
-			array('first_name, last_name, email, street_address, city, state', 'length', 'max'=>64),
+			// specific validation and regx for Brazil postal code is to validate numbers in the format of 00000-000
+
+			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>'Invalid Format, use 00000-000'),
+			array('int_plz', 'length', 'max'=>9),
+
+			// Make Id, Model Id, Trim Id, Color Id, Dealer Id
+
+			array('int_fabrikat, int_modell, int_ausstattung, int_farbe, int_haendler', 'numerical', 'integerOnly'=>true),
+
+			// String Data types get length limits
+			
+			array('int_text', 'length', 'max'=>255),			
+			array('int_name, int_vname, int_str', 'length', 'max'=>30),
+			array('int_plz', 'length', 'max'=>20),
+			array('int_tel', 'length', 'min' => 7, 'max'=>20), // minimum number of characters is 7
+			array('int_mail', 'length', 'max'=>64),
+					
+			// set a default value if needed, in this case stuff the create date (int_anlage) with current db time
+
+			array('int_anlage, int_ort, int_text', 'safe'),	// mark as safe incase we need these, likely not...
 
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			
-			array('id_lead', 'safe', 'on'=>'search'),	// only allow search by id, if that is even needed
+			array('int_id, int_name, int_vname, int_plz, int_status', 'safe', 'on'=>'search'),
 		);
 	}
+
 
 	/**
 	 * @return array relational rules.
@@ -100,28 +168,41 @@ class LeadGen extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-
-// sjg - Need to be localized
-
 		return array(
-			'id_lead' => 'Id Lead',
-			'make' => 'Make',
-			'model' => 'Model',
-			'model_year' => 'Model Year',
-			'color' => 'Color',
-			'trim' => 'Trim',
-			'user_comment' => 'User Comment',
-			'status' => 'Status',
-			'first_name' => 'First Name',
-			'last_name' => 'Last Name',
-			'phone' => 'Phone',
-			'email' => 'Email',
-			'street_address' => 'Street Address',
-			'city' => 'City',
-			'state' => 'State',
-			'zipcode' => 'Your ZIP:',
-			'params' => 'Params',
-			'update_date' => 'Update Date',
+			'int_id' => 'Int',
+			'int_name' => 'Last Name',
+			'int_vname' => 'First Name',
+			'int_plz' => 'Your ZIP:',
+			'int_ort' => 'Location',
+			'int_str' => 'Street Address',
+			'int_tel' => 'Telephone',
+			'int_mobil' => 'Mobil Phone',
+			'int_mail' => 'Email',
+			'int_fabrikat' => 'Color',
+			'int_modell' => 'Model',
+			'int_bauart' => 'Type',
+			'int_ausstattung' => 'Trim',
+			'int_farbe' => 'Color',
+			'int_kaufzeitpunkt' => 'Int Kaufzeitpunkt',
+			'int_zahlungsart' => 'Int Zahlungsart',
+			'int_kontakt' => 'Int Kontakt',
+			'int_haendler' => 'Int Haendler',
+			'int_anlage' => 'Create Date',
+			'int_suchmaschine' => 'Int Suchmaschine',
+			'int_suchwort' => 'Int Suchwort',
+			'int_erreichbar' => 'Int Erreichbar',
+			'int_kenntnis' => 'Int Kenntnis',
+			'int_text' => 'Message',
+			'int_bericht_ma' => 'Int Bericht Ma',
+			'int_bericht_status' => 'Int Bericht Status',
+			'int_bericht_wv' => 'Int Bericht Wv',
+			'int_alt_ausstattung' => 'Int Alt Ausstattung',
+			'int_grund' => 'Int Grund',
+			'int_entfernung' => 'Int Entfernung',
+			'int_kvs_status' => 'Int Kvs Status',
+			'int_mitarbeiter' => 'Int Mitarbeiter',
+			'int_premium_id' => 'Int Premium',
+			'int_status' => 'Int Status',
 		);
 	}
 
@@ -143,26 +224,44 @@ class LeadGen extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_lead',$this->id_lead);
-		$criteria->compare('make',$this->make);
-		$criteria->compare('model',$this->model);
-		$criteria->compare('model_year',$this->model_year);
-		$criteria->compare('color',$this->color);
-		$criteria->compare('trim',$this->trim);
-		$criteria->compare('user_comment',$this->user_comment,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('first_name',$this->first_name,true);
-		$criteria->compare('last_name',$this->last_name,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('street_address',$this->street_address,true);
-		$criteria->compare('city',$this->city,true);
-		$criteria->compare('state',$this->state,true);
-		$criteria->compare('zipcode',$this->zipcode,true);
-		$criteria->compare('params',$this->params,true);
-		$criteria->compare('update_date',$this->update_date,true);
+		$criteria->compare('int_id',$this->int_id);
+		$criteria->compare('int_name',$this->int_name,true);
+		$criteria->compare('int_vname',$this->int_vname,true);
+		$criteria->compare('int_plz',$this->int_plz,true);
+		$criteria->compare('int_ort',$this->int_ort,true);
+		$criteria->compare('int_str',$this->int_str,true);
+		$criteria->compare('int_tel',$this->int_tel,true);
+		$criteria->compare('int_mobil',$this->int_mobil,true);
+		$criteria->compare('int_mail',$this->int_mail,true);
+		$criteria->compare('int_fabrikat',$this->int_fabrikat);
+		$criteria->compare('int_modell',$this->int_modell);
+		$criteria->compare('int_bauart',$this->int_bauart);
+		$criteria->compare('int_ausstattung',$this->int_ausstattung);
+		$criteria->compare('int_farbe',$this->int_farbe);
+		$criteria->compare('int_kaufzeitpunkt',$this->int_kaufzeitpunkt);
+		$criteria->compare('int_zahlungsart',$this->int_zahlungsart);
+		$criteria->compare('int_kontakt',$this->int_kontakt);
+		$criteria->compare('int_haendler',$this->int_haendler);
+		$criteria->compare('int_anlage',$this->int_anlage,true);
+		$criteria->compare('int_suchmaschine',$this->int_suchmaschine);
+		$criteria->compare('int_suchwort',$this->int_suchwort);
+		$criteria->compare('int_erreichbar',$this->int_erreichbar,true);
+		$criteria->compare('int_kenntnis',$this->int_kenntnis);
+		$criteria->compare('int_text',$this->int_text,true);
+		$criteria->compare('int_bericht_ma',$this->int_bericht_ma);
+		$criteria->compare('int_bericht_status',$this->int_bericht_status);
+		$criteria->compare('int_bericht_wv',$this->int_bericht_wv,true);
+		$criteria->compare('int_alt_ausstattung',$this->int_alt_ausstattung);
+		$criteria->compare('int_grund',$this->int_grund);
+		$criteria->compare('int_entfernung',$this->int_entfernung);
+		$criteria->compare('int_kvs_status',$this->int_kvs_status);
+		$criteria->compare('int_mitarbeiter',$this->int_mitarbeiter);
+		$criteria->compare('int_premium_id',$this->int_premium_id);
+		$criteria->compare('int_status',$this->int_status);
 
-		return new CActiveDataProvider($this, array('criteria'=>$criteria,));
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
 	}
 
 	/**

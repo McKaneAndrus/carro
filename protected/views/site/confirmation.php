@@ -30,9 +30,9 @@
                 
                 <div class="confirm_vehicle">
                     <h2>Your selected vehicle:<br />
-						<?php echo $this->GetMakeName($model->make) . ' ' . $this->GetModelName($model->model); ?>
-						<?php echo $this->GetTrimName($model->trim) . '<br />'?>
-						<?php echo $this->GetColorName($model->color); ?>
+						<?php echo $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell); ?>
+						<?php echo $this->GetTrimName($model->int_ausstattung) . '<br />'?>
+						<?php echo $this->GetColorName($model->int_farbe); ?>
                     </h2>
                     <img src="" alt="" />
                 </div>

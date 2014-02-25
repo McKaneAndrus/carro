@@ -1,10 +1,10 @@
 <?php
 
 /**
- * This is the model class for table "postal_codes".
+ * This is the model class for table "{{postal_codes}}".
  *
- * The followings are the available columns in table 'postal_codes':
- * @property string $postal_code
+ * The followings are the available columns in table '{{postal_codes}}':
+ * @property string $code
  * @property string $city
  * @property string $state
  * @property double $latitude
@@ -17,7 +17,7 @@ class PostalCodeLookup extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'postal_codes';
+		return '{{postal_codes}}';
 	}
 
 	/**
@@ -28,13 +28,13 @@ class PostalCodeLookup extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('latitude, longitude', 'numerical'),
-			array('postal_code', 'length', 'max'=>20),
+			array('code', 'length', 'max'=>20),
 			array('city', 'length', 'max'=>180),
 			array('state', 'length', 'max'=>100),
+			array('latitude, longitude', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('postal_code, city, state, latitude, longitude', 'safe', 'on'=>'search'),
+			array('code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,7 +55,7 @@ class PostalCodeLookup extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'postal_code' => 'Postal Code',
+			'code' => 'Postal Code',
 			'city' => 'City',
 			'state' => 'State',
 			'latitude' => 'Latitude',
@@ -81,11 +81,13 @@ class PostalCodeLookup extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('postal_code',$this->postal_code,true);
-		$criteria->compare('city',$this->city,true);
-		$criteria->compare('state',$this->state,true);
-		$criteria->compare('latitude',$this->latitude);
-		$criteria->compare('longitude',$this->longitude);
+		$criteria->compare('code',$this->code,true);
+		/*
+		* $criteria->compare('city',$this->city,true);
+		* $criteria->compare('state',$this->state,true);
+		* $criteria->compare('latitude',$this->latitude);
+		* $criteria->compare('longitude',$this->longitude);
+		*/
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -81,7 +81,7 @@ class SiteController extends Controller
 			
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
 
-		$city_state = PostalCodeLookup::model()->find('postal_code=:postal_code', array(':postal_code' => $postal_code_str));
+		$city_state = PostalCodeLookup::model()->find('code=:postal_code', array(':postal_code' => $postal_code_str));
 
 		if($city_state == NULL)
 		{
@@ -168,12 +168,12 @@ class SiteController extends Controller
 		if($color_id == $this->DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
 			return $this->LANG_ANY_COLOR_PROMPT;
 		
-		$color_rec = ColorLookup::model()->find('id_color=:id_color', array(':id_color' => $color_id));
+		$color_rec = ColorLookup::model()->find('farb_id=:id_color', array(':id_color' => $color_id));
 
 		if($color_rec == NULL)
 			return($this->LANG_UNKNOWN_COLOR);
 		
-		return($color_rec->name);
+		return($color_rec->farb_bez);
 	}
 
 
@@ -221,9 +221,12 @@ class SiteController extends Controller
 
 	public function GetColors($trim_id)
 	{
-		$colors = ColorLookup::model()->findAll('id_color_trim=:id_color_trim', array(':id_color_trim' => (int) $trim_id));
+		// using the farben table with a look up on model only, implies data is set up for model look up
+		// and not a trim look up, use trim id when/if that becomes availaible
+		
+		$colors = ColorLookup::model()->findAll('farb_modell=:id_color_trim', array(':id_color_trim' => (int) $trim_id));
 
-		return CHtml::listData($colors, 'id_color', 'name');	// fields from the color table
+		return CHtml::listData($colors, 'farb_id', 'farb_bez');	// fields from the color table
 	}
 
 	/*
@@ -240,7 +243,7 @@ class SiteController extends Controller
 	{
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as make
 			
-		$return = $this->GetModels((int) ($_POST['LeadGen']['make']));
+		$return = $this->GetModels((int) ($_POST['LeadGen']['int_fabrikat']));
 
 		// if we have results gen the html, always create the default option
 		
@@ -270,8 +273,8 @@ class SiteController extends Controller
 
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as model
 				
-		$trims = TrimLookup::model()->findAll('aus_modell=:id_trim_model', array(':id_trim_model' => (int) ($_POST['LeadGen']['model'])));
-		
+		$trims = TrimLookup::model()->findAll('aus_modell=:id_trim_model', array(':id_trim_model' => (int) ($_POST['LeadGen']['int_modell'])));
+
 		if($trims != NULL)
 			$return = CHtml::listData($trims, 'aus_modell', 'aus_bez');	// fields from the trim table
 
@@ -300,7 +303,16 @@ class SiteController extends Controller
 	{
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as trim
 
-		$return = $this->GetColors((int) ($_POST['LeadGen']['trim']));
+		// $return = $this->GetColors((int) ($_POST['LeadGen']['trim'])); // when the trim to color relation is valid
+		
+		// for now fake out the query tand call with model as we can only get color by model right now.
+		
+		// begin hack code
+		$model = new LeadGen('landing');	// create a temp leadgen model 
+		$model->attributes = $this->getPageState('page', array()); // gets the state into the model
+		$tmp_model_id = $model->attributes['int_modell'];
+		$return = $this->GetColors($tmp_model_id); // when the model to color relation is valid in newcars tables for now
+		// end hack code
 
 		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_COLOR_PROMPT), true);			// prompt
 		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode($this->LANG_ANY_COLOR_PROMPT), true);	// Any Option

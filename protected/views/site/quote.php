@@ -19,7 +19,7 @@
 
                     <div class="quote_column">
                         <h2>
-							 <?php echo $model->model_year . ' ' . $this->GetMakeName($model->make) . ' ' . $this->GetModelName($model->model); ?>
+							 <?php echo $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell); ?>
                         </h2>
                         <img src="" alt="" />
                         
@@ -27,26 +27,32 @@
 			
 					<?php 
 						// check out the trim field by looking at the model
-						$trim = $model->trim;	// get trim from model, will be zero if NOT set, so don't use 0 as a valid select value 
+						
+						// $trim = $model->trim;	// get trim from model, will be zero if NOT set, so don't use 0 as a valid select value 
+						
+						//BEGIN HACK
+						$trim = $model->int_modell; // HACK so color will be displayed off of model, disabled color selector is broke because of this
+						// END HACK
+						
 						$trims = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_TRIM_PROMPT);
-						$trims += $this->GetTrims($model->model);
-						echo $form->dropDownList($model, 'trim', $trims, array(
+						$trims += $this->GetTrims($model->int_modell);
+						
+						echo $form->dropDownList($model, 'int_ausstattung', $trims, array(
 								'prompt' => $this->LANG_TRIM_PROMPT,
 								'ajax' => array(
 										'type' => 'POST',
 										'url' => CController::createUrl('colors'),
-										'update' => '#LeadGen_color',
+										'update' => '#LeadGen_int_farbe',		// color select
 										), 
 										'onchange'=>'trimChanged();'
 								)
 							);
 						?>
 						
-                        <?php echo $form->error($model,'trim'); ?>
+                        <?php echo $form->error($model,'int_ausstattung'); ?>
 
 						<label for="">Color:</label>
 						
-						<?php echo $form->error($model,'make'); ?>
 						<?php						
 							$color_list = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_COLOR_PROMPT);
 
@@ -66,13 +72,10 @@
 								}?>
 
 						
-						<?php echo $form->dropDownList($model, 'color', $color_list, array('disabled' =>$disable, 'prompt' => $this->LANG_COLOR_PROMPT));?>
-                        <?php echo $form->error($model,'color'); ?>
+						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array('disabled' =>$disable, 'prompt' => $this->LANG_COLOR_PROMPT));?>
+                        <?php echo $form->error($model,'int_farbe'); ?>
 						<br>
 						<?php echo CHtml::submitButton('', array('name'=>'landing', 'id'=>'back')); ?>
-
-
-
 
                     </div>
                     
@@ -160,33 +163,33 @@
                     <!-- START COLUMN 3 -->
                     <div class="quote_column">
 						
-							<?php echo $form->labelEx($model,'first_name'); ?>
-							<?php echo $form->textField($model,'first_name'); ?>
-							<?php echo $form->error($model,'first_name'); ?>
+							<?php echo $form->labelEx($model,'int_vname'); ?>
+							<?php echo $form->textField($model,'int_vname'); ?>
+							<?php echo $form->error($model,'int_vname'); ?>
 
-							<?php echo $form->labelEx($model,'last_name'); ?>
-							<?php echo $form->textField($model,'last_name'); ?>
-							<?php echo $form->error($model,'last_name'); ?>
+							<?php echo $form->labelEx($model,'int_name'); ?>
+							<?php echo $form->textField($model,'int_name'); ?>
+							<?php echo $form->error($model,'int_name'); ?>
 
-							<?php echo $form->labelEx($model,'phone'); ?>
-							<?php echo $form->textField($model,'phone'); ?>
-							<?php echo $form->error($model,'phone'); ?>
+							<?php echo $form->labelEx($model,'int_tel'); ?>
+							<?php echo $form->textField($model,'int_tel'); ?>
+							<?php echo $form->error($model,'int_tel'); ?>
 
-							<?php echo $form->labelEx($model,'email'); ?>
-							<?php echo $form->textField($model,'email'); ?>
-							<?php echo $form->error($model,'email'); ?>
+							<?php echo $form->labelEx($model,'int_mail'); ?>
+							<?php echo $form->textField($model,'int_mail'); ?>
+							<?php echo $form->error($model,'int_mail'); ?>
 
-							<?php echo $form->labelEx($model,'street_address'); ?>
-							<?php echo $form->textField($model,'street_address'); ?>
-							<?php echo $form->error($model,'street_address'); ?>
+							<?php echo $form->labelEx($model,'int_str'); ?>
+							<?php echo $form->textField($model,'int_str'); ?>
+							<?php echo $form->error($model,'int_str'); ?>
 
-							<?php echo $form->labelEx($model,'user_comment'); ?>
-							<?php echo $form->textArea($model,'user_comment'); ?>
-							<?php echo $form->error($model,'user_comment'); ?>
+							<?php echo $form->labelEx($model,'int_text'); ?>
+							<?php echo $form->textArea($model,'int_text'); ?>
+							<?php echo $form->error($model,'int_text'); ?>
                         
                         <p class="quote_city">
-							<?php $cs_rec = $this->GetCityState($model->zipcode);?>
-							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->zipcode; ?>
+							<?php $cs_rec = $this->GetCityState($model->int_plz);?>
+							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
 						</p>
 						<?php echo $form->hiddenField($model, 'city', array('value'=>$cs_rec->city)); ?>
 						<?php echo $form->hiddenField($model, 'state', array('value'=>$cs_rec->state)); ?>
@@ -203,15 +206,15 @@ $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function trimChanged() 
  	{
-			$("#LeadGen_color").empty(); 
+			$("#LeadGen_int_farbe").empty(); 
 
-			if($("#LeadGen_trim").val() == "") 
+			if($("#int_ausstattung").val() == "") 
 			{
-				$("#LeadGen_color").prop("disabled", true);
+				$("#LeadGen_int_farbe").prop("disabled", true);
 			}
 			else
 			{
-				$("#LeadGen_color").prop("disabled", false);
+				$("#LeadGen_int_farbe").prop("disabled", false);
 			}
 		}',
   CClientScript::POS_END						// Script insert Position 

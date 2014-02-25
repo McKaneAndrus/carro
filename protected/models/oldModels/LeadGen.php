@@ -80,6 +80,9 @@ class LeadGen extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			
+			 // set a default value if needed
+			 // array('dte_created, dte_modified', 'default', 'value'=>new CDbExpression('NOW()'), 'setOnEmpty'=>false,'on'=>'insert')
+			
 			array('id_lead', 'safe', 'on'=>'search'),	// only allow search by id, if that is even needed
 		);
 	}
