@@ -55,7 +55,6 @@
 						<?php echo $form->labelEx($model,'int_plz'); ?>
 						<?php echo $form->textField($model,'int_plz'); ?>
 						<?php echo $form->error($model,'int_plz'); ?>
-						<?php echo $form->hiddenField($model, 'model_year', array('value'=>'2014')); ?>
 						<?php echo CHtml::submitButton('', array('name'=>'quote')); ?>
                     </fieldset>
 				<?php $this->endWidget(); ?>

@@ -144,6 +144,12 @@ class LeadGen extends CActiveRecord
 
 			array('int_anlage, int_ort, int_text', 'safe'),	// mark as safe incase we need these, likely not...
 
+			array('int_erreichbar, int_mobil, int_id, int_status, int_premium_id', 'safe'), // not using these below
+			array('int_mitarbeiter, int_kvs_status, int_entfernung, int_grund', 'safe'),
+			array('int_alt_ausstattung, int_bericht_wv, int_bericht_status, int_bericht_ma', 'safe'),
+			array('int_kenntnis, int_suchwort, int_suchmaschine, int_kontakt', 'safe'),
+			array('int_zahlungsart, int_kaufzeitpunkt, int_bauart', 'safe'),
+			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			
@@ -159,7 +165,13 @@ class LeadGen extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
+		
 		return array(
+			
+			// the inthae (this table is the many part, which is selected dealers of a particular lead
+							// variable => Relationship, Class name, foriegn_key
+			'inthae'=>array(self::HAS_MANY, 'Inthae', 'inthae_interessenten'),
+			'dlrs'=>array(self::HAS_MANY, 'DealerLookup', 'hd_id'),
 		);
 	}
 

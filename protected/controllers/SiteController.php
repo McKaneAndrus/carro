@@ -16,7 +16,8 @@ class SiteController extends Controller
 	public $LANG_UNKNOWN_MODEL = 'Unknown Model';
 	public $LANG_UNKNOWN_TRIM = 'Unknown Trim';
 	public $LANG_UNKNOWN_COLOR = 'Unknown Color';
-
+	public $LANG_ZIP_SEP = ', ';
+	
 	public $DEFAULT_ANY_VALUE = -1;		// must be < 0
 		
 	/**
@@ -229,6 +230,42 @@ class SiteController extends Controller
 		return CHtml::listData($colors, 'farb_id', 'farb_bez');	// fields from the color table
 	}
 
+	public function GetDealers($postal_code_str, $limit)
+	{
+		// implies postal code should have an index
+		// add error checks on both parameters
+		// might also check for null or empty here as invalid zip would return that
+		// need to also query the postal codes with a like on the first 5 digits ???
+	
+		// {label}line2</br>Line3</br>Line4 need to format the data like this with each line termed by <br> except last
+			
+		// $postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
+		
+		//echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_MODEL_PROMPT), true);		// prompt
+
+		// return the html for the SELECT as <option value="xyz">trimname</option>
+
+		// foreach ($return as $modelId => $modelName) 
+		// {
+		// 	echo CHtml::tag('option', array('value' => $modelId), CHtml::encode($modelName), true);
+		// }
+
+
+
+		$dealers = DealerLookup::model()->findAll('hd_plz=:postal_code', array(':postal_code' => $postal_code_str));
+
+		return CHtml::listData($dealers, 'hd_id', function($dealers) {
+			
+			return CHtml::encode($dealers->hd_name) . 
+			'<br>' . CHtml::encode($dealers->hd_str) . 
+			'<br>' . CHtml::encode($dealers->hd_ort . $this->LANG_ZIP_SEP .  $dealers->hd_plz) .
+			'<br>' . CHtml::encode($dealers->hd_tel);
+		});
+
+		//return CHtml::listData($dealers,'hd_id','hd_name');
+	}
+
+
 	/*
 	* Returns makes given a make id (id_make)
 	* called based on the select's ajax call. This given a model will return a list of all the trims
@@ -352,7 +389,7 @@ class SiteController extends Controller
 		
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
-				'actions'=>array('landing', 'quote', 'confirmation', 'models', 'trims', 'colors'),  // added create to all users no login needed 
+				'actions'=>array('landing', 'quote', 'confirmation', 'models', 'trims', 'colors', 'dealers'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
@@ -439,6 +476,7 @@ class SiteController extends Controller
 				{
 					$model = new LeadGen('quote');
 					$model->attributes = $this->getPageState('page', array()); // tricky, gets the state into the model, then erases it 
+
 					$model->attributes = $_POST['LeadGen'];
 					  
 					if($model->validate())	

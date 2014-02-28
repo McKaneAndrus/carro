@@ -136,8 +136,10 @@ class TrimLookup extends CActiveRecord
 			array('aus_listenpreis, aus_kennziffer', 'length', 'max'=>11),
 			array('aus_anlage_user, aus_aender_user', 'length', 'max'=>12),
 			array('aus_anlage, aus_lastpick, aus_aenderdatum', 'safe'),
+			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
+			
 			array('aus_id, aus_modell, aus_bez, aus_sitze, aus_bezug, aus_motorart, aus_hubraum, aus_leistung, aus_antrieb, aus_zylinder, aus_schaltung, aus_verbrauch_stadt, aus_verbrauch_land, aus_verbrauch_bab, aus_verbrauch_mix, aus_emissionen, aus_beschleunigung, aus_drehmoment, aus_drehmoment_drehzahl, aus_abs, aus_esp, aus_airbags, aus_klimaanlage, aus_hoehe, aus_breite, aus_laenge, aus_leergewicht, aus_zuladung, aus_gepaeckraum, aus_tank, aus_navi, aus_klimaautomatik, aus_schiebedach, aus_tempomat, aus_einparkhilfe, aus_lederausstattung, aus_leichtmetallfelgen, aus_sitzheizung, aus_standheizung, aus_xenonlicht, aus_haengerkupplung, aus_listenpreis, aus_kennziffer, aus_klasse, aus_anlage, aus_picks, aus_lastpick, aus_aenderdatum, aus_anlage_user, aus_aender_user, aus_status', 'safe', 'on'=>'search'),
 		);
 	}

@@ -21,7 +21,7 @@
                         <h2>
 							 <?php echo $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell); ?>
                         </h2>
-                        <img src="" alt="" />
+                        <!-- <img src="" alt="" /> add image if wanted from make / model -->
                         
 						<label for="">Trim:</label>
 			
@@ -81,7 +81,37 @@
                     
                     <!-- START COLUMN 2 -->
                     <div class="quote_column">
+                        
+                        <!-- get premium dealers first -->
+                        
                         <h3>Best Dealers in Your Area</h3>
+						<?php $dealer_list = $this->GetDealers('01000-123', 10); 
+						
+						$model->dlrs = $dealer_list;
+						?>
+						<?php  // var_dump($dealer_list) ?>
+                        <div class="quote_special">
+							
+						<?php $model->dlrs = array_keys($dealer_list); ?>
+						<?php  echo $form->CheckBoxList($model, 'dlrs', $dealer_list,  
+								array('separator'=>'', 
+									  'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+						?>
+						
+						</div>
+
+						<!-- Then all the rest-->
+                        <h3>More Dealers</h3>
+                        <div class="quote_more_dealers">
+						<?php $model->dlrs = array_keys($dealer_list); ?>
+						<?php  echo $form->CheckBoxList($model, 'dlrs', $dealer_list,  
+								array('separator'=>'', 
+									  'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+						?>
+						</div>
+
+<!--
+						
                         <div class="quote_special">
                             <div class="quote_dealer">
                             <div>
@@ -158,6 +188,8 @@
                                 </div>
                             </div>
                         </div>
+             -->
+                        
                     </div>
                     
                     <!-- START COLUMN 3 -->
@@ -191,8 +223,6 @@
 							<?php $cs_rec = $this->GetCityState($model->int_plz);?>
 							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
 						</p>
-						<?php echo $form->hiddenField($model, 'city', array('value'=>$cs_rec->city)); ?>
-						<?php echo $form->hiddenField($model, 'state', array('value'=>$cs_rec->state)); ?>
 						<?php echo CHtml::submitButton('', array('name'=>'submit')); ?>
                         
                     </div>
