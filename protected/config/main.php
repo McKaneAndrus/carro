@@ -72,6 +72,13 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
+// uncomment to show sql in log
+				array(
+					'class'=>'CFileLogRoute',
+					'categories'=>'system.db.*',				
+					'levels'=>'trace, info',
+				),
+				
 
 				// uncomment the following to show log messages on web pages
 				/*

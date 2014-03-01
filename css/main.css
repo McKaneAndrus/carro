@@ -423,7 +423,7 @@ Quote form
 }
 
 .quote_more_dealers {
-    max-height: 190px;
+    max-height: 275px;
     overflow: auto;
     border: 1px solid #ccc;
 }

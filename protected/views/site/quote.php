@@ -84,32 +84,57 @@
                         
                         <!-- get premium dealers first -->
                         
-                        <h3>Best Dealers in Your Area</h3>
-						<?php $dealer_list = $this->GetDealers('01000-123', 10); 
+						<?php $special_dealer_display_count = 3; // 0 = No display of Special Dealers div ?>
 						
-						$model->dlrs = $dealer_list;
-						?>
-						<?php  // var_dump($dealer_list) ?>
-                        <div class="quote_special">
+						<?php $dealer_list = $this->GetDealers($model->int_plz, 10); ?>
+						<?php $dealer_select_list = array_keys($dealer_list);?>
+						<?php //var_dump($dealer_list); ?>
+				
+						<?php 
+							$dlr_cnt = count($dealer_list);
+							if( $dlr_cnt == 0)
+							{
+								 echo '<h3>Unable to Locate Local Dealers</h3>';
+								 echo 'Carro Specialist will forward request</br>';
+								 echo 'Please continue with submission. </br></br>Thank You';
+							}
 							
-						<?php $model->dlrs = array_keys($dealer_list); ?>
-						<?php  echo $form->CheckBoxList($model, 'dlrs', $dealer_list,  
+							if($special_dealer_display_count > 0 && $dlr_cnt)
+							{
+								echo '<h3>Best Dealers in Your Area</h3>';
+								echo '<div class="quote_special">';
+
+								// Get results, but only top X
+							
+								$special_dealer_list = array_slice($dealer_list, 0, $special_dealer_display_count, true);
+								$special_dealer_select_list = array_keys($special_dealer_list);
+							
+								echo CHtml::checkBoxList('special_dlrs[hd_id]', $special_dealer_select_list, $special_dealer_list,
 								array('separator'=>'', 
-									  'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+										'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+								
+								// shift first top N elements off the list as they have been seen above
+								
+								$dealer_list = array_slice($dealer_list, $special_dealer_display_count, $dlr_cnt, true);
+								$dealer_select_list = array_keys($dealer_list);
+								echo '</div>';
+							}
 						?>
+				
+						<!-- Then all the rest if any -->
 						
-						</div>
-
-						<!-- Then all the rest-->
-                        <h3>More Dealers</h3>
-                        <div class="quote_more_dealers">
-						<?php $model->dlrs = array_keys($dealer_list); ?>
-						<?php  echo $form->CheckBoxList($model, 'dlrs', $dealer_list,  
+						<?php
+							// if we have more then three, render the more box...
+							if(($cnt = count($dealer_list)) > 0)
+							{	
+								echo '<h3>More Dealers (' . $cnt . ') </h3>';
+								echo '<div class="quote_more_dealers">';
+								echo CHtml::checkBoxList('more_dlrs[hd_id]', $dealer_select_list, $dealer_list,
 								array('separator'=>'', 
-									  'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+									'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+								echo '</div>';
+							}
 						?>
-						</div>
-
 <!--
 						
                         <div class="quote_special">

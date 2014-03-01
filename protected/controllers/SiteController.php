@@ -264,9 +264,8 @@ class SiteController extends Controller
 		$q = 'CALL P_br_dealer_distance_km(:user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
 
-		$dist = 1000;
+		$dist = 500;	// 500 sq km for testing
 		$cnt = 0;
-		
 		do
 		{
 			$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
@@ -274,14 +273,15 @@ class SiteController extends Controller
 			$cmd->bindParam(':max_results', $limit, PDO::PARAM_INT);
 			$dealers = $cmd->queryAll();
 			
-			if(count($dealers)) > 10)	// we have found minimum # results
+			if(count($dealers) > $limit)	// we have found minimum # results
 				break;
 			
-			var_dump(count($dealers));
+			echo 'Cnt : ' . count($dealers) . ', Dist : ' . $dist . '<br>';
 			
-			$dist = $dist * 2;	// quad the area
+			$dist = $dist * 2;		// qeometricly increase the area (its a square size)
+			$cnt++;					// bump or you will dead the server
 			
-		}while($cnt++ < 3);	// exit on 3rd query attempt
+		}while($cnt < 5);			// exit on 5rd query attempt never more!
 
 
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
@@ -289,7 +289,8 @@ class SiteController extends Controller
 			return CHtml::encode($dealers['hd_name']) . 
 			'<br>' . CHtml::encode($dealers['hd_str']) . 
 			'<br>' . CHtml::encode($dealers['hd_ort'] . $this->LANG_ZIP_SEP .  $dealers['hd_plz']) .
-			'<br>' . CHtml::encode($dealers['hd_tel']);
+			'<br>' . CHtml::encode($dealers['hd_tel']).
+			'<br>' . CHtml::encode('Distance : ' . $dealers['distance'] . 'km');
 		});
 	}
 
