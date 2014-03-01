@@ -54,14 +54,22 @@ class SiteController extends Controller
 	{
 		// for the BR postal code we only have the first 5 digits, so we need to make sure we hack off
 		// last 3 and replace with 000 as that is what the database has for lookup.
-		// format must come in as 00000-000 or we return garbage.
+		// format must come in as 00000 or 00000-000 or we return default.
 		
-		if(strlen($postal_code_str) != 9)
-			return '00000-000';
-			
-		$postal_code_str = substr($postal_code_str, 0, 6) . '000';	// get the 00000- add suffix
+		$len = strlen($postal_code_str);
 		
-		return $postal_code_str;
+		if($len == 5)
+		{
+			return $postal_code_str . '-000'; // format came in as just the 5 digit
+		}
+		else
+			if($len == 9)
+			{
+				return substr($postal_code_str, 0, 6) . '000';	// get the '00000-' add suffix
+				
+			}
+			else
+				return '00000-000'; // NULL might be good, not sure yet...
 	}
 
 	/*
@@ -237,32 +245,52 @@ class SiteController extends Controller
 		// might also check for null or empty here as invalid zip would return that
 		// need to also query the postal codes with a like on the first 5 digits ???
 	
-		// {label}line2</br>Line3</br>Line4 need to format the data like this with each line termed by <br> except last
 			
-		// $postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
+
+		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
+/*
+		$postal_code_str = substr($postal_code_str, 0, 5);					// now we can safely clean to 5 digits
+
+		$dealers = DealerLookup::model()->findAll(
+			array(
+				'select'=>'hd_id, hd_name, hd_str, hd_ort, hd_plz',			// select only needed fields, this table has lots!
+				'condition'=>'hd_plz like :postal_code',					// use a like on the codes, cheeeezy but works
+				'limit'=> $limit,
+				'params'=>array(':postal_code' => $postal_code_str . '%'),	// tricky way to get the trailing '%' into the like
+			)
+		);
+*/
+
+		$q = 'CALL P_br_dealer_distance_km(:user_postal_code, :distance_km, :max_results)';
+		$cmd = Yii::app()->db->createCommand($q);
+
+		$dist = 1000;
+		$cnt = 0;
 		
-		//echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_MODEL_PROMPT), true);		// prompt
+		do
+		{
+			$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
+			$cmd->bindParam(':distance_km', $dist, PDO::PARAM_INT);
+			$cmd->bindParam(':max_results', $limit, PDO::PARAM_INT);
+			$dealers = $cmd->queryAll();
+			
+			if(count($dealers)) > 10)	// we have found minimum # results
+				break;
+			
+			var_dump(count($dealers));
+			
+			$dist = $dist * 2;	// quad the area
+			
+		}while($cnt++ < 3);	// exit on 3rd query attempt
 
-		// return the html for the SELECT as <option value="xyz">trimname</option>
-
-		// foreach ($return as $modelId => $modelName) 
-		// {
-		// 	echo CHtml::tag('option', array('value' => $modelId), CHtml::encode($modelName), true);
-		// }
-
-
-
-		$dealers = DealerLookup::model()->findAll('hd_plz=:postal_code', array(':postal_code' => $postal_code_str));
 
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
 			
-			return CHtml::encode($dealers->hd_name) . 
-			'<br>' . CHtml::encode($dealers->hd_str) . 
-			'<br>' . CHtml::encode($dealers->hd_ort . $this->LANG_ZIP_SEP .  $dealers->hd_plz) .
-			'<br>' . CHtml::encode($dealers->hd_tel);
+			return CHtml::encode($dealers['hd_name']) . 
+			'<br>' . CHtml::encode($dealers['hd_str']) . 
+			'<br>' . CHtml::encode($dealers['hd_ort'] . $this->LANG_ZIP_SEP .  $dealers['hd_plz']) .
+			'<br>' . CHtml::encode($dealers['hd_tel']);
 		});
-
-		//return CHtml::listData($dealers,'hd_id','hd_name');
 	}
 
 
