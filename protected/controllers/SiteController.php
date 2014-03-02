@@ -185,7 +185,6 @@ class SiteController extends Controller
 		return($color_rec->farb_bez);
 	}
 
-
 	/*
 	* Given a Make Id will generate an HTML list data of id, name for use
 	* in such places as select fields.
@@ -240,31 +239,41 @@ class SiteController extends Controller
 
 	public function GetDealers($postal_code_str, $limit)
 	{
-		// implies postal code should have an index
-		// add error checks on both parameters
-		// might also check for null or empty here as invalid zip would return that
-		// need to also query the postal codes with a like on the first 5 digits ???
-	
-			
 
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
-/*
-		$postal_code_str = substr($postal_code_str, 0, 5);					// now we can safely clean to 5 digits
+		
+		/*
+		* // This is the old called that called the dealer lookup model
+		* // Replaced with the proc call that calc's distance 
+		*
+		* $postal_code_str = substr($postal_code_str, 0, 5);				// now we can safely clean to 5 digits
+		* 
+		* $dealers = DealerLookup::model()->findAll(
+		*	array(
+		*		'select'=>'hd_id, hd_name, hd_str, hd_ort, hd_plz',			// select only needed fields, this table has lots!
+		*		'condition'=>'hd_plz like :postal_code',					// use a like on the codes, cheeeezy but works
+		*		'limit'=> $limit,
+		*		'params'=>array(':postal_code' => $postal_code_str . '%'),	// tricky way to get the trailing '%' into the like
+		*	)
+		*);
+		*/
 
-		$dealers = DealerLookup::model()->findAll(
-			array(
-				'select'=>'hd_id, hd_name, hd_str, hd_ort, hd_plz',			// select only needed fields, this table has lots!
-				'condition'=>'hd_plz like :postal_code',					// use a like on the codes, cheeeezy but works
-				'limit'=> $limit,
-				'params'=>array(':postal_code' => $postal_code_str . '%'),	// tricky way to get the trailing '%' into the like
-			)
-		);
-*/
-
+		/*
+		* Proc returns number max number of results for a given distance of a user from a dealer
+		* Indexes may help on some items
+		*
+		* The algo below basically can call the sp a few times. This proc is expensive so
+		* keep loop count low. The idea is to geometrically increase the size of the
+		* distance and requery until a suitable amount of dealers are found. If the number
+		* of tries is exceeded then you get what was found.
+		* 
+		* The distance used for the start ($dist) should be chosen accordingly
+		*/
+		
+		
 		$q = 'CALL P_br_dealer_distance_km(:user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
-
-		$dist = 500;	// 500 sq km for testing
+		$dist = 1000;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 		do
 		{
@@ -276,13 +285,19 @@ class SiteController extends Controller
 			if(count($dealers) > $limit)	// we have found minimum # results
 				break;
 			
-			echo 'Cnt : ' . count($dealers) . ', Dist : ' . $dist . '<br>';
+			// echo 'Cnt : ' . count($dealers) . ', Dist : ' . $dist . '<br>';
 			
 			$dist = $dist * 2;		// qeometricly increase the area (its a square size)
 			$cnt++;					// bump or you will dead the server
 			
-		}while($cnt < 5);			// exit on 5rd query attempt never more!
+		}while($cnt < 4);			// exit on 4th query attempt
 
+		/*
+		* The CheckBoxList we want has several lines of text so we must
+		* format it here. No <BR> on the last line, and possibly may want
+		* to limit lenght of data for each line or increase size of area
+		* width
+		*/
 
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
 			
@@ -293,7 +308,6 @@ class SiteController extends Controller
 			'<br>' . CHtml::encode('Distance : ' . $dealers['distance'] . 'km');
 		});
 	}
-
 
 	/*
 	* Returns makes given a make id (id_make)
@@ -323,7 +337,6 @@ class SiteController extends Controller
 		}
 	 }
 
-	
 	/*
 	* Returns trims given a model id (id_model)
 	* called based on the select's ajax call. This given a model will return a list of all the trims
@@ -336,7 +349,6 @@ class SiteController extends Controller
 	
 	public function actionTrims() 
 	{
-
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as model
 				
 		$trims = TrimLookup::model()->findAll('aus_modell=:id_trim_model', array(':id_trim_model' => (int) ($_POST['LeadGen']['int_modell'])));
@@ -515,11 +527,47 @@ class SiteController extends Controller
 						//$model->params = $_REQUEST;		// can be refined to get a specific param, just grab anything now
 						$model->save();
 						$view = 'confirmation';		// jump to the confirmation page
+						
+						// at this point $model->int_id has the key for the inthae table inserts
+
+						// First any of the special dealers 
+						
+						if(isset($_POST['Inthae']['special_dlrs']))
+						{
+							$sdl = $_POST['Inthae']['special_dlrs'];
+							foreach($sdl as $dlr)
+							{
+								$prospect_sdlr = new Inthae;	
+								$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
+								$prospect_sdlr->ih_dealer_id = $dlr;
+								$prospect_sdlr->ih_status = 1;						// database value for special dealers = 1
+								
+								if (!$prospect_sdlr->save()) 
+									print_r($$prospect_sdlr->errors);
+							}
+						}
+
+						// Now the 'More' dealers, same table just from different form element
+						
+						if(isset($_POST['Inthae']['more_dlrs']))
+						{
+							$mdl = $_POST['Inthae']['more_dlrs'];
+							foreach($mdl as $dlr)
+							{
+								$prospect_mdlr = new Inthae;	
+								$prospect_mdlr->ih_prospect_id = $model->int_id; 	// current models updated id
+								$prospect_mdlr->ih_dealer_id = $dlr;
+								$prospect_mdlr->ih_status = 0;						// database value for regular = 0
+								
+								if (!$prospect_mdlr->save()) 
+									print_r($$prospect_mdlr->errors);
+							}
+						}
 					}
 					else
 					{
 						// validation failed go back to the quote page and do it again
-						  
+						  					
 						$view = 'quote';	// fix up errors
 					}
 				}
@@ -531,6 +579,7 @@ class SiteController extends Controller
 				}
     
 		// hack to make browser back button work by enabling the page to be cached
+		// otherwise you get the dreaded 'Re-send data popup'
 		
 		$expires = 300;  // in secs
 		header("Content-Type: text/html; charset: UTF-8");

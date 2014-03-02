@@ -109,7 +109,7 @@
 								$special_dealer_list = array_slice($dealer_list, 0, $special_dealer_display_count, true);
 								$special_dealer_select_list = array_keys($special_dealer_list);
 							
-								echo CHtml::checkBoxList('special_dlrs[hd_id]', $special_dealer_select_list, $special_dealer_list,
+								echo CHtml::checkBoxList('Inthae[special_dlrs]', $special_dealer_select_list, $special_dealer_list,
 								array('separator'=>'', 
 										'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
 								
@@ -129,7 +129,7 @@
 							{	
 								echo '<h3>More Dealers (' . $cnt . ') </h3>';
 								echo '<div class="quote_more_dealers">';
-								echo CHtml::checkBoxList('more_dlrs[hd_id]', $dealer_select_list, $dealer_list,
+								echo CHtml::checkBoxList('Inthae[more_dlrs]', $dealer_select_list, $dealer_list,
 								array('separator'=>'', 
 									'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
 								echo '</div>';

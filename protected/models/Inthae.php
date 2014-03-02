@@ -4,10 +4,9 @@
  * This is the model class for table "{{inthae}}".
  *
  * The followings are the available columns in table '{{inthae}}':
- * @property integer $inthae_id
- * @property integer $inthae_interessenten
- * @property integer $inthae_haendler
- * @property string $inthae_created
+ * @property integer $ih_prospect_id
+ * @property integer $ih_dealer_id
+ * @property integer $ih_status
  */
 class Inthae extends CActiveRecord
 {
@@ -27,11 +26,12 @@ class Inthae extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('inthae_interessenten, inthae_haendler, inthae_created', 'required'),
-			array('inthae_interessenten, inthae_haendler', 'numerical', 'integerOnly'=>true),
+			array('ih_prospect_id, ih_dealer_id, ih_status', 'required'),
+			array('ih_prospect_id, ih_dealer_id, ih_status', 'numerical', 'integerOnly'=>true),
+			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('inthae_id, inthae_interessenten, inthae_haendler, inthae_created', 'safe', 'on'=>'search'),
+			array('ih_prospect_id, ih_dealer_id, ih_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,8 +43,8 @@ class Inthae extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-							// variable => Relationship, Class name, foriegn_key
-			 'leadgen'=>array(self::BELONGS_TO, 'LeadGen', 'inthae_interessenten'),
+
+			 'leadgen'=>array(self::BELONGS_TO, 'LeadGen', 'ih_prospect_id'),
 		);
 	}
 
@@ -54,10 +54,9 @@ class Inthae extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'inthae_id' => 'Inthae',
-			'inthae_interessenten' => 'Inthae Interessenten',
-			'inthae_haendler' => 'Inthae Haendler',
-			'inthae_created' => 'Inthae Created',
+			'ih_prospect_id' => 'Ih Prospect',
+			'ih_dealer_id' => 'Ih Dealer',
+			'ih_status' => 'Ih Status',
 		);
 	}
 
@@ -79,10 +78,9 @@ class Inthae extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('inthae_id',$this->inthae_id);
-		$criteria->compare('inthae_interessenten',$this->inthae_interessenten);
-		$criteria->compare('inthae_haendler',$this->inthae_haendler);
-		$criteria->compare('inthae_created',$this->inthae_created,true);
+		$criteria->compare('ih_prospect_id',$this->ih_prospect_id);
+		$criteria->compare('ih_dealer_id',$this->ih_dealer_id);
+		$criteria->compare('ih_status',$this->ih_status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

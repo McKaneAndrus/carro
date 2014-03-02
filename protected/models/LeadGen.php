@@ -143,7 +143,7 @@ class LeadGen extends CActiveRecord
 			// set a default value if needed, in this case stuff the create date (int_anlage) with current db time
 
 			array('int_anlage, int_ort, int_text', 'safe'),	// mark as safe incase we need these, likely not...
-
+			
 			array('int_erreichbar, int_mobil, int_id, int_status, int_premium_id', 'safe'), // not using these below
 			array('int_mitarbeiter, int_kvs_status, int_entfernung, int_grund', 'safe'),
 			array('int_alt_ausstattung, int_bericht_wv, int_bericht_status, int_bericht_ma', 'safe'),
@@ -170,7 +170,7 @@ class LeadGen extends CActiveRecord
 			
 			// the inthae (this table is the many part, which is selected dealers of a particular lead
 							// variable => Relationship, Class name, foriegn_key
-			'inthae'=>array(self::HAS_MANY, 'Inthae', 'inthae_interessenten'),
+			'inthae'=>array(self::HAS_MANY, 'Inthae', 'ih_prospect_id'),
 			'dlrs'=>array(self::HAS_MANY, 'DealerLookup', 'hd_id'),
 		);
 	}
