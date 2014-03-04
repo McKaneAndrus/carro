@@ -213,9 +213,16 @@ class SiteController extends Controller
 	
 	public function GetTrims($model_id)
 	{
-		$trims = TrimLookup::model()->findAll('aus_modell=:id_trim_model', array(':id_trim_model' => (int) $model_id));
+		// set up query, make easy to read and change
 		
-		return CHtml::listData($trims, 'aus_id', 'aus_bez');	// fields from the model table
+		$criteria = new CDbCriteria();
+		$criteria->select = 'aus_id, aus_modell, aus_bez, aus_extended_trim';	// fields of interest
+		$criteria->condition = 'aus_modell=:id_trim_model';
+		$criteria->order = 'aus_extended_trim';
+		$criteria->params = array(':id_trim_model' => (int) $model_id);
+		$trims = TrimLookup::model()->findAll($criteria);
+	
+		return CHtml::listData($trims, 'aus_id', 'aus_extended_trim');	// fields from the model table, use unique extended trim
 	}
 
 	/*
@@ -229,12 +236,20 @@ class SiteController extends Controller
 
 	public function GetColors($trim_id)
 	{
-		// using the farben table with a look up on model only, implies data is set up for model look up
-		// and not a trim look up, use trim id when/if that becomes availaible
-		
-		$colors = ColorLookup::model()->findAll('farb_modell=:id_color_trim', array(':id_color_trim' => (int) $trim_id));
 
-		return CHtml::listData($colors, 'farb_id', 'farb_bez');	// fields from the color table
+		// note that the 'as color' requred a public variable in the model to access
+		// the data. Live and learn...
+		
+		$criteria = new CDbCriteria();
+		$criteria->alias = 'mf';
+		$criteria->select = 'mf.mf_trim, mf.mf_farbe, s1.farb_bez as color';				// fields of interest (from 2 tables)
+		$criteria->join = 'join br_farben s1 on (mf.mf_farbe = s1.farb_id)';
+		$criteria->condition = 'mf.mf_trim=:id_color_trim';
+		$criteria->params = array(':id_color_trim' => (int) $trim_id);	// related key
+
+		$colors = TrimToColor::model()->findAll($criteria);
+
+		return CHtml::listData($colors, 'mf_farbe', 'color');	// fields color ID and name
 	}
 
 	public function GetDealers($postal_code_str, $limit)

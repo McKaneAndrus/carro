@@ -1,20 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "ausstattung".
+ * This is the model class for table "{{ausstattung}}".
  *
- * The followings are the available columns in table 'ausstattung':
- * @property integer $aus_id
+ * The followings are the available columns in table '{{ausstattung}}':
+ * @property string $aus_id
  * @property integer $aus_modell
  * @property string $aus_bez
+ * @property string $aus_extended_trim
+ * @property string $aus_body_id
+ * @property string $aus_body_type
+ * @property integer $aus_doors
  * @property integer $aus_sitze
  * @property integer $aus_bezug
- * @property integer $aus_motorart
+ * @property string $aus_motorart
  * @property integer $aus_hubraum
  * @property integer $aus_leistung
- * @property integer $aus_antrieb
+ * @property string $aus_antrieb
  * @property integer $aus_zylinder
- * @property integer $aus_schaltung
+ * @property string $aus_schaltung
  * @property string $aus_verbrauch_stadt
  * @property string $aus_verbrauch_land
  * @property string $aus_verbrauch_bab
@@ -55,62 +59,7 @@
  * @property string $aus_anlage_user
  * @property string $aus_aender_user
  * @property integer $aus_status
- *
- *
- * German to Engish Field Translation
- *
- * aus_id => record id 
- * aus_modell => model id 
- * aus_bez => description
- * seats id => (table x_.._sitze)
- * aus_bezug => seat cover id (table x_.._bezug) 
- * aus_motorart => engine type id (table x_.._motorart)
- * aus_hubraum => cubic capacity
- * aus_leistung => Power
- * aus_antrieb => drive id (table x_.._antrieb) 
- * aus_zylinder => cylinder id (table x_.._zylinder) 
- * aus_schaltung => gear shift id (table x_.._schaltung) 
- * aus_verbrauch_stadt => fuel consumption city 
- * aus_verbrauch_land => fuel consumption country 
- * aus_verbrauch_bab => fuel consumption highway 
- * aus_verbrauch_mix => fuel consumption mix
- * aus_emissionen => emission id (table x_.._emission) 
- * aus_beschleunigung => acceleration 
- * aus_drehmoment => torque
- * aus_drehmoment_drehzahl => torque-speed
- * aus_esp => esp 
- * aus_airbags => airbags
- * aus_klimaanlage => air conditioning
- * aus_hoehe => height (cm)
- * aus_breite => width (cm)
- * aus_laenge length (cm)
- * aus_leergewicht => tare
- * aus_zuladung => additional load
- * aus_gepaeckraum luggage compartment
- * aus_tank => tank capacity
- * aus_navi => navigation system
- * aus_klimaautomatik => automatic climate control
- * aus_schiebedach => sunroof 
- * aus_tempomat => cruise control
- * aus_einparkhilfe => parking aid 
- * aus_lederausstattung => leather seats 
- * aus_leichtmetallfelgen => alloy rims 
- * aus_sitzheizung => heated seats
- * aus_standheizung => stand-heating 
- * aus_xenonlicht => xenon lights
- * aus_haengerkupplung => trailer hitch 
- * aus_listenpreis => list price
- * aus_kennziffer => code number (intern)
- * aus_klasse => class
- * aus_anlage => creation date
- * aus_picks => number of clicks
- * aus_lastpick => date of last click
- * aus_aenderdatum => Update Date
- * aus_anlage_user => creation user 
- * aus_aender_user update user 
- * aus_status => Status (1 = record is locked) smallint(1)
  */
-
 class TrimLookup extends CActiveRecord
 {
 	/**
@@ -129,18 +78,23 @@ class TrimLookup extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('aus_modell, aus_sitze, aus_bezug, aus_motorart, aus_hubraum, aus_leistung, aus_antrieb, aus_zylinder, aus_schaltung, aus_emissionen, aus_drehmoment, aus_drehmoment_drehzahl, aus_abs, aus_esp, aus_airbags, aus_klimaanlage, aus_hoehe, aus_breite, aus_laenge, aus_leergewicht, aus_zuladung, aus_gepaeckraum, aus_tank, aus_navi, aus_klimaautomatik, aus_schiebedach, aus_tempomat, aus_einparkhilfe, aus_lederausstattung, aus_leichtmetallfelgen, aus_sitzheizung, aus_standheizung, aus_xenonlicht, aus_haengerkupplung, aus_klasse, aus_picks, aus_status', 'numerical', 'integerOnly'=>true),
+			array('aus_id, aus_extended_trim, aus_body_id, aus_body_type, aus_doors', 'required'),
+			array('aus_modell, aus_doors, aus_sitze, aus_bezug, aus_hubraum, aus_leistung, aus_zylinder, aus_emissionen, aus_drehmoment, aus_drehmoment_drehzahl, aus_abs, aus_esp, aus_airbags, aus_klimaanlage, aus_hoehe, aus_breite, aus_laenge, aus_leergewicht, aus_zuladung, aus_gepaeckraum, aus_tank, aus_navi, aus_klimaautomatik, aus_schiebedach, aus_tempomat, aus_einparkhilfe, aus_lederausstattung, aus_leichtmetallfelgen, aus_sitzheizung, aus_standheizung, aus_xenonlicht, aus_haengerkupplung, aus_klasse, aus_picks, aus_status', 'numerical', 'integerOnly'=>true),
+			array('aus_id', 'length', 'max'=>20),
 			array('aus_bez', 'length', 'max'=>40),
+			array('aus_extended_trim', 'length', 'max'=>60),
+			array('aus_body_id', 'length', 'max'=>2),
+			array('aus_body_type', 'length', 'max'=>45),
+			array('aus_motorart, aus_schaltung', 'length', 'max'=>30),
+			array('aus_antrieb', 'length', 'max'=>10),
 			array('aus_verbrauch_stadt, aus_verbrauch_land, aus_verbrauch_bab, aus_verbrauch_mix', 'length', 'max'=>5),
 			array('aus_beschleunigung', 'length', 'max'=>4),
 			array('aus_listenpreis, aus_kennziffer', 'length', 'max'=>11),
 			array('aus_anlage_user, aus_aender_user', 'length', 'max'=>12),
 			array('aus_anlage, aus_lastpick, aus_aenderdatum', 'safe'),
-			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			
-			array('aus_id, aus_modell, aus_bez, aus_sitze, aus_bezug, aus_motorart, aus_hubraum, aus_leistung, aus_antrieb, aus_zylinder, aus_schaltung, aus_verbrauch_stadt, aus_verbrauch_land, aus_verbrauch_bab, aus_verbrauch_mix, aus_emissionen, aus_beschleunigung, aus_drehmoment, aus_drehmoment_drehzahl, aus_abs, aus_esp, aus_airbags, aus_klimaanlage, aus_hoehe, aus_breite, aus_laenge, aus_leergewicht, aus_zuladung, aus_gepaeckraum, aus_tank, aus_navi, aus_klimaautomatik, aus_schiebedach, aus_tempomat, aus_einparkhilfe, aus_lederausstattung, aus_leichtmetallfelgen, aus_sitzheizung, aus_standheizung, aus_xenonlicht, aus_haengerkupplung, aus_listenpreis, aus_kennziffer, aus_klasse, aus_anlage, aus_picks, aus_lastpick, aus_aenderdatum, aus_anlage_user, aus_aender_user, aus_status', 'safe', 'on'=>'search'),
+			array('aus_id, aus_modell, aus_bez, aus_extended_trim, aus_body_id, aus_body_type, aus_doors, aus_sitze, aus_bezug, aus_motorart, aus_hubraum, aus_leistung, aus_antrieb, aus_zylinder, aus_schaltung, aus_verbrauch_stadt, aus_verbrauch_land, aus_verbrauch_bab, aus_verbrauch_mix, aus_emissionen, aus_beschleunigung, aus_drehmoment, aus_drehmoment_drehzahl, aus_abs, aus_esp, aus_airbags, aus_klimaanlage, aus_hoehe, aus_breite, aus_laenge, aus_leergewicht, aus_zuladung, aus_gepaeckraum, aus_tank, aus_navi, aus_klimaautomatik, aus_schiebedach, aus_tempomat, aus_einparkhilfe, aus_lederausstattung, aus_leichtmetallfelgen, aus_sitzheizung, aus_standheizung, aus_xenonlicht, aus_haengerkupplung, aus_listenpreis, aus_kennziffer, aus_klasse, aus_anlage, aus_picks, aus_lastpick, aus_aenderdatum, aus_anlage_user, aus_aender_user, aus_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -164,6 +118,10 @@ class TrimLookup extends CActiveRecord
 			'aus_id' => 'Aus',
 			'aus_modell' => 'Aus Modell',
 			'aus_bez' => 'Aus Bez',
+			'aus_extended_trim' => 'Aus Extended Trim',
+			'aus_body_id' => 'Aus Body',
+			'aus_body_type' => 'Aus Body Type',
+			'aus_doors' => 'Aus Doors',
 			'aus_sitze' => 'Aus Sitze',
 			'aus_bezug' => 'Aus Bezug',
 			'aus_motorart' => 'Aus Motorart',
@@ -233,17 +191,21 @@ class TrimLookup extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('aus_id',$this->aus_id);
+		$criteria->compare('aus_id',$this->aus_id,true);
 		$criteria->compare('aus_modell',$this->aus_modell);
 		$criteria->compare('aus_bez',$this->aus_bez,true);
+		$criteria->compare('aus_extended_trim',$this->aus_extended_trim,true);
+		$criteria->compare('aus_body_id',$this->aus_body_id,true);
+		$criteria->compare('aus_body_type',$this->aus_body_type,true);
+		$criteria->compare('aus_doors',$this->aus_doors);
 		$criteria->compare('aus_sitze',$this->aus_sitze);
 		$criteria->compare('aus_bezug',$this->aus_bezug);
-		$criteria->compare('aus_motorart',$this->aus_motorart);
+		$criteria->compare('aus_motorart',$this->aus_motorart,true);
 		$criteria->compare('aus_hubraum',$this->aus_hubraum);
 		$criteria->compare('aus_leistung',$this->aus_leistung);
-		$criteria->compare('aus_antrieb',$this->aus_antrieb);
+		$criteria->compare('aus_antrieb',$this->aus_antrieb,true);
 		$criteria->compare('aus_zylinder',$this->aus_zylinder);
-		$criteria->compare('aus_schaltung',$this->aus_schaltung);
+		$criteria->compare('aus_schaltung',$this->aus_schaltung,true);
 		$criteria->compare('aus_verbrauch_stadt',$this->aus_verbrauch_stadt,true);
 		$criteria->compare('aus_verbrauch_land',$this->aus_verbrauch_land,true);
 		$criteria->compare('aus_verbrauch_bab',$this->aus_verbrauch_bab,true);

@@ -31,7 +31,7 @@
 									),			 
 									'onchange'=>'makeChanged();'
 							)
-					);
+						);
 					?>
 					<?php echo $form->error($model,'int_fabrikat'); ?>
 				

@@ -52,7 +52,7 @@
  * int_fabrikat make id int(8)
  * int_modell model id int(8)
  * int_bauart type int(5)
- * int_ausstattung trim id int(8)
+ * int_ausstattung trim id int(20)
  * int_farbe int(8)
  * int_kaufzeitpunkt purchase time smallint(2)
  * int_zahlungsart payment method smallint(2)

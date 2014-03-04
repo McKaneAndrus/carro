@@ -28,12 +28,7 @@
 					<?php 
 						// check out the trim field by looking at the model
 						
-						// $trim = $model->trim;	// get trim from model, will be zero if NOT set, so don't use 0 as a valid select value 
-						
-						//BEGIN HACK
-						$trim = $model->int_modell; // HACK so color will be displayed off of model, disabled color selector is broke because of this
-						// END HACK
-						
+						$trim = $model->int_ausstattung;	// get trim (int_ausstattung), will be zero if NOT set, so don't use 0 as a valid select value 
 						$trims = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_TRIM_PROMPT);
 						$trims += $this->GetTrims($model->int_modell);
 						
@@ -135,85 +130,6 @@
 								echo '</div>';
 							}
 						?>
-<!--
-						
-                        <div class="quote_special">
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                        </div>
-                        
-                        <h3>More Dealers</h3>
-                        <div class="quote_more_dealers">
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                            <div class="quote_dealer">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                Dealer Name<br />
-                                123 Street Name<br />
-                                City, State 99999
-                            </div>
-                        </div>
-                            <div class="quote_dealer">
-                                <div>
-                                    <input type="checkbox" />
-                                </div>
-                                <div>
-                                    Dealer Name<br />
-                                    123 Street Name<br />
-                                    City, State 99999
-                                </div>
-                            </div>
-                        </div>
-             -->
                         
                     </div>
                     
@@ -263,7 +179,7 @@ $cs->registerScript(
  	{
 			$("#LeadGen_int_farbe").empty(); 
 
-			if($("#int_ausstattung").val() == "") 
+			if($("#LeadGen_int_ausstattung").val() == "") 
 			{
 				$("#LeadGen_int_farbe").prop("disabled", true);
 			}
@@ -271,7 +187,7 @@ $cs->registerScript(
 			{
 				$("#LeadGen_int_farbe").prop("disabled", false);
 			}
-		}',
+	}',
   CClientScript::POS_END						// Script insert Position 
 );
 ?>
