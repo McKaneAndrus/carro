@@ -196,7 +196,16 @@ class SiteController extends Controller
 	
 	public function GetModels($make_id)
 	{
-		$models = ModelLookup::model()->findAll('mod_fabrikat=:id_model_make', array(':id_model_make' => (int) $make_id));
+
+
+		$criteria = new CDbCriteria();
+		$criteria->select = 'mod_id, mod_bez';	// fields of interest
+		$criteria->condition = 'mod_fabrikat=:id_model_make';
+		$criteria->order = 'mod_bez';
+		$criteria->params = array(':id_model_make' => (int) $make_id);
+		$models = ModelLookup::model()->findAll($criteria);
+
+		//$models = ModelLookup::model()->findAll('mod_fabrikat=:id_model_make', array(':id_model_make' => (int) $make_id));
 
 		return CHtml::listData($models, 'mod_id', 'mod_bez');	// fields from the model table
 	}
