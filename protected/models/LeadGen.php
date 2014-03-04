@@ -169,9 +169,6 @@ class LeadGen extends CActiveRecord
 		return array(
 			
 			// the inthae (this table is the many part, which is selected dealers of a particular lead
-							// variable => Relationship, Class name, foriegn_key
-			'inthae'=>array(self::HAS_MANY, 'Inthae', 'ih_prospect_id'),
-			'dlrs'=>array(self::HAS_MANY, 'DealerLookup', 'hd_id'),
 		);
 	}
 

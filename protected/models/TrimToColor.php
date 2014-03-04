@@ -10,11 +10,16 @@
  * @property integer $mf_farbe
  * @property integer $mf_schalter
  * @property integer $mf_status
+ *
+ * NOTE :
+ * 	This model is a bit different then the XYZLookup models since this can't
+ *  get the trim to color data directly. The ColorLookup is still needed for 
+ *  other uses. 
  */
 class TrimToColor extends CActiveRecord
 {
 	
-	public $color;
+	public $color;		// Need this public attribute so the query can do the field alias to color in the query
 	
 	/**
 	 * @return string the associated database table name
@@ -48,10 +53,6 @@ class TrimToColor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		
-				
-		//'color'=>array(self::BELONGS_TO, 'ColorLookup', 'color_id'),
-		
 		);
 	}
 

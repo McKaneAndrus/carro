@@ -288,7 +288,7 @@ class SiteController extends Controller
 		
 		$q = 'CALL P_br_dealer_distance_km(:user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
-		$dist = 1000;	// 100 sq km box for the start, remember ordered by distance
+		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 		do
 		{
@@ -305,7 +305,7 @@ class SiteController extends Controller
 			$dist = $dist * 2;		// qeometricly increase the area (its a square size)
 			$cnt++;					// bump or you will dead the server
 			
-		}while($cnt < 4);			// exit on 4th query attempt
+		}while($cnt < 4);			// exit on 4th query attempt, getting wasteful now...
 
 		/*
 		* The CheckBoxList we want has several lines of text so we must
@@ -315,7 +315,6 @@ class SiteController extends Controller
 		*/
 
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
-			
 			return CHtml::encode($dealers['hd_name']) . 
 			'<br>' . CHtml::encode($dealers['hd_str']) . 
 			'<br>' . CHtml::encode($dealers['hd_ort'] . $this->LANG_ZIP_SEP .  $dealers['hd_plz']) .
@@ -366,11 +365,10 @@ class SiteController extends Controller
 	{
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as model
 				
-		$trims = TrimLookup::model()->findAll('aus_modell=:id_trim_model', array(':id_trim_model' => (int) ($_POST['LeadGen']['int_modell'])));
+		$trims = GetTrims((int) ($_POST['LeadGen']['int_modell']));	// post has the request model we need trims for
 
-		if($trims != NULL)
-			$return = CHtml::listData($trims, 'aus_modell', 'aus_bez');	// fields from the trim table
-
+		// stuff the prompt and the default any value
+		
 		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_TRIM_PROMPT), true);			// Prompt
 		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode($this->LANG_ANY_TRIM_PROMPT), true);		// Any Option
 
@@ -396,16 +394,9 @@ class SiteController extends Controller
 	{
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as trim
 
-		// $return = $this->GetColors((int) ($_POST['LeadGen']['trim'])); // when the trim to color relation is valid
+		$return = $this->GetColors((int) ($_POST['LeadGen']['int_ausstattung'])); // when the trim (int_ausstattung) to color relation is valid
 		
-		// for now fake out the query tand call with model as we can only get color by model right now.
-		
-		// begin hack code
-		$model = new LeadGen('landing');	// create a temp leadgen model 
-		$model->attributes = $this->getPageState('page', array()); // gets the state into the model
-		$tmp_model_id = $model->attributes['int_modell'];
-		$return = $this->GetColors($tmp_model_id); // when the model to color relation is valid in newcars tables for now
-		// end hack code
+		// stuff the prompt and the default any value
 
 		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_COLOR_PROMPT), true);			// prompt
 		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode($this->LANG_ANY_COLOR_PROMPT), true);	// Any Option

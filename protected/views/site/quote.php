@@ -26,7 +26,7 @@
 						<label for="">Trim:</label>
 			
 					<?php 
-						// check out the trim field by looking at the model
+						// check out the trim field by looking at the LeadGen model to see if it was ever set
 						
 						$trim = $model->int_ausstattung;	// get trim (int_ausstattung), will be zero if NOT set, so don't use 0 as a valid select value 
 						$trims = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_TRIM_PROMPT);
