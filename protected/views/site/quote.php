@@ -18,11 +18,11 @@
 					)); ?>
 
                     <div class="quote_column">
+						<img id="mmt_img_1" src="images/Mercedes-200x.jpg" alt="" />
                         <h2>
 							 <?php echo $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell); ?>
                         </h2>
-                        <!-- <img src="" alt="" /> add image if wanted from make / model -->
-                        
+				
 						<label for="">Trim:</label>
 			
 					<?php 
@@ -69,8 +69,9 @@
 						
 						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array('disabled' =>$disable, 'prompt' => $this->LANG_COLOR_PROMPT));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
-						<br>
+<!--						<br>
 						<?php echo CHtml::submitButton('', array('name'=>'landing', 'id'=>'back')); ?>
+-->
 
                     </div>
                     

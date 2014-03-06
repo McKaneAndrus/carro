@@ -18,6 +18,8 @@ class SiteController extends Controller
 	public $LANG_UNKNOWN_COLOR = 'Unknown Color';
 	public $LANG_ZIP_SEP = ', ';
 	
+	public $DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';
+	
 	public $DEFAULT_ANY_VALUE = -1;		// must be < 0
 		
 	/**
@@ -34,6 +36,135 @@ class SiteController extends Controller
 	
 	public $defaultAction = 'landing';	
 
+	public function get_pic($p_id)
+	{
+		/*
+		* The $url_image_path is use for final generation of the web based URL of the image. 
+		* This is typically a relative path from webroot or application root. The problem is
+		* that PHP's file_exists() does not work for relative paths and a absolute path is needed
+		* to make it work. So the paths for URL and for Filesysytem are handled independantly.
+		* 
+		* $_SERVER['DOCUMENT_ROOT'] is typically something like '/var/www/' or '/var/www/html/ ......'
+		*
+		* $url_image_path - path prepended to image filename returned to caller
+		* $file_check_path - Absolute filesystem path to the file 
+		* $p_filename - valid filename of an image, default is set at start of function!
+		*
+		* RETURNS : Encoded url to the image
+		*/
+
+		$url_image_path = '/images/cars/';									// Can empth if you just want filename
+		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
+		$p_filename = $this->DEFAULT_NOT_FOUND_CAR_PIC; 					// must always be a valid filename!
+
+		if ($p_id)
+		{
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('aus_modell, aus_body_id, aus_doors');			// vehicle/trim_id
+			$sql->from('{{ausstattung}}');								// will prepend country
+			$sql->where('aus_id=:trim_id', array(':trim_id' => $p_id));
+			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+						
+			if ($rec)
+			{
+				// -- Get model name
+		   
+				$sql1 = Yii::app()->db->createCommand();
+				$sql1->select('mod_path, mod_text, mod_fabrikat');			// vehicle/trim_id
+				$sql1->from('{{modelle}}');									// will prepend country
+				$sql1->where('mod_id=:model_id', array(':model_id' => $rec['aus_modell']));
+				$rec1 = $sql1->queryRow();
+
+				if($rec1 == false)
+					return $url_image_path . $p_filename;		  		// ugly but safe
+
+				$p_year = intval(substr($rec1['mod_text'], 0, 4));
+			   
+				// -- If year is unknown, it's impossible to find photos
+			   
+				if ($p_year >= 1990)
+				{
+					// -- Get make name
+				  
+					$sql2 = Yii::app()->db->createCommand();
+					$sql2->select('fab_bez');							// vehicle/trim_id
+					$sql2->from('{{fabrikate}}');						// will prepend country
+					$sql2->where('fab_id=:make_id', array(':make_id' => $rec1['mod_fabrikat']));
+					$rec2 = $sql2->queryRow();
+				  
+					if($rec2 == false)
+						return $url_image_path . $p_filename;		  	// ugly but safe
+				  
+				  
+					// build path based on  make, model, year, doors, body type (JATO Specific)
+					// file names need no encoding
+					
+					$p_common_name = strtoupper($rec2['fab_bez']) . '/' . 
+						strtoupper($rec1['mod_path']) . '/' . $p_year . '/' . 
+						$rec['aus_doors'] . $rec['aus_body_id'];
+		
+					$p_filename45 = $p_common_name . '_45.JPG';
+					$p_filename135 = $p_common_name . '_135.JPG';
+					$p_filename0 = $p_common_name . '_0.JPG';
+					$p_filename_ = $p_common_name . '.JPG';
+					$p_filename135_4 = $p_common_name . '-4_135.JPG';
+					$p_filename45_4 = $p_common_name . '-4_45.JPG';
+					$p_filename0_4 = $p_common_name. '-4_0.JPG';
+					$p_filename_4 = $p_common_name . '-4.JPG';
+
+					// URL needs raw encoding on file names as they sadly contain spaces
+					
+					$p_common_name = rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
+						rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $p_year . '/' . 
+						$rec['aus_doors'] . $rec['aus_body_id'];
+
+					$p_url45 = $p_common_name . '_45.JPG';
+					$p_url135 = $p_common_name . '_135.JPG';
+					$p_url0 = $p_common_name . '_0.JPG';
+					$p_url_ = $p_common_name . '.JPG';
+					$p_url135_4 = $p_common_name . '-4_135.JPG';
+					$p_url45_4 = $p_common_name . '-4_45.JPG';
+					$p_url0_4 = $p_common_name. '-4_0.JPG';
+					$p_url_4 = $p_common_name . '-4.JPG';
+
+					// -- Find photo (hit the file system)
+					// keep paths out of filename until the end
+					
+					if (file_exists($file_check_path . $p_filename45))
+						$p_filename = $p_url45;
+					else
+						if (file_exists($file_check_path . $p_filename135))
+							$p_filename = $p_url135;
+						else
+							if (file_exists($file_check_path . $p_filename0))
+								$p_filename = $p_url0;
+							else
+								if (file_exists($file_check_path . $p_filename_))
+									$p_filename = $p_url_;
+								else
+									if (file_exists($file_check_path . $p_filename45_4))
+										$p_filename = $p_url45_4;
+									else
+										if (file_exists($file_check_path . $p_filename135_4))
+											$p_filename = $p_url135_4;
+										else
+											if (file_exists($file_check_path . $p_filename0_4))
+												$p_filename = $p_url0_4;
+											else
+												if (file_exists($file_check_path . $p_filename_4))
+													$p_filename = $p_url_4;
+													
+												// a fall though here means we wasted a lot of time...
+												// we should have the default $p_filename set up with the default
+				} // year > 1990
+			} // found a modell record
+		} // $p_id was specified
+
+		// returns default not found image or one that is valid, with URL path not filesystem!!
+		
+		return $url_image_path . $p_filename;	
+	}
+
 	/*
 	* Get the zip to city and state from the zipcode database
 	* currently if unknown we return defaults to allow entry to go on, but
@@ -42,7 +173,6 @@ class SiteController extends Controller
 	* $zip is currently an integer USA style zipcode
 	* Returns : ZipLookup 
 	*/
-
 
 	/*
 	* Returns a normalized postal code that matches the db format. 
@@ -59,15 +189,10 @@ class SiteController extends Controller
 		$len = strlen($postal_code_str);
 		
 		if($len == 5)
-		{
 			return $postal_code_str . '-000'; // format came in as just the 5 digit
-		}
 		else
 			if($len == 9)
-			{
 				return substr($postal_code_str, 0, 6) . '000';	// get the '00000-' add suffix
-				
-			}
 			else
 				return '00000-000'; // NULL might be good, not sure yet...
 	}
@@ -417,69 +542,74 @@ class SiteController extends Controller
 			echo CHtml::tag('option', array('value' => $colorId), CHtml::encode($colorName), true);
 		}
 	}
-	
-	/**
-	* @return array action filters
-	* sjg - needs some work. No delete ever needed, not using access crotrol or crud stuff
-	*/
-	 
-	public function filters()
-	{
-		return array(
-			'accessControl', 			// perform access control for CRUD operations
-			'postOnly + delete', 		// we only allow deletion via POST request
-		);
-	}
 
-	/**
-	* Specifies the access control rules.
-	* This method is used by the 'accessControl' filter.
-	* @return array access control rules
+	/*
+	* Ajax call's to return the image name for 
+	*  Make (fabrikate) which return 3 images in an array
+	*  Model which returns 1 image
+	*  Trim which returns 1 image
+	*
+	* NOTE NOTE : the rand() order is costly and if too slow, drop this type of sort!!
 	*/
-	 
-	public function accessRules()
+	
+	public function actionPhotoMakes()
 	{
+		// check for Ajax call, reject call if not
+		
 		/*
-		* Only allow the 3 pages and the lookup functions to be accessable
+		if(!YII_DEBUG && !Yii::app()->request->isAjaxRequest) 
+		{
+			throw new CHttpException('403', 'Forbidden access.');
+		}
+   
+		if (empty($_POST['LeadGen']['int_fabrikat'])) 
+		{
+			throw new CHttpException('404', 'Missing parameter.');
+		}			
 		*/
 		
-		return array(
-			array('allow',  // allow all to look at the pages and lookups
-				'actions'=>array('landing', 'quote', 'confirmation', 'models', 'trims', 'colors', 'dealers'),  // added create to all users no login needed 
-				'users'=>array('*'),
-			),
-
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('update'),
-				'users'=>array('@'),
-			),
-			
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		//$model_id = (int) ($_POST['LeadGen']['int_fabrikat']));  // the selected model
+		
+		$model_id = 184; 	// audi debug
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_id');									// vehicle/trim_id
+		$sql->from('{{modelle}}');								// will prepend country
+		$sql->join('{{ausstattung}}', 'aus_modell=mod_id');
+		$sql->where('mod_fabrikat=:vehicle_model', array(':vehicle_model' => $model_id));
+		$sql->order('rand()');
+		$sql->limit(3);	
+		
+		$model_trims = $sql->queryAll();
+		
+		// var_dump( $model_trims[0]['aus_id']);
+		
+		$cnt = count($model_trims);		// 0 to 3 results
+		
+		$photo_paths = array();
+		
+		if($cnt)
+			foreach ($model_trims as $id) 
+			{
+				 echo '<br> aus_id : ' . $id['aus_id'] . ' ' . $this->get_pic($id['aus_id'])  . '<br>' ;
+				
+				// get the image file names, save to array (push on end)
+				
+				$photo_paths[] =$this->get_pic($id['aus_id']); 
+			}
+		
+		echo json_encode($photo_paths); // ships it as a nice jason compatible array
 	}
-	
-	/*
-	* checkPageState manages the data from page to page in the sequence.
-	* The model's attributes (form fields) get set and assigned to the 'page' state.
-	* 
-	* $model gets the current state on return
-	* data is the current forms state that is going to be set to the $model's attributes (form fields)
-	* and finally set the current page state to the controllers internal state (Not 100% what to call this)
-	*/
-	
-	private function checkPageState(&$model, $data)
+
+	public function actionPhotoModel()
 	{
-		$model->attributes = $this->getPageState('page', array());
-		$model->attributes = $data;
-		$this->setPageState('page', $model->attributes);
 	}
+	
+	
+	public function actionPhotoTrim()
+	{
+	}
+
 
 	/*
 	* This is where most of the navigation and page state work is done. We never change the page url
@@ -604,6 +734,71 @@ class SiteController extends Controller
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
     
 		$this->render($view, array('model'=>$model));	// render correct view with current model state
+	}
+
+	
+	/**
+	* @return array action filters
+	* sjg - needs some work. No delete ever needed, not using access crotrol or crud stuff
+	*/
+	 
+	public function filters()
+	{
+		return array(
+			'accessControl', 			// perform access control for CRUD operations
+			'postOnly + delete', 		// we only allow deletion via POST request
+		);
+	}
+
+	/**
+	* Specifies the access control rules.
+	* This method is used by the 'accessControl' filter.
+	* @return array access control rules
+	*/
+ 
+	public function accessRules()
+	{
+		/*
+		* Only allow the 3 pages and the lookup functions to be accessable
+		*/
+		
+		return array(
+			array('allow',  // allow all to look at the pages and lookups
+				'actions'=>array('landing', 'quote', 'confirmation', 
+				'models', 'trims', 'colors', 'dealers', 'photomakes'),  // added create to all users no login needed 
+				'users'=>array('*'),
+			),
+
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('update'),
+				'users'=>array('@'),
+			),
+			
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
+			),
+
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
+	
+	/*
+	* checkPageState manages the data from page to page in the sequence.
+	* The model's attributes (form fields) get set and assigned to the 'page' state.
+	* 
+	* $model gets the current state on return
+	* data is the current forms state that is going to be set to the $model's attributes (form fields)
+	* and finally set the current page state to the controllers internal state (Not 100% what to call this)
+	*/
+	
+	private function checkPageState(&$model, $data)
+	{
+		$model->attributes = $this->getPageState('page', array());
+		$model->attributes = $data;
+		$this->setPageState('page', $model->attributes);
 	}
 
 	/**

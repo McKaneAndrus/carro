@@ -261,7 +261,9 @@ nav a:hover {
 }
 
 .landing_overview_car h4,
-.landing_overview_makeCar h4 {
+.landing_overview_makeCar,
+.landing_overview_modelCar,
+ h4 {
     font-weight: bold;
     font-size: 16px;
     color: #d60008;
@@ -275,13 +277,50 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
+    height: 170px;
+    
 }
 
 .landing_overview_makeCar:first-child {
     margin: 0;
 }
 
+/* next few added sjg */ 
 
+
+.landing_overview_modelCar {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #999;
+    width: 524px;
+    margin: 0 0 0 10px;
+    text-align: center;  
+    padding: 20px; 
+    height: 170px;
+}
+
+.landing_overview_adspace {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #999;
+    width: 318px;
+    margin: 0 0 0 10px;
+    text-align: center;  
+    padding: 20px; 
+    height: 170px;
+    
+}
+
+.landing_overview_modelCar:first-child {
+    margin: 0;
+}
+
+/* hide the model div by default */ 
+
+.landing_overview #show_models {
+	display: none;
+}
+ 
 
 /*-----------
 Quote form 
