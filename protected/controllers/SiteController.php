@@ -19,6 +19,7 @@ class SiteController extends Controller
 	public $LANG_ZIP_SEP = ', ';
 	
 	public $DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';
+	public $DEFAULT_URL_IMAGE_PATH = '/images/cars/';
 	
 	public $DEFAULT_ANY_VALUE = -1;		// must be < 0
 		
@@ -36,7 +37,7 @@ class SiteController extends Controller
 	
 	public $defaultAction = 'landing';	
 
-	public function get_pic($p_id)
+	public function GetPic($p_id)
 	{
 		/*
 		* The $url_image_path is use for final generation of the web based URL of the image. 
@@ -50,12 +51,12 @@ class SiteController extends Controller
 		* $file_check_path - Absolute filesystem path to the file 
 		* $p_filename - valid filename of an image, default is set at start of function!
 		*
-		* RETURNS : Encoded url to the image
+		* RETURNS : Encoded url to the image or FALSE if not found
 		*/
 
-		$url_image_path = '/images/cars/';									// Can empth if you just want filename
+		$url_image_path = $this->DEFAULT_URL_IMAGE_PATH; 
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
-		$p_filename = $this->DEFAULT_NOT_FOUND_CAR_PIC; 					// must always be a valid filename!
+		$p_filename = FALSE;
 
 		if ($p_id)
 		{
@@ -76,8 +77,8 @@ class SiteController extends Controller
 				$rec1 = $sql1->queryRow();
 
 				if($rec1 == false)
-					return $url_image_path . $p_filename;		  		// ugly but safe
-
+					return FALSE;
+					
 				$p_year = intval(substr($rec1['mod_text'], 0, 4));
 			   
 				// -- If year is unknown, it's impossible to find photos
@@ -93,76 +94,33 @@ class SiteController extends Controller
 					$rec2 = $sql2->queryRow();
 				  
 					if($rec2 == false)
-						return $url_image_path . $p_filename;		  	// ugly but safe
-				  
+						return FALSE;
 				  
 					// build path based on  make, model, year, doors, body type (JATO Specific)
-					// file names need no encoding
-					
-					$p_common_name = strtoupper($rec2['fab_bez']) . '/' . 
-						strtoupper($rec1['mod_path']) . '/' . $p_year . '/' . 
-						$rec['aus_doors'] . $rec['aus_body_id'];
-		
-					$p_filename45 = $p_common_name . '_45.JPG';
-					$p_filename135 = $p_common_name . '_135.JPG';
-					$p_filename0 = $p_common_name . '_0.JPG';
-					$p_filename_ = $p_common_name . '.JPG';
-					$p_filename135_4 = $p_common_name . '-4_135.JPG';
-					$p_filename45_4 = $p_common_name . '-4_45.JPG';
-					$p_filename0_4 = $p_common_name. '-4_0.JPG';
-					$p_filename_4 = $p_common_name . '-4.JPG';
+					// file names need no encoding, URL's do
+					// $image_suffix has the image suffix in order of importance	
 
-					// URL needs raw encoding on file names as they sadly contain spaces
-					
-					$p_common_name = rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
-						rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $p_year . '/' . 
-						$rec['aus_doors'] . $rec['aus_body_id'];
+					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_135.JPG', '-4_45.JPG', '-4_0.JPG', '-4.JPG');
 
-					$p_url45 = $p_common_name . '_45.JPG';
-					$p_url135 = $p_common_name . '_135.JPG';
-					$p_url0 = $p_common_name . '_0.JPG';
-					$p_url_ = $p_common_name . '.JPG';
-					$p_url135_4 = $p_common_name . '-4_135.JPG';
-					$p_url45_4 = $p_common_name . '-4_45.JPG';
-					$p_url0_4 = $p_common_name. '-4_0.JPG';
-					$p_url_4 = $p_common_name . '-4.JPG';
-
-					// -- Find photo (hit the file system)
-					// keep paths out of filename until the end
+					foreach($image_suffix as $suffix)
+					{
+						if (file_exists($file_check_path . strtoupper($rec2['fab_bez']) . '/' . 
+										strtoupper($rec1['mod_path']) . '/' . $p_year . '/' . 
+										$rec['aus_doors'] . $rec['aus_body_id'] . $suffix))
+						{
+							// Exit here if we find it, otherwise we return FALSE at the bottom
+							
+							return  rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
+											rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $p_year . '/' . 
+											$rec['aus_doors'] . $rec['aus_body_id'] . $suffix;
+						}
+					} // foreach
 					
-					if (file_exists($file_check_path . $p_filename45))
-						$p_filename = $p_url45;
-					else
-						if (file_exists($file_check_path . $p_filename135))
-							$p_filename = $p_url135;
-						else
-							if (file_exists($file_check_path . $p_filename0))
-								$p_filename = $p_url0;
-							else
-								if (file_exists($file_check_path . $p_filename_))
-									$p_filename = $p_url_;
-								else
-									if (file_exists($file_check_path . $p_filename45_4))
-										$p_filename = $p_url45_4;
-									else
-										if (file_exists($file_check_path . $p_filename135_4))
-											$p_filename = $p_url135_4;
-										else
-											if (file_exists($file_check_path . $p_filename0_4))
-												$p_filename = $p_url0_4;
-											else
-												if (file_exists($file_check_path . $p_filename_4))
-													$p_filename = $p_url_4;
-													
-												// a fall though here means we wasted a lot of time...
-												// we should have the default $p_filename set up with the default
 				} // year > 1990
 			} // found a modell record
 		} // $p_id was specified
-
-		// returns default not found image or one that is valid, with URL path not filesystem!!
 		
-		return $url_image_path . $p_filename;	
+		return FALSE;	// if here then not found
 	}
 
 	/*
@@ -578,27 +536,46 @@ class SiteController extends Controller
 		$sql->join('{{ausstattung}}', 'aus_modell=mod_id');
 		$sql->where('mod_fabrikat=:vehicle_model', array(':vehicle_model' => $model_id));
 		$sql->order('rand()');
-		$sql->limit(3);	
+		$sql->limit(10);		// get more then we think so empty images can be skipped
 		
 		$model_trims = $sql->queryAll();
 		
 		// var_dump( $model_trims[0]['aus_id']);
 		
-		$cnt = count($model_trims);		// 0 to 3 results
+		$cnt = count($model_trims);
 		
-		$photo_paths = array();
+		$photo_urls = array();
+		
+		// scan the list for 3 valids
 		
 		if($cnt)
+		{
+			$valid_images = 0;
 			foreach ($model_trims as $id) 
 			{
-				 echo '<br> aus_id : ' . $id['aus_id'] . ' ' . $this->get_pic($id['aus_id'])  . '<br>' ;
-				
-				// get the image file names, save to array (push on end)
-				
-				$photo_paths[] =$this->get_pic($id['aus_id']); 
+				// get the image file names if valid, save to array (push on end)
+			
+				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+				{ 
+					$photo_urls[] = $pic; 	// same as array_push()
+					$valid_images++;
+					
+					if($valid_images > 2)	// we need 3 valids
+						break;
+				}
 			}
+		}
 		
-		echo json_encode($photo_paths); // ships it as a nice jason compatible array
+		// backfill empty images if we can't come up with any
+		
+		$cnt = count($photo_urls);
+		while($cnt < 3)
+		{
+			$photo_urls[] = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
+			$cnt++;
+		}
+		
+		echo json_encode($photo_urls); // ships it as a nice jason compatible array
 	}
 
 	public function actionPhotoModel()
