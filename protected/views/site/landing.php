@@ -71,22 +71,22 @@
 				<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<img id="mm_img_1" src="images/Aston-200x.jpg" alt="" />
-						<h4>Year Make Model</h4>
+						<h4 id="mm_txt_1">Year Make Model</h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<img id="mm_img_2" src="images/Mercedes-200x.jpg" alt="" />
-						<h4>Year Make Model</h4>
+						<h4 id="mm_txt_2">Year Make Model</h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<img id="mm_img_3" src="images/Audi-200x.jpg" alt="" />
-						<h4>Year Make Model</h4>
+						<h4 id="mm_txt_3">Year Make Model</h4>
 					</div>
                 </div>
                 
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
-						<img id="selected_make_image" src="images/Aston-200x.jpg" alt="" />
-						<h4>Year Make Model</h4>
+						<img id="selected_model_img" src="images/Aston-200x.jpg" alt="" />
+						<h4 id="selected_model_txt">Year Make Model</h4>
 					</div>
 					<div class="landing_overview_adspace">
 						<h4>Lorem, Ipsum, Etc</h4>
@@ -113,13 +113,53 @@
             </div>
         </div>
 
+
+
+
 <?php
+
+
+$make_update_code = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/photomakes'), 
+		'type'=>'POST',           
+		'dataType'=>'json',
+		'data'=>'js:{ "ajax":true, "make_id":$("#LeadGen_int_fabrikat").val() }',
+		'success'=>'js:function(data){
+			$("#mm_img_1").attr("src", data[0]);
+			$("#mm_img_2").attr("src", data[1]);
+			$("#mm_img_3").attr("src", data[2]); 
+			$("#mm_txt_1").html(data[0]);
+			$("#mm_txt_2").html(data[1]);
+			$("#mm_txt_3").html(data[2]);
+		 }'
+   )
+);
+
+$model_update_code = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/photomodel'), 
+		'type'=>'POST',           
+		'dataType'=>'json',
+		'data'=>'js:{ "ajax":true, "model_id":$("#LeadGen_int_modell").val() }',
+		'success'=>'js:function(data){
+			$("#selected_model_img").attr("src", data);
+			$("#selected_model_txt").html(data);
+		 }'
+   )
+);
+
+
+
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function makeChanged() 
  	{
 		$("#LeadGen_int_modell").empty(); 
+
+		$("#show_makes").show();
+		$("#show_models").hide();
 
 		if($("#LeadGen_int_fabrikat").val() == "") 
 		{
@@ -139,7 +179,11 @@ $cs->registerScript(
 			$("#mm_img_1").attr("src", "images/Audi-200x.jpg");
 			$("#mm_img_2").attr("src", "images/Audi-200x.jpg");
 			$("#mm_img_3").attr("src", "images/Audi-200x.jpg");
-		}
+
+			// call for images
+		' . $make_update_code .
+		 
+		'}
 	}
 	
 	function modelChanged()
@@ -147,7 +191,8 @@ $cs->registerScript(
 		$("#show_makes").hide();
 		$("#show_models").show();
 		
-	}
+		' . $model_update_code . 
+	'}
 	
 	$(document).ready(function() {
 		//alert("Page Loaded");

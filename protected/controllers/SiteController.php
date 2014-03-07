@@ -54,19 +54,20 @@ class SiteController extends Controller
 		* RETURNS : Encoded url to the image or FALSE if not found
 		*/
 
-		$url_image_path = $this->DEFAULT_URL_IMAGE_PATH; 
+		$url_image_path = $this->DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
 		$p_filename = FALSE;
 
-		if ($p_id)
+		if(is_numeric($p_id))	// test for existance and a number
 		{
+
 			$sql = Yii::app()->db->createCommand();
 			$sql->select('aus_modell, aus_body_id, aus_doors');			// vehicle/trim_id
 			$sql->from('{{ausstattung}}');								// will prepend country
 			$sql->where('aus_id=:trim_id', array(':trim_id' => $p_id));
 			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 						
-			if ($rec)
+			if($rec)
 			{
 				// -- Get model name
 		   
@@ -100,7 +101,7 @@ class SiteController extends Controller
 					// file names need no encoding, URL's do
 					// $image_suffix has the image suffix in order of importance	
 
-					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_135.JPG', '-4_45.JPG', '-4_0.JPG', '-4.JPG');
+					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_45.JPG', '-4_135.JPG', '-4_0.JPG', '-4.JPG');
 
 					foreach($image_suffix as $suffix)
 					{
@@ -110,7 +111,7 @@ class SiteController extends Controller
 						{
 							// Exit here if we find it, otherwise we return FALSE at the bottom
 							
-							return  rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
+							return  $url_image_path . rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
 											rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $p_year . '/' . 
 											$rec['aus_doors'] . $rec['aus_body_id'] . $suffix;
 						}
@@ -512,38 +513,35 @@ class SiteController extends Controller
 	
 	public function actionPhotoMakes()
 	{
-		// check for Ajax call, reject call if not
+		// This should only be allowed to be called by an ajax request, set access rules...
 		
-		/*
-		if(!YII_DEBUG && !Yii::app()->request->isAjaxRequest) 
+		if(!isset($_POST['make_id']))
 		{
-			throw new CHttpException('403', 'Forbidden access.');
-		}
-   
-		if (empty($_POST['LeadGen']['int_fabrikat'])) 
+			echo "<h1>Reqest Denied</h1>";	// toss exception this is just temp
+			return;
+		}	
+		
+		$make_id = $_POST['make_id'];
+		
+		if(!is_numeric($make_id))
 		{
-			throw new CHttpException('404', 'Missing parameter.');
-		}			
-		*/
-		
-		//$model_id = (int) ($_POST['LeadGen']['int_fabrikat']));  // the selected model
-		
-		$model_id = 184; 	// audi debug
+			echo "<h1>Reqest Denied, Invalid Param</h1>";	// toss exception this is just temp
+			return;
+		}	
 		
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');									// vehicle/trim_id
 		$sql->from('{{modelle}}');								// will prepend country
 		$sql->join('{{ausstattung}}', 'aus_modell=mod_id');
-		$sql->where('mod_fabrikat=:vehicle_model', array(':vehicle_model' => $model_id));
+		$sql->where('mod_fabrikat=:vehicle_make', array(':vehicle_make' => $make_id));
 		$sql->order('rand()');
 		$sql->limit(10);		// get more then we think so empty images can be skipped
 		
-		$model_trims = $sql->queryAll();
+		$make_trims = $sql->queryAll();
 		
-		// var_dump( $model_trims[0]['aus_id']);
+		// var_dump($make_trims[0]['aus_id']);
 		
-		$cnt = count($model_trims);
-		
+		$cnt = count($make_trims);
 		$photo_urls = array();
 		
 		// scan the list for 3 valids
@@ -551,7 +549,7 @@ class SiteController extends Controller
 		if($cnt)
 		{
 			$valid_images = 0;
-			foreach ($model_trims as $id) 
+			foreach ($make_trims as $id) 
 			{
 				// get the image file names if valid, save to array (push on end)
 			
@@ -575,16 +573,90 @@ class SiteController extends Controller
 			$cnt++;
 		}
 		
-		echo json_encode($photo_urls); // ships it as a nice jason compatible array
+		echo CJSON::encode($photo_urls); // ships it as a nice jason compatible array
 	}
 
 	public function actionPhotoModel()
 	{
+		// This should only be allowed to be called by an ajax request, set access rules...
+		// also picks up a few models for display and back fill. The code is a bit more
+		// then what's needed, but at some point might want 3 models displayed like
+		// above so will return array of 1 element in this case
+				
+		if(!isset($_POST['model_id']))
+		{
+			echo "<h1>Reqest Denied</h1>";	// toss exception this is just temp
+			return;
+		}	
+		
+		$model_id = $_POST['model_id'];
+		
+		if(!is_numeric($model_id))
+		{
+			echo "<h1>Reqest Denied, Invalid Param</h1>";	// toss exception this is just temp
+			return;
+		}	
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_id');										// vehicle/trim_id
+		$sql->from('{{ausstattung}}');								// will prepend country
+		$sql->where('aus_modell=:vehicle_model', array(':vehicle_model' => $model_id));
+		$sql->limit(10);		// get more then we think so empty images can be skipped
+		$make_trims = $sql->queryAll();
+		
+		// var_dump($make_trims[0]['aus_id']);
+		
+		$cnt = count($make_trims);
+		$photo_urls = array();
+		
+		// scan the list for at least 1 valid as that is all we are displaying
+		
+		if($cnt)
+		{
+			$valid_images = 0;
+			foreach ($make_trims as $id) 
+			{
+				// get the image file names if valid, save to array (push on end)
+			
+				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+				{ 
+					$photo_urls[] = $pic; 	// same as array_push()
+					$valid_images++;
+					
+					if($valid_images > 0)	// we need 1 valid
+						break;
+				}
+			}
+		}
+		
+		// backfill empty images if we can't come up with any
+		
+		$cnt = count($photo_urls);
+		while($cnt < 1)
+		{
+			$photo_urls[] = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
+			$cnt++;
+		}
+		
+		echo CJSON::encode($photo_urls); // ships it as a nice jason compatible array
 	}
 	
 	
 	public function actionPhotoTrim()
 	{
+		// This should only be allowed to be called by an ajax request, set access rules...
+		// also picks up a few models for display and back fill. 
+		// Just fetches the image for a single specific make, if no images, returns the
+		// default. This returns a single element NOT an array like it's other counterparts
+				
+		//$trim_id = (int) ($_POST['LeadGen']['int_ausstattung]));  // the selected model
+		
+		$trim_id = 7003609; 	// debug
+
+		if(($photo_url = $this->GetPic($trim_id)) === FALSE)
+			$photo_url = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
+
+		echo CJSON::encode($photo_url); // ships it as a nice jason element
 	}
 
 
@@ -736,13 +808,14 @@ class SiteController extends Controller
 	public function accessRules()
 	{
 		/*
-		* Only allow the 3 pages and the lookup functions to be accessable
+		* Only allow the 3 pages and the lookup and ajax related functions to be accessable
 		*/
 		
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
-				'models', 'trims', 'colors', 'dealers', 'photomakes'),  // added create to all users no login needed 
+				'models', 'trims', 'colors', 'dealers', 
+				'photomakes', 'photomodel', 'phototrim'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
