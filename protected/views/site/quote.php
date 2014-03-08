@@ -201,7 +201,7 @@ $model_image_update_code = CHtml::ajax(
 
 $color_list_update = CHtml::ajax(
    array(
-		'url' => Yii::app()->createUrl('site/models'), 
+		'url' => Yii::app()->createUrl('site/colors'), 
 		'type'=>'POST',           
 		'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
 		'success'=>'js:function(html){
