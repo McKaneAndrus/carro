@@ -205,7 +205,7 @@ $color_list_update = CHtml::ajax(
 		'type'=>'POST',           
 		'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
 		'success'=>'js:function(html){
-			jQuery("#LeadGen_int_ausstattung").html(html)
+			jQuery("#LeadGen_int_farbe").html(html)
 		}'
    )
 );
