@@ -19,10 +19,7 @@
 
                     <div class="quote_column">
 						<img id="mmt_img_1" src="images/Mercedes-200x.jpg" alt="" />
-                        <h2>
-							 <?php echo $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell); ?>
-                        </h2>
-				
+						<h4 id="mmt_txt_1">Year Make Model</h4>
 						<label for="">Trim:</label>
 			
 					<?php 
@@ -69,9 +66,10 @@
 						
 						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array('disabled' =>$disable, 'prompt' => $this->LANG_COLOR_PROMPT));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
-<!--						<br>
+<!-- testing only 
+						<br>
 						<?php echo CHtml::submitButton('', array('name'=>'landing', 'id'=>'back')); ?>
--->
+testing only -->
 
                     </div>
                     
@@ -165,20 +163,59 @@
 							<?php $cs_rec = $this->GetCityState($model->int_plz);?>
 							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
 						</p>
+						
+						 <?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
 						<?php echo CHtml::submitButton('', array('name'=>'submit')); ?>
                         
                     </div>
 				<?php $this->endWidget(); ?>
             </div>
         </div>        
-        
 <?php
+$trim_image_update_code = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/phototrim'), 
+		'type'=>'POST',           
+		'dataType'=>'json',
+		'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
+		'success'=>'js:function(data){
+			$("#mmt_img_1").attr("src", data.image_path);
+			$("#mmt_txt_1").html(data.image_desc);
+		 }'
+   )
+);
+
+$model_image_update_code = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/photomodel'), 
+		'type'=>'POST',           
+		'dataType'=>'json',
+		'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
+		'success'=>'js:function(data){
+			$("#mmt_img_1").attr("src", data.image_path);
+			$("#mmt_txt_1").html(data.image_desc);
+		 }'
+   )
+);
+
+
+$color_list_update = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/models'), 
+		'type'=>'POST',           
+		'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
+		'success'=>'js:function(html){
+			jQuery("#LeadGen_int_ausstattung").html(html)
+		}'
+   )
+);
+
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function trimChanged() 
  	{
-			$("#LeadGen_int_farbe").empty(); 
+			// $("#LeadGen_int_farbe").empty(); 
 
 			if($("#LeadGen_int_ausstattung").val() == "") 
 			{
@@ -187,10 +224,26 @@ $cs->registerScript(
 			else
 			{
 				$("#LeadGen_int_farbe").prop("disabled", false);
+				
+			' . $trim_image_update_code . '
 			}
-	}',
-  CClientScript::POS_END						// Script insert Position 
+	}
+	
+	$(document).ready(function() {
+		
+		if($("#LeadGen_int_ausstattung").val() == "" || $("#LeadGen_int_ausstattung").val() == -1) 
+		{
+		' . $model_image_update_code .
+		'
+		}
+		else
+		{
+			trimChanged();
+			' . $color_list_update . '
+			
+		}
+	});	
+	',
+	CClientScript::POS_END						// Script insert Position 
 );
 ?>
-        
-        

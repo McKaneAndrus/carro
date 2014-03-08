@@ -112,51 +112,54 @@
                 <!-- END MODEL LANDING -->
             </div>
         </div>
-
-
-
-
 <?php
-
-
-$make_update_code = CHtml::ajax(
+$make_image_update_code = CHtml::ajax(
    array(
 		'url' => Yii::app()->createUrl('site/photomakes'), 
 		'type'=>'POST',           
 		'dataType'=>'json',
 		'data'=>'js:{ "ajax":true, "make_id":$("#LeadGen_int_fabrikat").val() }',
 		'success'=>'js:function(data){
-			$("#mm_img_1").attr("src", data[0]);
-			$("#mm_img_2").attr("src", data[1]);
-			$("#mm_img_3").attr("src", data[2]); 
-			$("#mm_txt_1").html(data[0]);
-			$("#mm_txt_2").html(data[1]);
-			$("#mm_txt_3").html(data[2]);
+			$("#mm_img_1").attr("src", data[0].image_path);
+			$("#mm_img_2").attr("src", data[1].image_path);
+			$("#mm_img_3").attr("src", data[2].image_path); 
+			$("#mm_txt_1").html(data[0].image_desc);
+			$("#mm_txt_2").html(data[1].image_desc);
+			$("#mm_txt_3").html(data[2].image_desc);
 		 }'
    )
 );
 
-$model_update_code = CHtml::ajax(
+$model_image_update_code = CHtml::ajax(
    array(
 		'url' => Yii::app()->createUrl('site/photomodel'), 
 		'type'=>'POST',           
 		'dataType'=>'json',
 		'data'=>'js:{ "ajax":true, "model_id":$("#LeadGen_int_modell").val() }',
 		'success'=>'js:function(data){
-			$("#selected_model_img").attr("src", data);
-			$("#selected_model_txt").html(data);
+			$("#selected_model_img").attr("src", data.image_path);
+			$("#selected_model_txt").html(data.image_desc);
 		 }'
    )
 );
 
-
+$model_list_update = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/models'), 
+		'type'=>'POST',           
+		'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
+		'success'=>'js:function(html){
+			jQuery("#LeadGen_int_modell").html(html)
+		}'
+   )
+);
 
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function makeChanged() 
  	{
-		$("#LeadGen_int_modell").empty(); 
+		// $("#LeadGen_int_modell").empty(); 
 
 		$("#show_makes").show();
 		$("#show_models").hide();
@@ -175,37 +178,37 @@ $cs->registerScript(
 			$("#LeadGen_int_modell").prop("disabled", false);
 
 			// get the make and update the images if something selected
-			
-			$("#mm_img_1").attr("src", "images/Audi-200x.jpg");
-			$("#mm_img_2").attr("src", "images/Audi-200x.jpg");
-			$("#mm_img_3").attr("src", "images/Audi-200x.jpg");
 
-			// call for images
-		' . $make_update_code .
-		 
-		'}
+		' . $make_image_update_code . '
+		}
 	}
 	
 	function modelChanged()
 	{
 		$("#show_makes").hide();
 		$("#show_models").show();
-		
-		' . $model_update_code . 
-	'}
+	
+		' . $model_image_update_code . '
+	}
 	
 	$(document).ready(function() {
-		//alert("Page Loaded");
+		if($("#LeadGen_int_modell").val() != "")
+		{
+			modelChanged();
+		}
+		else
+		{
+			makeChanged();
+			
+			' . $model_list_update . '
+			
+		}
 
 		//$("#LeadGen_int_fabrikat option:first-child").attr("selected", "selected");
-		
-		//alert("Make  :" + $("#LeadGen_int_fabrikat").val() + ":");
-		//alert("Model :" + $("#LeadGen_int_modelle").val()  + ":");
 
 	});
 	'
-		
-		,
-  CClientScript::POS_END						// Script insert Position 
+	,
+	CClientScript::POS_END						// Script insert Position 
 );
 ?>

@@ -29,6 +29,20 @@ select.error
 	background: #FFC0CB;
 }
 
+div.error
+{
+	color: #C00;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+div.error h1
+{
+	color: #C00;
+    font-size: 40px;
+    font-weight: bold;
+}
+
 /*
 * End mods
 */
@@ -368,6 +382,14 @@ Quote form
     margin: 0 0 10px;
 }
 
+.quote_column h4 {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    color: #d60008;
+}
+
+
 .quote_column img {
     display: block;
     margin: 0 auto 20px;
@@ -513,6 +535,7 @@ Confirmation
     padding: 20px;
     width: 260px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .confirm_vehicle h2 {

@@ -80,6 +80,8 @@ class SiteController extends Controller
 				if($rec1 == false)
 					return FALSE;
 					
+				$mod_text = $rec1['mod_text'];	// get the nice year, make, model text
+					
 				$p_year = intval(substr($rec1['mod_text'], 0, 4));
 			   
 				// -- If year is unknown, it's impossible to find photos
@@ -102,18 +104,21 @@ class SiteController extends Controller
 					// $image_suffix has the image suffix in order of importance	
 
 					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_45.JPG', '-4_135.JPG', '-4_0.JPG', '-4.JPG');
-
+					$image_ydb = $p_year . '/' . $rec['aus_doors'] . $rec['aus_body_id'];
+					
 					foreach($image_suffix as $suffix)
 					{
 						if (file_exists($file_check_path . strtoupper($rec2['fab_bez']) . '/' . 
-										strtoupper($rec1['mod_path']) . '/' . $p_year . '/' . 
-										$rec['aus_doors'] . $rec['aus_body_id'] . $suffix))
+										strtoupper($rec1['mod_path']) . '/' . $image_ydb . $suffix))
 						{
 							// Exit here if we find it, otherwise we return FALSE at the bottom
+							// return is in the form of an array with 'image_path' and 'image_desc' as
+							// keys to get at the data
 							
-							return  $url_image_path . rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
-											rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $p_year . '/' . 
-											$rec['aus_doors'] . $rec['aus_body_id'] . $suffix;
+							$image_path = $url_image_path . rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
+											rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $image_ydb . $suffix;
+											
+							return array('image_path' => $image_path, 'image_desc' => $mod_text);
 						}
 					} // foreach
 					
@@ -226,6 +231,26 @@ class SiteController extends Controller
 	}
 
 	/*
+	* Get the Model text (string) from a model ID. 
+	* Model text is Year, Make, Model 
+	*
+	* currently if unknown we return default
+	*
+	* $model_id is currently an integer for the trim
+	* Returns : string name of the model
+	*/
+		
+	public function GetModelText($model_id)
+	{
+		$model_rec = ModelLookup::model()->find('mod_id=:id_model', array(':id_model' => $model_id));
+
+		if($model_rec == NULL)
+			return($this->LANG_UNKNOWN_MODEL);
+		
+		return($model_rec->mod_text);
+	}
+
+	/*
 	* Get the Trim name (string) from a Trim ID. 
 	* currently if unknown we return default. Handles
 	* the ANY TRIM option
@@ -280,8 +305,6 @@ class SiteController extends Controller
 	
 	public function GetModels($make_id)
 	{
-
-
 		$criteria = new CDbCriteria();
 		$criteria->select = 'mod_id, mod_bez';	// fields of interest
 		$criteria->condition = 'mod_fabrikat=:id_model_make';
@@ -514,10 +537,16 @@ class SiteController extends Controller
 	public function actionPhotoMakes()
 	{
 		// This should only be allowed to be called by an ajax request, set access rules...
-		
+
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['make_id']))
+			throw new CHttpException(400, 'Invalid Request');
+ 		
 		if(!isset($_POST['make_id']))
 		{
-			echo "<h1>Reqest Denied</h1>";	// toss exception this is just temp
+			echo "<h1>Request Denied</h1>";	// toss exception this is just temp
 			return;
 		}	
 		
@@ -525,9 +554,11 @@ class SiteController extends Controller
 		
 		if(!is_numeric($make_id))
 		{
-			echo "<h1>Reqest Denied, Invalid Param</h1>";	// toss exception this is just temp
+			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
 			return;
 		}	
+
+		//$make_id = 184;
 		
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');									// vehicle/trim_id
@@ -538,9 +569,7 @@ class SiteController extends Controller
 		$sql->limit(10);		// get more then we think so empty images can be skipped
 		
 		$make_trims = $sql->queryAll();
-		
-		// var_dump($make_trims[0]['aus_id']);
-		
+	
 		$cnt = count($make_trims);
 		$photo_urls = array();
 		
@@ -555,6 +584,7 @@ class SiteController extends Controller
 			
 				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
 				{ 
+					
 					$photo_urls[] = $pic; 	// same as array_push()
 					$valid_images++;
 					
@@ -569,7 +599,7 @@ class SiteController extends Controller
 		$cnt = count($photo_urls);
 		while($cnt < 3)
 		{
-			$photo_urls[] = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
+			$photo_urls[] = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
 			$cnt++;
 		}
 		
@@ -580,12 +610,21 @@ class SiteController extends Controller
 	{
 		// This should only be allowed to be called by an ajax request, set access rules...
 		// also picks up a few models for display and back fill. The code is a bit more
-		// then what's needed, but at some point might want 3 models displayed like
-		// above so will return array of 1 element in this case
-				
+		// then what's needed. An ugly requirement is that we still need a description for images
+		// at this point as the user will be needing to see that even if default image is shown
+		//
+		// Will return an single element unlike the array above in PhotoMakes
+
+
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['model_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
 		if(!isset($_POST['model_id']))
 		{
-			echo "<h1>Reqest Denied</h1>";	// toss exception this is just temp
+			echo "<h1>Request Denied</h1>";	// toss exception this is just temp
 			return;
 		}	
 		
@@ -593,21 +632,21 @@ class SiteController extends Controller
 		
 		if(!is_numeric($model_id))
 		{
-			echo "<h1>Reqest Denied, Invalid Param</h1>";	// toss exception this is just temp
+			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
 			return;
 		}	
+
+		// $model_id = 38727;
 		
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');										// vehicle/trim_id
 		$sql->from('{{ausstattung}}');								// will prepend country
 		$sql->where('aus_modell=:vehicle_model', array(':vehicle_model' => $model_id));
-		$sql->limit(10);		// get more then we think so empty images can be skipped
+		$sql->limit(5);		// get more then we think so empty images can be skipped
 		$make_trims = $sql->queryAll();
 		
-		// var_dump($make_trims[0]['aus_id']);
-		
 		$cnt = count($make_trims);
-		$photo_urls = array();
+		$photo_url = array();
 		
 		// scan the list for at least 1 valid as that is all we are displaying
 		
@@ -620,27 +659,22 @@ class SiteController extends Controller
 			
 				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
 				{ 
-					$photo_urls[] = $pic; 	// same as array_push()
-					$valid_images++;
-					
-					if($valid_images > 0)	// we need 1 valid
-						break;
+					$photo_url = $pic; 	// same as array_push()
+					break;
 				}
 			}
 		}
 		
-		// backfill empty images if we can't come up with any
-		
-		$cnt = count($photo_urls);
-		while($cnt < 1)
+		// backfill empty images if we can't come up with any, fix up text to be valid info
+
+		if(count($photo_url) < 1)
 		{
-			$photo_urls[] = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
-			$cnt++;
+			$text = $this->GetModelText($model_id);	// always returns valid string or default unknown
+			$photo_url = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
 		}
 		
-		echo CJSON::encode($photo_urls); // ships it as a nice jason compatible array
+		echo CJSON::encode($photo_url);
 	}
-	
 	
 	public function actionPhotoTrim()
 	{
@@ -649,16 +683,27 @@ class SiteController extends Controller
 		// Just fetches the image for a single specific make, if no images, returns the
 		// default. This returns a single element NOT an array like it's other counterparts
 				
-		//$trim_id = (int) ($_POST['LeadGen']['int_ausstattung]));  // the selected model
-		
-		$trim_id = 7003609; 	// debug
+		// $trim_id = 7003609; 	// debug
 
-		if(($photo_url = $this->GetPic($trim_id)) === FALSE)
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['trim_id']))
+			throw new CHttpException(400, 'Invalid Request');
+		
+		$trim_id = $_POST['trim_id'];
+		
+		if(!is_numeric($trim_id))
+		{
+			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
+			return;
+		}	
+
+		if(($photo_url = $this->GetPic($trim_id)) === FALSE)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
 			$photo_url = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
 
 		echo CJSON::encode($photo_url); // ships it as a nice jason element
 	}
-
 
 	/*
 	* This is where most of the navigation and page state work is done. We never change the page url
@@ -814,7 +859,7 @@ class SiteController extends Controller
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
-				'models', 'trims', 'colors', 'dealers', 
+				'models', 'trims', 'colors', 'dealers', 'error', 
 				'photomakes', 'photomodel', 'phototrim'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
