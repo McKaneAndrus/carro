@@ -31,9 +31,9 @@
                 
                 <div class="confirm_vehicle">
                     <h2>Your selected vehicle</h2>
-						<img id="mmt_img_1" src="images/Mercedes-200x.jpg" alt="" />
+						<img id="mmt_img_1" src="/images/cars/no_pic.png" alt="" />
 						</br>
-						<h4 id="mmt_txt_1">Year Make Model</h4>
+						<h4 id="mmt_txt_1"></h4>
                 </div>
                 
                 <div class="confirm_affiliates">

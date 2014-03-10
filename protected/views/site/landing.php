@@ -70,22 +70,22 @@
                 <!-- START MAKE LANDING -->
 				<div id="show_makes">
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_1" src="images/Aston-200x.jpg" alt="" />
-						<h4 id="mm_txt_1">Year Make Model</h4>
+						<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
+						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_2" src="images/Mercedes-200x.jpg" alt="" />
-						<h4 id="mm_txt_2">Year Make Model</h4>
+						<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
+						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_3" src="images/Audi-200x.jpg" alt="" />
-						<h4 id="mm_txt_3">Year Make Model</h4>
+						<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
+						<h4 id="mm_txt_3"></h4>
 					</div>
                 </div>
                 
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
-						<img id="selected_model_img" src="images/Aston-200x.jpg" alt="" />
+						<img id="selected_model_img" src="/images/cars/no_pic.png" alt="" />
 						<h4 id="selected_model_txt">Year Make Model</h4>
 					</div>
 					<div class="landing_overview_adspace">
@@ -168,10 +168,9 @@ $cs->registerScript(
 		{
 			$("#LeadGen_int_modell").prop("disabled", true);
 
-			$("#mm_img_1").attr("src", "images/Aston-200x.jpg");
-			$("#mm_img_2").attr("src", "images/Aston-200x.jpg");
-			$("#mm_img_3").attr("src", "images/Aston-200x.jpg");
-
+			$("#mm_img_1").attr("src", "/images/cars/no_pic.png");
+			$("#mm_img_2").attr("src", "/images/cars/no_pic.png");
+			$("#mm_img_3").attr("src", "/images/cars/no_pic.png");
 		}
 		else
 		{
