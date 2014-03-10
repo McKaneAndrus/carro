@@ -171,6 +171,9 @@ $cs->registerScript(
 			$("#mm_img_1").attr("src", "/images/cars/no_pic.png");
 			$("#mm_img_2").attr("src", "/images/cars/no_pic.png");
 			$("#mm_img_3").attr("src", "/images/cars/no_pic.png");
+			$("#mm_txt_1").html("");
+			$("#mm_txt_2").html("");
+			$("#mm_txt_3").html("");
 		}
 		else
 		{
@@ -186,8 +189,20 @@ $cs->registerScript(
 	{
 		$("#show_makes").hide();
 		$("#show_models").show();
-	
+
+		if($("#LeadGen_int_modell").val() == "") 
+		{
+			$("#selected_model_img").attr("src", "/images/cars/no_pic.png");
+			$("#selected_model_txt").html("");
+		}
+		else
+		{
+			$("#LeadGen_int_modell").prop("disabled", false);
+
+			// get the make and update the images if something selected
+
 		' . $model_image_update_code . '
+		}
 	}
 	
 	$(document).ready(function() {
