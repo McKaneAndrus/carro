@@ -18,8 +18,8 @@
 					)); ?>
 
                     <div class="quote_column">
-						<img id="mmt_img_1" src="images/Mercedes-200x.jpg" alt="" />
-						<h4 id="mmt_txt_1">Year Make Model</h4>
+						<img id="mmt_img_1" src="/images/cars/no_pic.png" alt="" />
+						<h4 id="mmt_txt_1"></h4>
 						<label for="">Trim:</label>
 			
 					<?php 
