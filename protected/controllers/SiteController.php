@@ -2,20 +2,6 @@
 
 class SiteController extends Controller
 {
-	// Until these come from a language file...
-	
-	// public $LANG_MAKE_PROMPT = 'Select a Make'; 
-	// public $LANG_MODEL_PROMPT = 'Select a Model';
-	// public $LANG_TRIM_PROMPT = 'Select a Trim';
-	//public $LANG_COLOR_PROMPT = 'Select a Color';
-	//public $LANG_ANY_TRIM_PROMPT = 'Any Trim';
-	public $LANG_ANY_COLOR_PROMPT = 'Any Color';
-	public $LANG_UNKNOWN_CITY = 'Unknown City';
-	public $LANG_UNKNOWN_STATE = 'Unknown State';
-	public $LANG_UNKNOWN_MAKE = 'Unknown Make';
-	public $LANG_UNKNOWN_MODEL = 'Unknown Model';
-	public $LANG_UNKNOWN_TRIM = 'Unknown Trim';
-	public $LANG_UNKNOWN_COLOR = 'Unknown Color';
 	public $LANG_ZIP_SEP = ', ';
 	
 	public $DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';
@@ -295,10 +281,26 @@ class SiteController extends Controller
 	}
 
 	/*
-	* Given a Make Id will generate an HTML list data of id, name for use
+	* Given all Makes, will generate an HTML list data of id, name for use
 	* in such places as select fields.
 	*
-	* Calls the ModelLookup() with the make
+	* Returns array of model_id, name for building the html select field
+	*/
+	
+	public function GetMakes()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->select = 'fab_id, fab_bez';	// fields of interest
+		$criteria->condition = 'fab_status=0';	// active
+		$criteria->order = 'fab_bez';
+		$makes = MakeLookup::model()->findAll($criteria);
+
+		return CHtml::listData($makes, 'fab_id', 'fab_bez');	// fields from the model table
+	}
+
+	/*
+	* Given a Make Id will generate an HTML list data of id, name for use
+	* in such places as select fields.
 	*
 	* Returns array of model_id, name for building the html select field
 	*/
@@ -440,7 +442,7 @@ class SiteController extends Controller
 	}
 
 	/*
-	* Returns makes given a make id (id_make)
+	* Returns models given a make id (id_make)
 	* called based on the select's ajax call. This given a model will return a list of all the trims
 	* that are passed back to the select. This is called directly by component to populate a dependent
 	* dropdown.
@@ -451,6 +453,9 @@ class SiteController extends Controller
 
 	public function actionModels() 
 	{
+		if(!isset($_POST['LeadGen']['int_fabrikat']))
+			throw new CHttpException(400, 'Invalid Request');
+
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as make
 			
 		$return = $this->GetModels((int) ($_POST['LeadGen']['int_fabrikat']));
@@ -479,6 +484,9 @@ class SiteController extends Controller
 	
 	public function actionTrims() 
 	{
+		if(!isset($_POST['LeadGen']['int_modell']))
+			throw new CHttpException(400, 'Invalid Request');
+
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as model
 				
 		$trims = GetTrims((int) ($_POST['LeadGen']['int_modell']));	// post has the request model we need trims for
@@ -543,20 +551,11 @@ class SiteController extends Controller
 
 		if(!isset($_POST['make_id']))
 			throw new CHttpException(400, 'Invalid Request');
- 		
-		if(!isset($_POST['make_id']))
-		{
-			echo "<h1>Request Denied</h1>";	// toss exception this is just temp
-			return;
-		}	
 		
 		$make_id = $_POST['make_id'];
 		
 		if(!is_numeric($make_id))
-		{
-			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
-			return;
-		}	
+			throw new CHttpException(400, 'Invalid Request');
 
 		//$make_id = 184;
 		
@@ -621,20 +620,11 @@ class SiteController extends Controller
 
 		if(!isset($_POST['model_id']))
 			throw new CHttpException(400, 'Invalid Request');
-
-		if(!isset($_POST['model_id']))
-		{
-			echo "<h1>Request Denied</h1>";	// toss exception this is just temp
-			return;
-		}	
-		
+	
 		$model_id = $_POST['model_id'];
 		
 		if(!is_numeric($model_id))
-		{
-			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
-			return;
-		}	
+			throw new CHttpException(400, 'Invalid Request');
 
 		// $model_id = 38727;
 		
@@ -694,10 +684,7 @@ class SiteController extends Controller
 		$trim_id = $_POST['trim_id'];
 		
 		if(!is_numeric($trim_id))
-		{
-			echo "<h1>Request Denied, Invalid Param</h1>";	// toss exception this is just temp
-			return;
-		}	
+			throw new CHttpException(400, 'Invalid Request');
 
 		if(($photo_url = $this->GetPic($trim_id)) === FALSE)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
 			$photo_url = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;

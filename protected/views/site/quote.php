@@ -68,10 +68,6 @@
 						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array(
 								'disabled' =>$disable, 'prompt' => Yii::t('LeadGen','Select a Color')));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
-<!-- testing only 
-						<br>
-						<?php echo CHtml::submitButton('', array('name'=>'landing', 'id'=>'back')); ?>
-testing only -->
 
                     </div>
                     
@@ -167,7 +163,6 @@ testing only -->
 						</p>
 						
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
-						<?php echo CHtml::hiddenField('clr' ,$model->int_farbe , array('id' => 'hclr')); ?>
 						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('name'=>'submit')); ?>
                         
                     </div>
@@ -240,11 +235,8 @@ $cs->registerScript(
 		}
 		else
 		{
-			clr = $("#LeadGen_int_farbe").val(); 
 			trimChanged();
 			' . $color_list_update . ' 
-			if(clr != "")
-				$("#LeadGen_int_farbe").val(clr); 
 		}
 	});	
 	',
