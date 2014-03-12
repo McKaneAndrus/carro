@@ -8,8 +8,12 @@
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Carro Online',
-
+	'name'=>'Carro',
+	
+	//default language
+	'sourceLanguage' => 'en_us', 	// source 
+	'language' => 'pt_br',			// target language brazil is 'pt_br'
+	
 	// preloading 'log' component
 	'preload'=>array('log'),
 
