@@ -6,9 +6,9 @@
         <div class="wrapper">
             <div class="quote_wrapper">
                 <ol>
-                    <li>1. Select Trim and Color</li>
-                    <li>2. Select Dealers</li>
-                    <li>3. Enter Your Info</li>
+                    <li><?php echo Yii::t('LeadGen', '1. Select Trim and Color'); ?></li>
+                    <li><?php echo Yii::t('LeadGen', '2. Select Dealers'); ?></li>
+                    <li><?php echo Yii::t('LeadGen', '3. Enter Your Info'); ?></li>
                 </ol>
                 
 					<?php $form=$this->beginWidget('CActiveForm', array(
@@ -20,17 +20,18 @@
                     <div class="quote_column">
 						<img id="mmt_img_1" src="/images/cars/no_pic.png" alt="" />
 						<h4 id="mmt_txt_1"></h4>
-						<label for="">Trim:</label>
+						<label for=""><?php echo $form->labelEx($model,'int_ausstattung'); ?></label>
 			
 					<?php 
 						// check out the trim field by looking at the LeadGen model to see if it was ever set
 						
 						$trim = $model->int_ausstattung;	// get trim (int_ausstattung), will be zero if NOT set, so don't use 0 as a valid select value 
-						$trims = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_TRIM_PROMPT);
+						
+						$trims = array($this->DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Trim'));
 						$trims += $this->GetTrims($model->int_modell);
 						
 						echo $form->dropDownList($model, 'int_ausstattung', $trims, array(
-								'prompt' => $this->LANG_TRIM_PROMPT,
+								'prompt' => Yii::t('LeadGen','Select a Trim'),
 								'ajax' => array(
 										'type' => 'POST',
 										'url' => CController::createUrl('colors'),
@@ -43,10 +44,10 @@
 						
                         <?php echo $form->error($model,'int_ausstattung'); ?>
 
-						<label for="">Color:</label>
+						<label for=""><?php echo $form->labelEx($model,'int_farbe'); ?></label>
 						
 						<?php						
-							$color_list = array($this->DEFAULT_ANY_VALUE => $this->LANG_ANY_COLOR_PROMPT);
+							$color_list = array($this->DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Color'));
 
 							if($trim == 0)	// empty, not set
 							{
@@ -55,7 +56,7 @@
 							else
 								if($trim > 0)	// we have a real trim from the db
 								{
-									$color_list += $this->GetColors($trim); // get the models for if existing post
+									$color_list += $this->GetColors($trim); // get the models if existing post
 									$disable='';
 								}
 								else 			// we have no trim set, so no color enabled
@@ -64,7 +65,8 @@
 								}?>
 
 						
-						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array('disabled' =>$disable, 'prompt' => $this->LANG_COLOR_PROMPT));?>
+						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array(
+								'disabled' =>$disable, 'prompt' => Yii::t('LeadGen','Select a Color')));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
 <!-- testing only 
 						<br>
@@ -88,14 +90,14 @@ testing only -->
 							$dlr_cnt = count($dealer_list);
 							if( $dlr_cnt == 0)
 							{
-								 echo '<h3>Unable to Locate Local Dealers</h3>';
-								 echo 'Carro Specialist will forward request</br>';
-								 echo 'Please continue with submission. </br></br>Thank You';
+								 echo '<h3>' . Yii::t('LeadGen', 'Unable to Locate Local Dealers') . '</h3>';
+								 echo Yii::t('LeadGen','Carro Specialist will forward request,') . '</br>';
+								 echo Yii::t('LeadGen','Please continue with submission.'). '</br></br>' . Yii::t('LeadGen','Thank You');
 							}
 							
 							if($special_dealer_display_count > 0 && $dlr_cnt)
 							{
-								echo '<h3>Best Dealers in Your Area</h3>';
+								echo '<h3>' . Yii::t('LeadGen', 'Best Dealers in Your Area') . '</h3>';
 								echo '<div class="quote_special">';
 
 								// Get results, but only top X
@@ -121,7 +123,7 @@ testing only -->
 							// if we have more then three, render the more box...
 							if(($cnt = count($dealer_list)) > 0)
 							{	
-								echo '<h3>More Dealers (' . $cnt . ') </h3>';
+								echo '<h3>' . Yii::t('LeadGen', 'More Dealers') . ' (' . $cnt . ') </h3>';
 								echo '<div class="quote_more_dealers">';
 								echo CHtml::checkBoxList('Inthae[more_dlrs]', $dealer_select_list, $dealer_list,
 								array('separator'=>'', 
@@ -164,8 +166,9 @@ testing only -->
 							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
 						</p>
 						
-						 <?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
-						<?php echo CHtml::submitButton('', array('name'=>'submit')); ?>
+						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
+						<?php echo CHtml::hiddenField('clr' ,$model->int_farbe , array('id' => 'hclr')); ?>
+						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('name'=>'submit')); ?>
                         
                     </div>
 				<?php $this->endWidget(); ?>
@@ -205,7 +208,7 @@ $color_list_update = CHtml::ajax(
 		'type'=>'POST',           
 		'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
 		'success'=>'js:function(html){
-			jQuery("#LeadGen_int_farbe").html(html)
+			$("#LeadGen_int_farbe").html(html);
 		}'
    )
 );
@@ -229,18 +232,19 @@ $cs->registerScript(
 			}
 	}
 	
-	$(document).ready(function() {
-		
+	$(document).ready(function() 
+	{
 		if($("#LeadGen_int_ausstattung").val() == "" || $("#LeadGen_int_ausstattung").val() == -1) 
 		{
-		' . $model_image_update_code .
-		'
+		' . $model_image_update_code . '
 		}
 		else
 		{
+			clr = $("#LeadGen_int_farbe").val(); 
 			trimChanged();
-			' . $color_list_update . '
-			
+			' . $color_list_update . ' 
+			if(clr != "")
+				$("#LeadGen_int_farbe").val(clr); 
 		}
 	});	
 	',

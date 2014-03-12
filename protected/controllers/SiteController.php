@@ -4,11 +4,11 @@ class SiteController extends Controller
 {
 	// Until these come from a language file...
 	
-	public $LANG_MAKE_PROMPT = 'Select a Make';
-	public $LANG_MODEL_PROMPT = 'Select a Model';
-	public $LANG_TRIM_PROMPT = 'Select a Trim';
-	public $LANG_COLOR_PROMPT = 'Select a Color';
-	public $LANG_ANY_TRIM_PROMPT = 'Any Trim';
+	// public $LANG_MAKE_PROMPT = 'Select a Make'; 
+	// public $LANG_MODEL_PROMPT = 'Select a Model';
+	// public $LANG_TRIM_PROMPT = 'Select a Trim';
+	//public $LANG_COLOR_PROMPT = 'Select a Color';
+	//public $LANG_ANY_TRIM_PROMPT = 'Any Trim';
 	public $LANG_ANY_COLOR_PROMPT = 'Any Color';
 	public $LANG_UNKNOWN_CITY = 'Unknown City';
 	public $LANG_UNKNOWN_STATE = 'Unknown State';
@@ -457,7 +457,7 @@ class SiteController extends Controller
 
 		// if we have results gen the html, always create the default option
 		
-		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_MODEL_PROMPT), true);		// prompt
+		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen', 'Select a Model')), true);		// prompt
 
 		// return the html for the SELECT as <option value="xyz">trimname</option>
 
@@ -485,8 +485,8 @@ class SiteController extends Controller
 
 		// stuff the prompt and the default any value
 		
-		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_TRIM_PROMPT), true);			// Prompt
-		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode($this->LANG_ANY_TRIM_PROMPT), true);		// Any Option
+		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen','Select a Trim')), true);			// Prompt
+		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Trim')), true);		// Any Option
 
 		// return the html for the SELECT as <option value="xyz">trimname</option>
 		
@@ -514,8 +514,8 @@ class SiteController extends Controller
 		
 		// stuff the prompt and the default any value
 
-		echo CHtml::tag('option', array('value' => ""), CHtml::encode($this->LANG_COLOR_PROMPT), true);			// prompt
-		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode($this->LANG_ANY_COLOR_PROMPT), true);	// Any Option
+		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen', 'Select a Color')), true);			// prompt
+		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Color')), true);	// Any Option
 
 		// return the html for the SELECT as <option value="xyz">trimname</option>
 

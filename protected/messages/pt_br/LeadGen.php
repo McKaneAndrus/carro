@@ -2,7 +2,6 @@
 // pt_br langange translations for landing.php
 // format is 'English' => 'Portuguese'
 
-
 return array(
 
 	// view translates

@@ -5,8 +5,8 @@
 ?>
         <div class="wrapper">
             <div class="landing_main">
-                <h1>Let us help you get the best deal</h1>
-                <h2>Before you buy a new car, compare prices and financing from several dealers and banks</h2>
+                <h1><?php echo Yii::t('LeadGen', 'Let us help you get the best deal'); ?></h1>
+                <h2><?php echo Yii::t('LeadGen', 'Before you buy a new car, compare prices and financing from several dealers and banks'); ?></h2>
                 
 					<?php $form=$this->beginWidget('CActiveForm', array(
 						'id'=>'leadgen-form',
@@ -23,7 +23,7 @@
 					
 					<?php $makes = CHtml::listData(MakeLookup::model()->findAll(array('order' => 'fab_bez')), 'fab_id', 'fab_bez');	// id and description, order by description
 						echo $form->dropDownList($model, 'int_fabrikat', $makes, array(
-							'prompt' =>  $this->LANG_MAKE_PROMPT,
+							'prompt' =>  Yii::t('LeadGen', 'Select a Make'), // $this->LANG_MAKE_PROMPT,
 							'ajax' => array(
 									'type' => 'POST',
 									'url' => CController::createUrl('models'),
@@ -49,7 +49,7 @@
 
 					<?php echo $form->dropDownList($model, 'int_modell', $model_list, array(
 							'disabled' =>$disable, 
-							'prompt' => $this->LANG_MODEL_PROMPT,
+							'prompt' => Yii::t('LeadGen', 'Select a Model'), // $this->LANG_MODEL_PROMPT,
 							'onchange' => 'modelChanged();'
 							)
 						); 
@@ -62,7 +62,7 @@
 						<?php echo $form->labelEx($model,'int_plz'); ?>
 						<?php echo $form->textField($model,'int_plz'); ?>
 						<?php echo $form->error($model,'int_plz'); ?>
-						<?php echo CHtml::submitButton('', array('name'=>'quote')); ?>
+						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Started'), array('name'=>'quote')); ?>
                     </fieldset>
 				<?php $this->endWidget(); ?>
             </div>
@@ -178,9 +178,6 @@ $cs->registerScript(
 		else
 		{
 			$("#LeadGen_int_modell").prop("disabled", false);
-
-			// get the make and update the images if something selected
-
 		' . $make_image_update_code . '
 		}
 	}
@@ -198,9 +195,6 @@ $cs->registerScript(
 		else
 		{
 			$("#LeadGen_int_modell").prop("disabled", false);
-
-			// get the make and update the images if something selected
-
 		' . $model_image_update_code . '
 		}
 	}
@@ -215,11 +209,8 @@ $cs->registerScript(
 			makeChanged();
 			
 			' . $model_list_update . '
-			
 		}
-
 		//$("#LeadGen_int_fabrikat option:first-child").attr("selected", "selected");
-
 	});
 	'
 	,

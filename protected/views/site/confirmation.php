@@ -15,14 +15,13 @@
 					  'stateful'=>true,
 					)); ?>
 				
-                <h1>Thank you for your request</h1>
+                <h1><?php echo Yii::t('LeadGen', 'Thank you for your request'); ?></h1>
                 
                 <div class="confirm_message">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa.</p>
                     <div class="confirm_anotherQuote">
-                        <h2>Would you like to get another quote?</h2>
-	                        <button title="Get another quote"></button>
-							<?php echo CHtml::submitButton('', array('name'=>'restart')); ?>
+                        <h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
+							<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart')); ?>
 							<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
 							<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
 	                   
@@ -30,29 +29,29 @@
                 </div>
                 
                 <div class="confirm_vehicle">
-                    <h2>Your selected vehicle</h2>
+                    <h2><?php echo Yii::t('LeadGen', 'Your selected vehicle'); ?></h2>
 						<img id="mmt_img_1" src="/images/cars/no_pic.png" alt="" />
 						</br>
 						<h4 id="mmt_txt_1"></h4>
                 </div>
                 
                 <div class="confirm_affiliates">
-                    <h3>Save even more with these offers:</h3>
+                    <h3><?php echo Yii::t('LeadGen', 'Save even more with these offers');?></h3>
                     <span>
                         <div>
-                            <h5>Affiliate</h5>
+                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button>Get Deal</button>
+                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
                         </div>
                         <div>
-                            <h5>Affiliate</h5>
+                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button>Get Deal</button>
+                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
                         </div>
                         <div>
-                            <h5>Affiliate</h5>
+                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button>Get Deal</button>
+                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
                         </div>
                     </span>
                 </div>

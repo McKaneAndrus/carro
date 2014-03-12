@@ -105,27 +105,27 @@ class LeadGen extends CActiveRecord
 			// specify validations for each page
 			// Landing Page - Make, Model, Postal Code
 
-			array('int_fabrikat','required', 'on'=>'landing', 'message'=>'Please Select a Make'),
-			array('int_modell','required', 'on'=>'landing', 'message'=>'Please Select a Model'),
-			array('int_plz','required', 'on'=>'landing', 'message'=>'Please Enter a Postal Code'),
+			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
+			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
+			array('int_plz','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
 			
 			// Quote Page - Trim, Color, Email
 			
-			array('int_ausstattung', 'required', 'on'=>'quote', 'message'=>'Please Select a Trim'),
-			array('int_farbe', 'required', 'on'=>'quote', 'message'=>'Please Select a Color'),
-			array('int_name', 'required', 'on'=>'quote', 'message'=>'Last Name Required'),
-			array('int_vname', 'required', 'on'=>'quote', 'message'=>'First Name Required'),
-			array('int_tel', 'required', 'on'=>'quote', 'message'=>'Telephone Required'),
-			array('int_mail', 'required', 'on'=>'quote', 'message'=>'Email Required'),
+			array('int_ausstattung', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select a Trim')),
+			array('int_farbe', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select a Color')),
+			array('int_name', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Last Name Required')),
+			array('int_vname', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','First Name Required')),
+			array('int_tel', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Telephone Required')),
+			array('int_mail', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Email Required')),
 
-			array('int_mail', 'email', 'on'=>'quote', 'message'=>'Invalid Email Address'),
-			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>'Invalid Phone Number'),
+			array('int_mail', 'email', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Email Address')),
+			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>Yii::t('LeadGen','Invalid Phone Number')),
 			
 			// add each string field, int_name, int_vname, etc so each can have their own error message
 		
 			// specific validation and regx for Brazil postal code is to validate numbers in the format of 00000-000
 
-			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>'Invalid Format, use 00000-000'),
+			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>Yii::t('LeadGen','Invalid Format, use 00000-000')),
 			array('int_plz', 'length', 'max'=>9),
 
 			// Make Id, Model Id, Trim Id, Color Id, Dealer Id
@@ -179,19 +179,19 @@ class LeadGen extends CActiveRecord
 	{
 		return array(
 			'int_id' => 'Int',
-			'int_name' => 'Last Name',
-			'int_vname' => 'First Name',
-			'int_plz' => 'Your ZIP:',
+			'int_name' => Yii::t('LeadGen', 'Last Name'),
+			'int_vname' => Yii::t('LeadGen', 'First Name'),
+			'int_plz' => Yii::t('LeadGen', 'Zip Code'),
 			'int_ort' => 'Location',
-			'int_str' => 'Street Address',
-			'int_tel' => 'Telephone',
+			'int_str' => Yii::t('LeadGen', 'Street Address'),
+			'int_tel' => Yii::t('LeadGen', 'Telephone'),
 			'int_mobil' => 'Mobil Phone',
-			'int_mail' => 'Email',
-			'int_fabrikat' => 'Color',
-			'int_modell' => 'Model',
+			'int_mail' => Yii::t('LeadGen', 'Email'),
+			'int_fabrikat' => Yii::t('LeadGen', 'Make'),
+			'int_modell' => Yii::t('LeadGen', 'Model'),
 			'int_bauart' => 'Type',
-			'int_ausstattung' => 'Trim',
-			'int_farbe' => 'Color',
+			'int_ausstattung' => Yii::t('LeadGen', 'Trim'),
+			'int_farbe' => Yii::t('LeadGen', 'Color'),
 			'int_kaufzeitpunkt' => 'Int Kaufzeitpunkt',
 			'int_zahlungsart' => 'Int Zahlungsart',
 			'int_kontakt' => 'Int Kontakt',
@@ -201,7 +201,7 @@ class LeadGen extends CActiveRecord
 			'int_suchwort' => 'Int Suchwort',
 			'int_erreichbar' => 'Int Erreichbar',
 			'int_kenntnis' => 'Int Kenntnis',
-			'int_text' => 'Message',
+			'int_text' => Yii::t('LeadGen', 'Message'),
 			'int_bericht_ma' => 'Int Bericht Ma',
 			'int_bericht_status' => 'Int Bericht Status',
 			'int_bericht_wv' => 'Int Bericht Wv',
