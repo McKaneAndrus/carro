@@ -6,50 +6,50 @@ return array(
 
 	// view translates
 	
-	'Select a Make' =>'pt_br Select a Make',
-	'Select a Model' => 'pt_br Select a Model',
-	'Select a Trim' => 'pt_br Select a Trim', 
-	'Select a Color' => 'pt_br Select a Color',
-	'Any Trim' => 'pt_br Any Trim',
-	'Any Color' => 'pt_br Any Color',
-	'Unknown City' => 'pt_br Unknown City',
-	'Unknown State' => 'pt_br Unknown State',
-	'Unknown Make' => 'pt_br Unknown Make',
-	'Unknown Model' => 'pt_br Unknown Model',
-	'Unknown Trim' => 'pt_br Unknown Trim',
-	'Unknown Color' => 'pt_br Unknown Color',
+	'Select a Make' =>'Selecione uma Marca',
+	'Select a Model' => 'Selecione um Modelo',
+	'Select a Trim' => 'Selecione uma Versão', 
+	'Select a Color' => 'Selecione uma Cor',
+	'Any Trim' => 'Todas as Versões',
+	'Any Color' => 'Todas as Cores',
+	'Unknown City' => 'Cidade Desconhecida',
+	'Unknown State' => 'Estado Desconhecido',
+	'Unknown Make' => 'Marca Desconhecida',
+	'Unknown Model' => 'Modelo Desconhecido',
+	'Unknown Trim' => 'Versão Desconhecida',
+	'Unknown Color' => 'Cor Desconhecida',
 	
 	// landing page 
 	
 	
-	'Let us help you get the best deal' => 'Vamos ajudá-lo a obter o melhor negócio',
-	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, comparar preços e financiamento de vários comerciantes e bancos',
-	'Get Started' => 'começar',
+	'Let us help you get the best deal' => 'Deixe-nos ajudá-lo a obter o melhor negócio',
+	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, compare preços e opções de financiamento de vários revendedores e bancos',
+	'Get Started' => 'Começe Aqui',
 	
 	// quote page
 	
-	'1. Select Trim and Color' => '1. selecionar aparar e cor',
-	'2. Select Dealers' => '2. Selecionar Dealers',
-	'3. Enter Your Info' => '3. Incorpore sua informação',
-	'Trim' => 'Aparar',
+	'1. Select Trim and Color' => '1. Selecionar Versão e Cor',
+	'2. Select Dealers' => '2. Selecionar Revendedores',
+	'3. Enter Your Info' => '3. Forneça sua informação',
+	'Trim' => 'Versão',
 	'Color' => 'Cor',
 	
-	'Unable to Locate Local Dealers' => 'Impossível Localizar Revendedor',
-	'Best Dealers in Your Area' => 'Concessionários em sua área',
-	'More Dealers' => 'Mais Dealers',
-	'Carro Specialist will forward request,' => 'Carro especialista encaminhará pedido.',
-	'Please continue with submission' => 'Por favor, continuem com a submissão',
+	'Unable to Locate Local Dealers' => 'Impossível Localizar Revendedores Locais',
+	'Best Dealers in Your Area' => 'Melhores Revendedores em sua área',
+	'More Dealers' => 'Mais Revendedores',
+	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
+	'Please continue with submission' => 'Por favor, continue com a submissão',
 	'Thank You' => 'Obrigado',
-	'Get Your Price Now' => 'Receba seu preço agora',
+	'Get Your Price Now' => 'Receba Seu Preço Agora',
 
 	// Confirm page 
 	
-	'Would you like to get another quote?' => 'Gostaria de ter outra citação?',
-	'Get Another Quote' => 'Obter outra citação',
+	'Would you like to get another quote?' => 'Gostaria de obter outra cotação?',
+	'Get Another Quote' => 'Obter outra cotação',
 	'Thank you for your request' =>'Obrigado por seu pedido',
 	'Your selected vehicle' => 'Seu veículo selecionado',
 	'Save even more with these offers' => 'Economize ainda mais com estas ofertas',
-	'Affiliate' => 'afiliar',
+	'Affiliate' => 'Afiliado',
 	'Get Deal' => 'Aproveite a Oferta',
 	
 	
@@ -67,16 +67,16 @@ return array(
 	
 	// field error messages
 	
-	'Please Select a Make'=>'Selecione um fabricante',
+	'Please Select a Make'=>'Selecione uma Marca',
 	'Please Select a Model' =>'Selecione um Modelo',
-	'Please Enter a Postal Code' => 'Introduza um código postal',
+	'Please Enter a Postal Code' => 'Forneça seu CEP',
 	'Invalid Format, use 00000-000' => 'Formato inválido, usar 00000-000',
-	'Please Select a Trim'=>'Selecione uma guarnição',
-	'Please Select a Color' => 'Selecione uma cor',
+	'Please Select a Trim'=>'Selecione uma Versão',
+	'Please Select a Color' => 'Selecione uma Cor',
 	'Last Name Required' => 'Apelido Obrigatório',
 	'First Name Required' => 'Nome Obrigatório',
 	'Email Required' => 'Email Obrigatório',
-	'Invalid Email Address' => 'Endereço inválido Email',
+	'Invalid Email Address' => 'Endereço de Email inválido',
 	'Invalid Phone Number' => 'Número de telefone inválido',
 	
 );
