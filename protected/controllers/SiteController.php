@@ -1,13 +1,9 @@
 <?php
-
 class SiteController extends Controller
 {
-	public $LANG_ZIP_SEP = ', ';
-	
 	public $DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';
 	public $DEFAULT_URL_IMAGE_PATH = '/images/cars/';
-	
-	public $DEFAULT_ANY_VALUE = -1;		// must be < 0
+	public $DEFAULT_ANY_VALUE = -1;		// change with caution, hard coded value in javascript
 		
 	/**
 	* Default layout for the views. Defaults to '//layouts/column2', meaning
@@ -36,6 +32,9 @@ class SiteController extends Controller
 		* $url_image_path - path prepended to image filename returned to caller
 		* $file_check_path - Absolute filesystem path to the file 
 		* $p_filename - valid filename of an image, default is set at start of function!
+		* 
+		* This doesn't query on the status of any tables used so images can be
+		* retreived for active or inactive records
 		*
 		* RETURNS : Encoded url to the image or FALSE if not found
 		*/
@@ -173,12 +172,15 @@ class SiteController extends Controller
 			// of a missing zipcode and something that could be fixed
 			
 			$city_state = new PostalCodeLookup();
-			$city_state->city = $this->LANG_UNKNOWN_CITY;
-			$city_state->state = $this->LANG_UNKNOWN_STATE;
+			$city_state->city = Yii::t('LeadGen', 'Unknown City');
+			$city_state->state = Yii::t('LeadGen', 'Unknown State');
 		}
 
 		return $city_state;	// record with City, State, if no match NULL or Empty Array
 	}
+
+	// Some of the GetXXXName() functions may be remove at a later date. 
+	// These are just helpers and may not all be needed
 
 	/*
 	* Get the Make name (string) from a make ID. 
@@ -193,7 +195,7 @@ class SiteController extends Controller
 		$make_rec = MakeLookup::model()->find('fab_id=:id_make', array(':id_make' => $make_id));
 		
 		if($make_rec == NULL)
-			return($this->LANG_UNKNOWN_MAKE);
+			return(Yii::t('LeadGen', 'Unknown Make'));
 			
 		return($make_rec->fab_bez);
 	}
@@ -211,8 +213,7 @@ class SiteController extends Controller
 		$model_rec = ModelLookup::model()->find('mod_id=:id_model', array(':id_model' => $model_id));
 
 		if($model_rec == NULL)
-			return($this->LANG_UNKNOWN_MODEL);
-		
+			return(Yii::t('LeadGen', 'Unknown Model'));		
 		return($model_rec->mod_bez);
 	}
 
@@ -231,8 +232,7 @@ class SiteController extends Controller
 		$model_rec = ModelLookup::model()->find('mod_id=:id_model', array(':id_model' => $model_id));
 
 		if($model_rec == NULL)
-			return($this->LANG_UNKNOWN_MODEL);
-		
+			return(Yii::t('LeadGen', 'Unknown Model'));		
 		return($model_rec->mod_text);
 	}
 
@@ -248,13 +248,13 @@ class SiteController extends Controller
 	public function GetTrimName($trim_id)
 	{
 		if($trim_id == $this->DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
-			return $this->LANG_ANY_TRIM_PROMPT;
+			return(Yii::t('LeadGen', 'Any Trim'));
 		
 		$trim_rec = TrimLookup::model()->find('aus_id=:id_trim', array(':id_trim' => $trim_id));
 
 		if($trim_rec == NULL)
-			return($this->LANG_UNKNOWN_TRIM);
-		
+			return(Yii::t('LeadGen', 'Unknown Trim'));
+					
 		return($trim_rec->aus_bez);
 	}
 
@@ -270,12 +270,12 @@ class SiteController extends Controller
 	public function GetColorName($color_id)
 	{
 		if($color_id == $this->DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
-			return $this->LANG_ANY_COLOR_PROMPT;
+			return(Yii::t('LeadGen', 'Any Color'));
 		
 		$color_rec = ColorLookup::model()->find('farb_id=:id_color', array(':id_color' => $color_id));
 
 		if($color_rec == NULL)
-			return($this->LANG_UNKNOWN_COLOR);
+			return(Yii::t('LeadGen', 'Unknown Color'));
 		
 		return($color_rec->farb_bez);
 	}
@@ -302,6 +302,8 @@ class SiteController extends Controller
 	* Given a Make Id will generate an HTML list data of id, name for use
 	* in such places as select fields.
 	*
+	* Uses mod_status to determine if the record is visible in the display
+	*
 	* Returns array of model_id, name for building the html select field
 	*/
 	
@@ -309,7 +311,7 @@ class SiteController extends Controller
 	{
 		$criteria = new CDbCriteria();
 		$criteria->select = 'mod_id, mod_bez';	// fields of interest
-		$criteria->condition = 'mod_fabrikat=:id_model_make';
+		$criteria->condition = 'mod_fabrikat=:id_model_make and mod_status=0';
 		$criteria->order = 'mod_bez';
 		$criteria->params = array(':id_model_make' => (int) $make_id);
 		$models = ModelLookup::model()->findAll($criteria);
@@ -324,7 +326,7 @@ class SiteController extends Controller
 	* Given a Model Id will generate an HTML list data of id, name for use
 	* in such places as select fields.
 	*
-	* Calls the TrimLookup() with the model
+	* Uses aus_status to determine if the record is visible in the display
 	*
 	* Returns array of trim_id, name for building the html select field
 	*/
@@ -335,7 +337,7 @@ class SiteController extends Controller
 		
 		$criteria = new CDbCriteria();
 		$criteria->select = 'aus_id, aus_modell, aus_bez, aus_extended_trim';	// fields of interest
-		$criteria->condition = 'aus_modell=:id_trim_model';
+		$criteria->condition = 'aus_modell=:id_trim_model and aus_status=0';
 		$criteria->order = 'aus_extended_trim';
 		$criteria->params = array(':id_trim_model' => (int) $model_id);
 		$trims = TrimLookup::model()->findAll($criteria);
@@ -362,7 +364,7 @@ class SiteController extends Controller
 		$criteria->alias = 'mf';
 		$criteria->select = 'mf.mf_trim, mf.mf_farbe, s1.farb_bez as color';				// fields of interest (from 2 tables)
 		$criteria->join = 'join br_farben s1 on (mf.mf_farbe = s1.farb_id)';
-		$criteria->condition = 'mf.mf_trim=:id_color_trim';
+		$criteria->condition = 'mf.mf_trim=:id_color_trim and farb_status=0';
 		$criteria->params = array(':id_color_trim' => (int) $trim_id);	// related key
 
 		$colors = TrimToColor::model()->findAll($criteria);
@@ -435,7 +437,7 @@ class SiteController extends Controller
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
 			return CHtml::encode($dealers['hd_name']) . 
 			'<br>' . CHtml::encode($dealers['hd_str']) . 
-			'<br>' . CHtml::encode($dealers['hd_ort'] . $this->LANG_ZIP_SEP .  $dealers['hd_plz']) .
+			'<br>' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_plz']) .
 			'<br>' . CHtml::encode($dealers['hd_tel']).
 			'<br>' . CHtml::encode('Distance : ' . $dealers['distance'] . 'km');
 		});
