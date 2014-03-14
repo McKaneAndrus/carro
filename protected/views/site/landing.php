@@ -129,6 +129,24 @@ $model_image_update_code = CHtml::ajax(
    )
 );
 
+$home_image_update_code = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/homepagephotos'), 
+		'type'=>'POST',           
+		'dataType'=>'json',
+		'data'=>'js:{ "ajax":true}',
+		'success'=>'js:function(data){
+			$("#mm_img_1").attr("src", data[0].image_path);
+			$("#mm_img_2").attr("src", data[1].image_path);
+			$("#mm_img_3").attr("src", data[2].image_path); 
+			$("#mm_txt_1").html(data[0].image_desc);
+			$("#mm_txt_2").html(data[1].image_desc);
+			$("#mm_txt_3").html(data[2].image_desc);
+		 }'
+   )
+);
+
+
 $model_list_update = CHtml::ajax(
    array(
 		'url' => Yii::app()->createUrl('site/models'), 
@@ -154,12 +172,7 @@ $cs->registerScript(
 		{
 			$("#LeadGen_int_modell").prop("disabled", true);
 
-			$("#mm_img_1").attr("src", "/images/cars/no_pic.png");
-			$("#mm_img_2").attr("src", "/images/cars/no_pic.png");
-			$("#mm_img_3").attr("src", "/images/cars/no_pic.png");
-			$("#mm_txt_1").html("");
-			$("#mm_txt_2").html("");
-			$("#mm_txt_3").html("");
+			' . $home_image_update_code . '
 		}
 		else
 		{
@@ -196,7 +209,6 @@ $cs->registerScript(
 			
 			' . $model_list_update . '
 		}
-		//$("#LeadGen_int_fabrikat option:first-child").attr("selected", "selected");
 	});
 	'
 	,
