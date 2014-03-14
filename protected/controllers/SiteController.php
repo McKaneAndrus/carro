@@ -537,6 +537,67 @@ class SiteController extends Controller
 
 	/*
 	* Ajax call's to return the image name for 
+	*  HomePagePhotos returns 3 random images for display. 
+    *
+	* NOTE NOTE : the rand() order is costly and if too slow, drop this type of sort!!
+	*/
+	
+	public function actionHomePagePhotos()
+	{
+		// This should only be allowed to be called by an ajax request, set access rules...
+
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		// call to get a random make table is very small so should be fast
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_id');									// vehicle/trim_id
+		$sql->from('{{ausstattung}}');
+		$sql->where('aus_status=0');
+		$sql->order('rand()');
+		$sql->limit(10);		// get more then we think so empty images can be skipped
+		
+		$make_trims = $sql->queryAll();
+
+		$cnt = count($make_trims);
+		$photo_urls = array();
+		
+		// scan the list for 3 valids
+		
+		if($cnt)
+		{
+			$valid_images = 0;
+			foreach ($make_trims as $id) 
+			{
+				// get the image file names if valid, save to array (push on end)
+			
+				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+				{ 
+					
+					$photo_urls[] = $pic; 	// same as array_push()
+					$valid_images++;
+					
+					if($valid_images > 2)	// we need 3 valids
+						break;
+				}
+			}
+		}
+		
+		// backfill empty images if we can't come up with any
+		
+		$cnt = count($photo_urls);
+		while($cnt < 3)
+		{
+			$photo_urls[] = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
+			$cnt++;
+		}
+		
+		echo CJSON::encode($photo_urls); // ships it as a nice jason compatible array
+	}
+
+	/*
+	* Ajax call's to return the image name for 
 	*  Make (fabrikate) which return 3 images in an array
 	*  Model which returns 1 image
 	*  Trim which returns 1 image
@@ -849,7 +910,7 @@ class SiteController extends Controller
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
 				'models', 'trims', 'colors', 'dealers', 'error', 
-				'photomakes', 'photomodel', 'phototrim'),  // added create to all users no login needed 
+				'photomakes', 'photomodel', 'phototrim', 'homepagephotos'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
