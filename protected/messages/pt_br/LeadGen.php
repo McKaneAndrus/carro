@@ -1,6 +1,10 @@
 <?php
 // pt_br langange translations for landing.php
 // format is 'English' => 'Portuguese'
+// 
+// v1.0.0
+// begat : 03/13/2014
+//
 
 return array(
 
@@ -38,7 +42,7 @@ return array(
 	'Best Dealers in Your Area' => 'Melhores Revendedores em sua área',
 	'More Dealers' => 'Mais Revendedores',
 	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
-	'Please continue with submission' => 'Por favor, continue com a submissão',
+	'Please continue with submission.' => 'Por favor, continue com a submissão',
 	'Thank You' => 'Obrigado',
 	'Get Your Price Now' => 'Receba Seu Preço Agora',
 
@@ -76,6 +80,7 @@ return array(
 	'Last Name Required' => 'Apelido Obrigatório',
 	'First Name Required' => 'Nome Obrigatório',
 	'Email Required' => 'Email Obrigatório',
+	'Telephone Required' => 'Telefone Obrigatório',
 	'Invalid Email Address' => 'Endereço de Email inválido',
 	'Invalid Phone Number' => 'Número de telefone inválido',
 	
