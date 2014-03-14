@@ -129,11 +129,12 @@ nav a:hover {
 
 .landing_main h1 {
     position: absolute;
-    top: 30px;
+    top: 38px;
     left: 34px;
-    font-size: 29px;
+    font-size: 26px;
     font-weight: bold;
     color: #fff;
+    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
 }
 
 .landing_main h2 {
@@ -141,7 +142,7 @@ nav a:hover {
     top: 100px;
     font-style: italic;
     font-size: 20px;
-    width: 500px;
+    width: 525px;
     color: #fff;
     text-shadow: -1px -1px 0 rgba(0,0,0,.4)
 }
@@ -276,7 +277,7 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
-    height: 170px;
+    height: 150px;
     
 }
 
@@ -295,7 +296,7 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
-    height: 170px;
+    height: 150px;
 }
 
 .landing_overview_adspace {
@@ -306,7 +307,7 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
-    height: 170px;
+    height: 150px;
     
 }
 
@@ -320,7 +321,6 @@ nav a:hover {
 	display: none;
 }
  
-
 /*-----------
 Quote form 
 ------------*/
