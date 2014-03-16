@@ -27,7 +27,7 @@
 						
 						$trim = $model->int_ausstattung;	// get trim (int_ausstattung), will be zero if NOT set, so don't use 0 as a valid select value 
 						
-						$trims = array($this->DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Trim'));
+						$trims = array(SiteController::DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Trim'));
 						$trims += $this->GetTrims($model->int_modell);
 						
 						echo $form->dropDownList($model, 'int_ausstattung', $trims, array(
@@ -47,7 +47,7 @@
 						<label for=""><?php echo $form->labelEx($model,'int_farbe'); ?></label>
 						
 						<?php						
-							$color_list = array($this->DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Color'));
+							$color_list = array(SiteController::DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Color'));
 
 							if($trim == 0)	// empty, not set
 							{
