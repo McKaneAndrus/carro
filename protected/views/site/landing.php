@@ -21,9 +21,10 @@
 							$make = $model->attributes['int_fabrikat'];
 					?>
 					
-					<?php $makes = $this->getMakes(); 
+					<?php echo $form->error($model,'int_fabrikat'); ?>
+					<?php  $makes = $this->getMakes(); 
 						echo $form->dropDownList($model, 'int_fabrikat', $makes, array(
-							'prompt' =>  Yii::t('LeadGen', 'Select a Make'), // $this->LANG_MAKE_PROMPT,
+							'prompt' =>  Yii::t('LeadGen', 'Select a Make'), 
 							'ajax' => array(
 									'type' => 'POST',
 									'url' => CController::createUrl('models'),
@@ -33,7 +34,6 @@
 							)
 						);
 					?>
-					<?php echo $form->error($model,'int_fabrikat'); ?>
 				
 					<?php 
 						if(!empty($make))
@@ -47,23 +47,66 @@
 							$disable='disable';
 						}?>
 
-					<?php echo $form->dropDownList($model, 'int_modell', $model_list, array(
-							'disabled' =>$disable, 
-							'prompt' => Yii::t('LeadGen', 'Select a Model'), // $this->LANG_MODEL_PROMPT,
+					<?php echo $form->error($model,'int_modell'); ?>
+					<?php
+							//$model_list = $this->GetModels(225); // get the models if existing post
+							
+							echo $form->dropDownList($model, 'int_modell', $model_list, array(
+							'disabled' =>$disable,
+							'prompt' => Yii::t('LeadGen', 'Select a Model'), 
 							'onchange' => 'modelChanged();'
+							)
+						);
+					?>
+
+                    </fieldset>
+
+                    <fieldset id="zip_button">
+					<?php 
+						if(!empty($model->attributes['int_staat']))	// (int_staat == state) post vars are saved from page to page in the state, so pick up from here if EVER set
+							$state = $model->attributes['int_staat'];
+					?>
+					<?php echo $form->error($model,'int_staat'); ?>
+					<?php $states = $this->getStates(); 
+						echo $form->dropDownList($model, 'int_staat', $states, array(
+							'prompt' =>  Yii::t('LeadGen', 'Select Your State'),
+							'ajax' => array(
+									'type' => 'POST',
+									'url' => CController::createUrl('cities'),
+									'update' =>   '#'. CHtml::activeId($model, 'int_stadt'), //selector to update - '#LeadGen_int_stadt'
+									),			 
+									'onchange'=>'stateChanged();'
+							)
+						);
+					?>
+
+					<?php 
+						if(!empty($state))
+						{
+							$city_list = $this->GetCities($state); // get the models if existing post
+							$disable='';
+						}
+						else
+						{
+							$city_list = array();
+							$disable='disable';
+						}?>
+
+					<?php echo $form->error($model,'int_stadt'); ?>
+					<?php echo $form->dropDownList($model, 'int_stadt', $city_list, array(
+							'disabled' =>$disable, 
+							'prompt' => Yii::t('LeadGen', 'Select Your City'), 
+							'onchange' => 'cityChanged();'
 							)
 						); 
 					?>
-					
-					<?php echo $form->error($model,'int_modell'); ?>
+						<?php echo CHtml::hiddenField('LeadGen[int_plz]',$model->int_plz, array('id' => 'LeadGen_int_plz')); ?>
+
 
                     </fieldset>
-                    <fieldset id="zip_button">
-						<?php echo $form->labelEx($model,'int_plz'); ?>
-						<?php echo $form->textField($model,'int_plz'); ?>
-						<?php echo $form->error($model,'int_plz'); ?>
+					<div id="submit_button">
 						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Started'), array('name'=>'quote')); ?>
-                    </fieldset>
+					</div>
 				<?php $this->endWidget(); ?>
             </div>
             <div class="landing_overview">
@@ -95,7 +138,6 @@
                 
                 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa. Ut quis nisi eu turpis commodo pulvinar nec vitae quam. Phasellus ac orci ullamcorper, dapibus metus sit amet, ultrices ipsum. Mauris turpis ipsum, adipiscing quis sodales et, imperdiet eget massa. Phasellus vulputate accumsan luctus. Nunc erat magna, vulputate id orci eu, rutrum gravida odio. Suspendisse euismod magna nec augue feugiat, vel vulputate metus rutrum. Vivamus imperdiet pellentesque porta.</p>
                 <p>Integer eget viverra diam. Pellentesque tempor eros sapien, in pretium risus tincidunt id. Mauris mi ligula, gravida fermentum sapien sit amet, pellentesque placerat lorem. Mauris feugiat dictum elementum. Nunc pellentesque, mi sit amet faucibus facilisis, est ligula hendrerit leo, a iaculis urna ligula quis nisi. Praesent sit amet lectus quis mauris facilisis scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id erat nisl. Etiam vulputate nec lacus in consequat. Nulla pharetra enim sit amet justo condimentum luctus. Sed luctus arcu massa, ut euismod elit fermentum et. Praesent risus augue, tristique varius pellentesque ut, egestas vitae magna. </p>
-                <p>Integer eget viverra diam. Pellentesque tempor eros sapien, in pretium risus tincidunt id. Mauris mi ligula, gravida fermentum sapien sit amet, pellentesque placerat lorem. Mauris feugiat dictum elementum. Nunc pellentesque, mi sit amet faucibus facilisis, est ligula hendrerit leo, a iaculis urna ligula quis nisi. Praesent sit amet lectus quis mauris facilisis scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id erat nisl. Etiam vulputate nec lacus in consequat. Nulla pharetra enim sit amet justo condimentum luctus. Sed luctus arcu massa, ut euismod elit fermentum et. Praesent risus augue, tristique varius pellentesque ut, egestas vitae magna. </p-->
             </div>
         </div>
 <?php
@@ -158,13 +200,24 @@ $model_list_update = CHtml::ajax(
    )
 );
 
+
+$city_list_update = CHtml::ajax(
+   array(
+		'url' => Yii::app()->createUrl('site/cities'), 
+		'type'=>'POST',           
+		'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
+		'success'=>'js:function(html){
+			jQuery("#LeadGen_int_stadt").html(html)
+		}'
+   )
+);
+
+
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function makeChanged() 
  	{
-		// $("#LeadGen_int_modell").empty(); 
-
 		$("#show_makes").show();
 		$("#show_models").hide();
 
@@ -197,7 +250,31 @@ $cs->registerScript(
 		' . $model_image_update_code . '
 		}
 	}
-	
+
+	function stateChanged() 
+ 	{
+		if($("#LeadGen_int_staat").val() == "") 
+		{
+			$("#LeadGen_int_stadt").prop("disabled", true);
+		}
+		else
+		{
+			$("#LeadGen_int_stadt").prop("disabled", false);
+		}
+	}
+
+	function cityChanged() 
+ 	{
+		if($("#LeadGen_int_stadt").val() == "") 
+		{
+			$("#LeadGen_int_plz").val("");
+		}
+		else
+		{
+			$("#LeadGen_int_plz").val($("#LeadGen_int_stadt").val());
+		}
+	}
+
 	$(document).ready(function() {
 		if($("#LeadGen_int_modell").val() != "")
 		{
@@ -206,8 +283,20 @@ $cs->registerScript(
 		else
 		{
 			makeChanged();
-			
-			' . $model_list_update . '
+			if($("#LeadGen_int_fabrikat").val() != "") 
+				' . $model_list_update . '
+		}
+
+		if($("#LeadGen_int_stadt").val() != "")
+		{
+			cityChanged();
+		}
+		else
+		{
+			stateChanged();
+			if($("#LeadGen_int_staat").val() != "")
+				' . $city_list_update . '
+
 		}
 	});
 	'
