@@ -10,6 +10,8 @@
  * @property string $int_plz
  * @property string $int_ort
  * @property string $int_str
+ * @property string $int_stadt
+ * @property string $int_staat
  * @property string $int_tel
  * @property string $int_mobil
  * @property string $int_mail
@@ -46,6 +48,8 @@
  * int_plz zip varchar(5)
  * int_ort location varchar(30)
  * int_str street address varchar(30)
+ * int_stadt - City
+ * int_staat - State
  * int_tel phone varchar(20)
  * int_mobil cell phone varchar(20)
  * int_mail Email varchar(64)
@@ -107,6 +111,8 @@ class LeadGen extends CActiveRecord
 
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
+			array('int_stadt', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your City')),
+			array('int_staat', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your State')),
 			array('int_plz','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
 			
 			// Quote Page - Trim, Color, Email
@@ -139,8 +145,8 @@ class LeadGen extends CActiveRecord
 			array('int_plz', 'length', 'max'=>20),
 			array('int_tel', 'length', 'min' => 7, 'max'=>20), // minimum number of characters is 7
 			array('int_mail', 'length', 'max'=>64),
-					
-			// set a default value if needed, in this case stuff the create date (int_anlage) with current db time
+			array('int_stadt', 'length', 'max'=>180),
+			array('int_staat', 'length', 'max'=>100),
 
 			array('int_anlage, int_ort, int_text', 'safe'),	// mark as safe incase we need these, likely not...
 			
@@ -184,6 +190,8 @@ class LeadGen extends CActiveRecord
 			'int_plz' => Yii::t('LeadGen', 'Zip Code'),
 			'int_ort' => 'Location',
 			'int_str' => Yii::t('LeadGen', 'Street Address'),
+			'int_stadt' => Yii::t('LeadGen','City'),
+			'int_staat' => Yii::t('LeadGen','State'),
 			'int_tel' => Yii::t('LeadGen', 'Telephone'),
 			'int_mobil' => 'Mobil Phone',
 			'int_mail' => Yii::t('LeadGen', 'Email'),
@@ -239,6 +247,8 @@ class LeadGen extends CActiveRecord
 		$criteria->compare('int_plz',$this->int_plz,true);
 		$criteria->compare('int_ort',$this->int_ort,true);
 		$criteria->compare('int_str',$this->int_str,true);
+		$criteria->compare('int_stadt',$this->int_stadt,true);
+		$criteria->compare('int_staat',$this->int_staat,true);		
 		$criteria->compare('int_tel',$this->int_tel,true);
 		$criteria->compare('int_mobil',$this->int_mobil,true);
 		$criteria->compare('int_mail',$this->int_mail,true);
