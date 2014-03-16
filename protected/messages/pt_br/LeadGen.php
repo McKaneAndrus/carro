@@ -14,8 +14,12 @@ return array(
 	'Select a Model' => 'Selecione um Modelo',
 	'Select a Trim' => 'Selecione uma Versão', 
 	'Select a Color' => 'Selecione uma Cor',
+	'Select Your State' => 'Selecione uma Estado',
+	'Select Your City' => 'Selecione uma Cidade',
+	
 	'Any Trim' => 'Todas as Versões',
 	'Any Color' => 'Todas as Cores',
+	'Other City' => 'Outra Cidade',
 	'Unknown City' => 'Cidade Desconhecida',
 	'Unknown State' => 'Estado Desconhecido',
 	'Unknown Make' => 'Marca Desconhecida',
@@ -73,6 +77,8 @@ return array(
 	
 	'Please Select a Make'=>'Selecione uma Marca',
 	'Please Select a Model' =>'Selecione um Modelo',
+	'Please Select Your State' => 'Selecione uma Estado',
+	'Please Select Your City' => 'Selecione uma Cidade',
 	'Please Enter a Postal Code' => 'Forneça seu CEP',
 	'Invalid Format, use 00000-000' => 'Formato inválido, usar 00000-000',
 	'Please Select a Trim'=>'Selecione uma Versão',
