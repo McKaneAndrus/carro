@@ -1,11 +1,11 @@
 <?php
 class SiteController extends Controller
 {
-	public $DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';
-	public $DEFAULT_URL_IMAGE_PATH = '/images/cars/';
-	public $DEFAULT_ANY_VALUE = -1;		// change with caution, hard coded value in javascript
+	const DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';		// picture not found file name
+	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';		// default path (url) to images
+	const DEFAULT_ANY_VALUE = -1;						// change with caution, hard coded value in javascript
 		
-	/**
+	/*
 	* Default layout for the views. Defaults to '//layouts/column2', meaning
 	* using two-column layout. See 'protected/views/layouts/column2.php'. We
 	* use a single column as that's how we do these pages
@@ -39,7 +39,7 @@ class SiteController extends Controller
 		* RETURNS : Encoded url to the image or FALSE if not found
 		*/
 
-		$url_image_path = $this->DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
+		$url_image_path = self::DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
 		$p_filename = FALSE;
 
@@ -247,7 +247,7 @@ class SiteController extends Controller
 		
 	public function GetTrimName($trim_id)
 	{
-		if($trim_id == $this->DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
+		if($trim_id == self::DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
 			return(Yii::t('LeadGen', 'Any Trim'));
 		
 		$trim_rec = TrimLookup::model()->find('aus_id=:id_trim', array(':id_trim' => $trim_id));
@@ -269,7 +269,7 @@ class SiteController extends Controller
 		
 	public function GetColorName($color_id)
 	{
-		if($color_id == $this->DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
+		if($color_id == self::DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
 			return(Yii::t('LeadGen', 'Any Color'));
 		
 		$color_rec = ColorLookup::model()->find('farb_id=:id_color', array(':id_color' => $color_id));
@@ -321,6 +321,51 @@ class SiteController extends Controller
 		return CHtml::listData($models, 'mod_id', 'mod_bez');	// fields from the model table
 	}
 
+
+	/*
+	* Get a list of the states from the postal code table. This combined
+	* with the city should map to a postal code. 
+	* 
+	* For the br_postal_codes table a mapping of state and city deliver
+	* a unique postal code (or so I think).
+	*/
+	
+	public function GetStates()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->select = 'state';	// fields of interest, state is the only part of interest
+		$criteria->distinct=true;
+		$criteria->order = 'state';
+		$states = PostalCodeLookup::model()->findAll($criteria);
+
+		// we have no unique key on state, and the state will be used for the id and value in the
+		// select
+		
+		return CHtml::listData($states, 'state', 'state');	// fields from the model table
+	}
+
+	/*
+	* Get a list of the cities from given state from the postal code table. 
+	*  
+	* For the br_postal_codes table a mapping of state and city deliver
+	* a unique postal code (or so I think).
+	* the value of the select list item is the ZIP CODE
+	*
+	* CAUTION : THIS ASSUMES THAT THE CITY IS UNIQUE TO A SINGLE ZIP CODE
+	*           
+	*/
+
+	public function GetCities($state)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->select = 'code, city';	// fields of interest, state is the only part of interest
+		$criteria->order = 'city';
+		$criteria->condition = 'state=:state_str';
+		$criteria->params = array(':state_str' => $state);
+		$cities = PostalCodeLookup::model()->findAll($criteria);
+		
+		return CHtml::listData($cities, 'code', 'city');
+	}
 
 	/*
 	* Given a Model Id will generate an HTML list data of id, name for use
@@ -475,6 +520,34 @@ class SiteController extends Controller
 	 }
 
 	/*
+	* Returns cities given a state name (string)
+	* called based on the select's ajax call. This given a model will return a list of all the cities
+	* that are passed back to the select. This is called directly by component to populate a dependent
+	* dropdown.
+	*/
+
+	public function actionCities() 
+	{
+		if(!isset($_POST['LeadGen']['int_staat']))	// state
+			throw new CHttpException(400, 'Invalid Request');
+
+		// The post parameters come from the form name, in this case it's LeadGen, with the field value as state
+			
+		$return = $this->GetCities( ($_POST['LeadGen']['int_staat']));
+
+		// if we have results gen the html, always create the default option
+		
+		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen', 'Select Your City')), true);		// prompt
+
+		// return the html for the SELECT as <option value="xyz">trimname</option>
+
+		foreach ($return as $postalId => $cityName) 
+		{
+			echo CHtml::tag('option', array('value' => $postalId), CHtml::encode($cityName), true);
+		}
+	 }
+
+	/*
 	* Returns trims given a model id (id_model)
 	* called based on the select's ajax call. This given a model will return a list of all the trims
 	* that are passed back to the select. This is called directly by component to populate a dependent
@@ -496,7 +569,7 @@ class SiteController extends Controller
 		// stuff the prompt and the default any value
 		
 		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen','Select a Trim')), true);			// Prompt
-		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Trim')), true);		// Any Option
+		echo CHtml::tag('option', array('value' => self::DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Trim')), true);		// Any Option
 
 		// return the html for the SELECT as <option value="xyz">trimname</option>
 		
@@ -525,7 +598,7 @@ class SiteController extends Controller
 		// stuff the prompt and the default any value
 
 		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen', 'Select a Color')), true);			// prompt
-		echo CHtml::tag('option', array('value' => $this->DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Color')), true);	// Any Option
+		echo CHtml::tag('option', array('value' => self::DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Color')), true);	// Any Option
 
 		// return the html for the SELECT as <option value="xyz">trimname</option>
 
@@ -589,7 +662,7 @@ class SiteController extends Controller
 		$cnt = count($photo_urls);
 		while($cnt < 3)
 		{
-			$photo_urls[] = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
+			$photo_urls[] = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
 			$cnt++;
 		}
 		
@@ -619,9 +692,7 @@ class SiteController extends Controller
 		
 		if(!is_numeric($make_id))
 			throw new CHttpException(400, 'Invalid Request');
-
-		//$make_id = 184;
-		
+	
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');									// vehicle/trim_id
 		$sql->from('{{modelle}}');								// will prepend country
@@ -661,7 +732,7 @@ class SiteController extends Controller
 		$cnt = count($photo_urls);
 		while($cnt < 3)
 		{
-			$photo_urls[] = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
+			$photo_urls[] = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
 			$cnt++;
 		}
 		
@@ -723,7 +794,7 @@ class SiteController extends Controller
 		if(count($photo_url) < 1)
 		{
 			$text = $this->GetModelText($model_id);	// always returns valid string or default unknown
-			$photo_url = array('image_path' => $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
+			$photo_url = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
 		}
 		
 		echo CJSON::encode($photo_url);
@@ -750,7 +821,7 @@ class SiteController extends Controller
 			throw new CHttpException(400, 'Invalid Request');
 
 		if(($photo_url = $this->GetPic($trim_id)) === FALSE)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
-			$photo_url = $this->DEFAULT_URL_IMAGE_PATH . $this->DEFAULT_NOT_FOUND_CAR_PIC;
+			$photo_url = self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC;
 
 		echo CJSON::encode($photo_url); // ships it as a nice jason element
 	}
@@ -909,7 +980,7 @@ class SiteController extends Controller
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
-				'models', 'trims', 'colors', 'dealers', 'error', 
+				'models', 'trims', 'colors', 'dealers', 'cities', 'error', 
 				'photomakes', 'photomodel', 'phototrim', 'homepagephotos'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
