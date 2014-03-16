@@ -134,9 +134,13 @@ class LeadGen extends CActiveRecord
 			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>Yii::t('LeadGen','Invalid Format, use 00000-000')),
 			array('int_plz', 'length', 'max'=>9),
 
-			// Make Id, Model Id, Trim Id, Color Id, Dealer Id
+			// Make Id, Model Id, Trim Id, Color Id, Dealer Id, etc
 
 			array('int_fabrikat, int_modell, int_ausstattung, int_farbe, int_haendler', 'numerical', 'integerOnly'=>true),
+			
+			// Odd case to catch a zero entry as a model (empty field since it's an integer)
+			
+			array('int_modell','compare','compareValue'=>'0', 'operator'=>'!=', 'message'=>Yii::t('LeadGen','Please Select a Model')),
 
 			// String Data types get length limits
 			
