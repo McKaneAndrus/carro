@@ -849,12 +849,13 @@ class SiteController extends Controller
 				// if these are not set we will just let the yii fail the validation which will be
 				// due to either city or state not being set. NOTE : if we do encounter an invalid state/city
 				// for some reason the GetPostalCode() will still generate the default and valid postal code
-				// to keep the flow going. (might be a new city or something)
-				
-				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']))
-						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
+				// to keep the flow going. (might be a new city or something) Set the model after we checkpagestate()
+				// so it doesn't get wiped when we validate
 
 				$this->checkPageState($model, $_POST['LeadGen']);	// get all the post params (form vars) and save to the current state
+
+				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']))
+					$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
 			
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
 				{
