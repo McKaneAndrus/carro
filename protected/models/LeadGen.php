@@ -113,7 +113,7 @@ class LeadGen extends CActiveRecord
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
 			array('int_stadt', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your City')),
 			array('int_staat', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your State')),
-			array('int_plz','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
+			// not a form field anymore array('int_plz','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
 			
 			// Quote Page - Trim, Color, Email
 			
