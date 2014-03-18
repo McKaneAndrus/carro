@@ -167,7 +167,6 @@ class LeadGen extends CActiveRecord
 		);
 	}
 
-
 	/**
 	 * @return array relational rules.
 	 */
