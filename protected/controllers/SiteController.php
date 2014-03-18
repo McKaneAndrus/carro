@@ -47,8 +47,8 @@ class SiteController extends Controller
 		{
 
 			$sql = Yii::app()->db->createCommand();
-			$sql->select('aus_modell, aus_body_id, aus_doors');			// vehicle/trim_id
-			$sql->from('{{ausstattung}}');								// will prepend country
+			$sql->select('aus_id, aus_modell, aus_body_id, aus_doors');		// vehicle/trim_id
+			$sql->from('{{ausstattung}}');									// will prepend country
 			$sql->where('aus_id=:trim_id', array(':trim_id' => $p_id));
 			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 						
@@ -57,7 +57,7 @@ class SiteController extends Controller
 				// -- Get model name
 		   
 				$sql1 = Yii::app()->db->createCommand();
-				$sql1->select('mod_path, mod_text, mod_fabrikat');			// vehicle/trim_id
+				$sql1->select('mod_id, mod_path, mod_text, mod_fabrikat');	// vehicle/trim_id
 				$sql1->from('{{modelle}}');									// will prepend country
 				$sql1->where('mod_id=:model_id', array(':model_id' => $rec['aus_modell']));
 				$rec1 = $sql1->queryRow();
@@ -76,7 +76,7 @@ class SiteController extends Controller
 					// -- Get make name
 				  
 					$sql2 = Yii::app()->db->createCommand();
-					$sql2->select('fab_bez');							// vehicle/trim_id
+					$sql2->select('fab_id, fab_bez');					// vehicle/trim_id
 					$sql2->from('{{fabrikate}}');						// will prepend country
 					$sql2->where('fab_id=:make_id', array(':make_id' => $rec1['mod_fabrikat']));
 					$rec2 = $sql2->queryRow();
@@ -91,6 +91,8 @@ class SiteController extends Controller
 					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_45.JPG', '-4_135.JPG', '-4_0.JPG', '-4.JPG');
 					$image_ydb = $p_year . '/' . $rec['aus_doors'] . $rec['aus_body_id'];
 					
+					// if here we have valid records so we can get trim, make, model from them
+					
 					foreach($image_suffix as $suffix)
 					{
 						if (file_exists($file_check_path . strtoupper($rec2['fab_bez']) . '/' . 
@@ -102,8 +104,15 @@ class SiteController extends Controller
 							
 							$image_path = $url_image_path . rawurlencode(strtoupper($rec2['fab_bez'])) . '/' . 
 											rawurlencode(strtoupper($rec1['mod_path'])) . '/' . $image_ydb . $suffix;
+									
+							// The result set contains an array of these elements which are useful!
 											
-							return array('image_path' => $image_path, 'image_desc' => $mod_text);
+							return array(	'image_path' => $image_path, 
+											'image_desc' => $mod_text, 
+											'fab_id' => $rec2['fab_id'],
+											'mod_id' => $rec1['mod_id'],
+											'aus_id' => $rec['aus_id']
+										);
 						}
 					} // foreach
 					
@@ -161,6 +170,7 @@ class SiteController extends Controller
 	{
 
 		// might also check for null or empty here as invalid zip would return that
+		// Also may be faster to just use DBO for looks ups like this
 			
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
 
@@ -179,8 +189,27 @@ class SiteController extends Controller
 		return $city_state;	// record with City, State, if no match NULL or Empty Array
 	}
 
-	// Some of the GetXXXName() functions may be remove at a later date. 
-	// These are just helpers and may not all be needed
+	/*
+	* Given a state and a city will return the postal code. This may
+	* not work correcly for all countries, but for Brazil the mapping
+	* seems to hold true. 
+	*/
+	
+	public function GetPostalCode($city, $state)
+	{
+
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('code');
+		$sql->from('{{postal_codes}}');									// will prepend country
+		$sql->where('state=:state_str and city=:city_str', array(':state_str' => $state, ':city_str' => $city));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+	
+		if($rec == FALSE)
+			return '00000-000';
+			
+		return $rec['code'];
+	}
+
 
 	/*
 	* Get the Make name (string) from a make ID. 
@@ -358,13 +387,13 @@ class SiteController extends Controller
 	public function GetCities($state)
 	{
 		$criteria = new CDbCriteria();
-		$criteria->select = 'code, city';	// fields of interest, state is the only part of interest
+		$criteria->select = 'city';	// fields of interest, state is the only part of interest
 		$criteria->order = 'city';
 		$criteria->condition = 'state=:state_str';
 		$criteria->params = array(':state_str' => $state);
 		$cities = PostalCodeLookup::model()->findAll($criteria);
 		
-		return CHtml::listData($cities, 'code', 'city');
+		return CHtml::listData($cities, 'city', 'city');
 	}
 
 	/*
@@ -546,39 +575,7 @@ class SiteController extends Controller
 			echo CHtml::tag('option', array('value' => $postalId), CHtml::encode($cityName), true);
 		}
 	 }
-
-	/*
-	* Returns trims given a model id (id_model)
-	* called based on the select's ajax call. This given a model will return a list of all the trims
-	* that are passed back to the select. This is called directly by component to populate a dependent
-	* dropdown.
-	*
-	* It currently has a couple of default values for the prompt and as well for a default to select
-	* ANY so a specific trim may not need to be selected but we stuff the option here	
-	*/
 	
-	public function actionTrims() 
-	{
-		if(!isset($_POST['LeadGen']['int_modell']))
-			throw new CHttpException(400, 'Invalid Request');
-
-		// The post parameters come from the form name, in this case it's LeadGen, with the field value as model
-				
-		$trims = GetTrims((int) ($_POST['LeadGen']['int_modell']));	// post has the request model we need trims for
-
-		// stuff the prompt and the default any value
-		
-		echo CHtml::tag('option', array('value' => ""), CHtml::encode(Yii::t('LeadGen','Select a Trim')), true);			// Prompt
-		echo CHtml::tag('option', array('value' => self::DEFAULT_ANY_VALUE), CHtml::encode(Yii::t('LeadGen', 'Any Trim')), true);		// Any Option
-
-		// return the html for the SELECT as <option value="xyz">trimname</option>
-		
-		foreach ($return as $trimId => $trimName) 
-		{
-			echo CHtml::tag('option', array('value' => $trimId), CHtml::encode($trimName), true);
-		}
-	}
-
 	/*
 	* Returns colors given a trim id (id_trim)
 	* called based on the select's ajax call. This given a model will return a list of all the trims
@@ -838,15 +835,6 @@ class SiteController extends Controller
 		if(isset($_POST['landing']))	// If here you came from the quote page using a back button (optional)
 		{
 			$model = new LeadGen('landing');
-      
-			/*
-			* Always remove any leftover Trim and Color data as we can't
-			* ensure we have valid time or color data if make or model has changed
-			* and causes selects to reset
-			*/
-			
-			unset($_POST['LeadGen']['trim']);
-			unset($_POST['LeadGen']['color']);
 		
 			$this->checkPageState($model, $_POST['LeadGen']);
 			$model->scenario = 'landing';	// set validation scenario to landing page 
@@ -856,6 +844,16 @@ class SiteController extends Controller
 			if(isset($_POST['quote'])) 
 			{ 
 				$model = new LeadGen('landing');
+				
+				// get the postal code and stuff into the model so it can do it's validation. 
+				// if these are not set we will just let the yii fail the validation which will be
+				// due to either city or state not being set. NOTE : if we do encounter an invalid state/city
+				// for some reason the GetPostalCode() will still generate the default and valid postal code
+				// to keep the flow going. (might be a new city or something)
+				
+				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']))
+						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
+
 				$this->checkPageState($model, $_POST['LeadGen']);	// get all the post params (form vars) and save to the current state
 			
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
@@ -980,7 +978,7 @@ class SiteController extends Controller
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
-				'models', 'trims', 'colors', 'dealers', 'cities', 'error', 
+				'models', 'colors', 'dealers', 'cities', 'error', 
 				'photomakes', 'photomodel', 'phototrim', 'homepagephotos'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
