@@ -48,10 +48,7 @@
 						}?>
 
 					<?php echo $form->error($model,'int_modell'); ?>
-					<?php
-							//$model_list = $this->GetModels(225); // get the models if existing post
-							
-							echo $form->dropDownList($model, 'int_modell', $model_list, array(
+					<?php echo $form->dropDownList($model, 'int_modell', $model_list, array(
 							'disabled' =>$disable,
 							'prompt' => Yii::t('LeadGen', 'Select a Model'), 
 							'onchange' => 'modelChanged();'
@@ -64,7 +61,7 @@
                     <fieldset id="zip_button">
 					<?php 
 						if(!empty($model->attributes['int_staat']))	// (int_staat == state) post vars are saved from page to page in the state, so pick up from here if EVER set
-							$state = $model->attributes['int_staat'];
+							$state = $model->attributes['int_staat']; 
 					?>
 					<?php echo $form->error($model,'int_staat'); ?>
 					<?php $states = $this->getStates(); 
@@ -100,8 +97,7 @@
 							)
 						); 
 					?>
-						<?php echo CHtml::hiddenField('LeadGen[int_plz]',$model->int_plz, array('id' => 'LeadGen_int_plz')); ?>
-
+					<?php // echo CHtml::hiddenField('LeadGen[int_plz]',$model->int_plz, array('id' => 'LeadGen_int_plz')); ?>
 
                     </fieldset>
 					<div id="submit_button">
@@ -113,15 +109,22 @@
                 <!-- START MAKE LANDING -->
 				<div id="show_makes">
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
+						<a href="#" id="mm_click_1" title="">
+							<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
+						</a>
+						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
+						<a href="#" id="mm_click_2" title="">
+							<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
+						</a>
 						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
-						<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
+						<a href="#" id="mm_click_3" title="">
+							<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
+						</a>
 						<h4 id="mm_txt_3"></h4>
 					</div>
                 </div>
@@ -151,6 +154,17 @@ $make_image_update_code = CHtml::ajax(
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
 			$("#mm_img_3").attr("src", data[2].image_path); 
+			$("#mm_img_1").attr("alt", data[0].image_desc);
+			$("#mm_img_2").attr("alt", data[1].image_desc);
+			$("#mm_img_3").attr("alt", data[2].image_desc);
+
+			$("#mm_click_1").attr("onclick", "clickMakeModelImage(" + data[0].fab_id + "," + data[0].mod_id + ");");
+			$("#mm_click_1").attr("title", data[0].image_desc);
+			$("#mm_click_2").attr("onclick", "clickMakeModelImage(" + data[1].fab_id + "," + data[1].mod_id + ");");
+			$("#mm_click_2").attr("title", data[1].image_desc);
+			$("#mm_click_3").attr("onclick", "clickMakeModelImage(" + data[2].fab_id + "," + data[2].mod_id + ");");
+			$("#mm_click_3").attr("title", data[2].image_desc);
+
 			$("#mm_txt_1").html(data[0].image_desc);
 			$("#mm_txt_2").html(data[1].image_desc);
 			$("#mm_txt_3").html(data[2].image_desc);
@@ -167,6 +181,7 @@ $model_image_update_code = CHtml::ajax(
 		'success'=>'js:function(data){
 			$("#selected_model_img").attr("src", data.image_path);
 			$("#selected_model_txt").html(data.image_desc);
+			$("#selected_model_img").attr("alt", data.image_desc);
 		 }'
    )
 );
@@ -181,6 +196,17 @@ $home_image_update_code = CHtml::ajax(
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
 			$("#mm_img_3").attr("src", data[2].image_path); 
+			$("#mm_img_1").attr("alt", data[0].image_desc);
+			$("#mm_img_2").attr("alt", data[1].image_desc);
+			$("#mm_img_3").attr("alt", data[2].image_desc);
+			
+			$("#mm_click_1").attr("onclick", "clickMakeModelImage(" + data[0].fab_id + "," + data[0].mod_id + ");");
+			$("#mm_click_1").attr("title", data[0].image_desc);
+			$("#mm_click_2").attr("onclick", "clickMakeModelImage(" + data[1].fab_id + "," + data[1].mod_id + ");");
+			$("#mm_click_2").attr("title", data[1].image_desc);
+			$("#mm_click_3").attr("onclick", "clickMakeModelImage(" + data[2].fab_id + "," + data[2].mod_id + ");");
+			$("#mm_click_3").attr("title", data[2].image_desc);
+		
 			$("#mm_txt_1").html(data[0].image_desc);
 			$("#mm_txt_2").html(data[1].image_desc);
 			$("#mm_txt_3").html(data[2].image_desc);
@@ -192,7 +218,7 @@ $home_image_update_code = CHtml::ajax(
 $model_list_update = CHtml::ajax(
    array(
 		'url' => Yii::app()->createUrl('site/models'), 
-		'type'=>'POST',           
+		'type'=>'POST', 
 		'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
 		'success'=>'js:function(html){
 			jQuery("#LeadGen_int_modell").html(html)
@@ -267,12 +293,30 @@ $cs->registerScript(
  	{
 		if($("#LeadGen_int_stadt").val() == "") 
 		{
-			$("#LeadGen_int_plz").val("");
+//			$("#LeadGen_int_plz").val("");
 		}
-		else
-		{
-			$("#LeadGen_int_plz").val($("#LeadGen_int_stadt").val());
-		}
+	}
+	
+	function clickMakeModelImage(make_id, model_id)
+	{
+	
+		$("#LeadGen_int_fabrikat").val(make_id);
+		makeChanged();
+		
+		' . CHtml::ajax(
+			array(
+				'url' => Yii::app()->createUrl('site/models'), 
+				'type'=>'POST', 
+				'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
+				'success'=>'js:function(html){
+					jQuery("#LeadGen_int_modell").html(html)
+					$("#LeadGen_int_modell").prop("disabled", false);
+					$("#LeadGen_int_modell").val(model_id);
+					modelChanged();
+
+				}'
+				)
+			) . '
 	}
 
 	$(document).ready(function() {
