@@ -93,7 +93,6 @@
 					<?php echo $form->dropDownList($model, 'int_stadt', $city_list, array(
 							'disabled' =>$disable, 
 							'prompt' => Yii::t('LeadGen', 'Select Your City'), 
-							'onchange' => 'cityChanged();'
 							)
 						); 
 					?>
@@ -110,20 +109,20 @@
 				<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_1" title="">
-							<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_1" src="" alt="" />
 						</a>
 						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_2" title="">
-							<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_2" src="" alt="" />
 						</a>
 						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_3" title="">
-							<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_3" src="" alt="" />
 						</a>
 						<h4 id="mm_txt_3"></h4>
 					</div>
@@ -131,7 +130,7 @@
                 
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
-						<img id="selected_model_img" src="/images/cars/no_pic.png" alt="" />
+						<img id="selected_model_img" src="" alt="" />
 						<h4 id="selected_model_txt">Year Make Model</h4>
 					</div>
 					<div class="landing_overview_adspace">
@@ -144,55 +143,16 @@
             </div>
         </div>
 <?php
-$make_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/photomakes'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "make_id":$("#LeadGen_int_fabrikat").val() }',
-		'success'=>'js:function(data){
-			$("#mm_img_1").attr("src", data[0].image_path);
-			$("#mm_img_2").attr("src", data[1].image_path);
-			$("#mm_img_3").attr("src", data[2].image_path); 
-			$("#mm_img_1").attr("alt", data[0].image_desc);
-			$("#mm_img_2").attr("alt", data[1].image_desc);
-			$("#mm_img_3").attr("alt", data[2].image_desc);
 
-			$("#mm_click_1").attr("onclick", "clickMakeModelImage(" + data[0].fab_id + "," + data[0].mod_id + ");");
-			$("#mm_click_1").attr("title", data[0].image_desc);
-			$("#mm_click_2").attr("onclick", "clickMakeModelImage(" + data[1].fab_id + "," + data[1].mod_id + ");");
-			$("#mm_click_2").attr("title", data[1].image_desc);
-			$("#mm_click_3").attr("onclick", "clickMakeModelImage(" + data[2].fab_id + "," + data[2].mod_id + ");");
-			$("#mm_click_3").attr("title", data[2].image_desc);
+$cs = Yii::app()->getClientScript();  
+$cs->registerScript(
+	'LeadGenJS',							// unique script ID
+	'function updateImages(data)
+	 {
 
-			$("#mm_txt_1").html(data[0].image_desc);
-			$("#mm_txt_2").html(data[1].image_desc);
-			$("#mm_txt_3").html(data[2].image_desc);
-		 }'
-   )
-);
-
-$model_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/photomodel'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "model_id":$("#LeadGen_int_modell").val() }',
-		'success'=>'js:function(data){
-			$("#selected_model_img").attr("src", data.image_path);
-			$("#selected_model_txt").html(data.image_desc);
-			$("#selected_model_img").attr("alt", data.image_desc);
-		 }'
-   )
-);
-
-$home_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/homepagephotos'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true}',
-		'success'=>'js:function(data){
+			$("#mm_img_1").attr("src", "/images/cars/no_pic.png");
+			$("#mm_img_2").attr("src", "/images/cars/no_pic.png");
+			$("#mm_img_3").attr("src", "/images/cars/no_pic.png"); 
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
 			$("#mm_img_3").attr("src", data[2].image_path); 
@@ -210,53 +170,44 @@ $home_image_update_code = CHtml::ajax(
 			$("#mm_txt_1").html(data[0].image_desc);
 			$("#mm_txt_2").html(data[1].image_desc);
 			$("#mm_txt_3").html(data[2].image_desc);
-		 }'
-   )
-);
-
-
-$model_list_update = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/models'), 
-		'type'=>'POST', 
-		'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
-		'success'=>'js:function(html){
-			jQuery("#LeadGen_int_modell").html(html)
-		}'
-   )
-);
-
-
-$city_list_update = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/cities'), 
-		'type'=>'POST',           
-		'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
-		'success'=>'js:function(html){
-			jQuery("#LeadGen_int_stadt").html(html)
-		}'
-   )
-);
-
-
-$cs = Yii::app()->getClientScript();  
-$cs->registerScript(
-	'LeadGenJS',							// unique script ID
-	'function makeChanged() 
+	}
+	
+	function makeChanged() 
  	{
 		$("#show_makes").show();
 		$("#show_models").hide();
 
 		if($("#LeadGen_int_fabrikat").val() == "") 
 		{
-			$("#LeadGen_int_modell").prop("disabled", true);
-
-			' . $home_image_update_code . '
+			' . CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/homepagephotos'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{ "ajax":true}',
+					'success'=>'js:function(data) {
+						updateImages(data);
+						$("#LeadGen_int_modell").prop("disabled", true);
+					}'
+					)		
+				) .
+			'
 		}
 		else
 		{
-			$("#LeadGen_int_modell").prop("disabled", false);
-		' . $make_image_update_code . '
+			' .CHtml::ajax(
+					array(
+						'url' => Yii::app()->createUrl('site/photomakes'), 
+						'type'=>'POST',           
+						'dataType'=>'json',
+						'data'=>'js:{ "ajax":true, "make_id":$("#LeadGen_int_fabrikat").val() }',
+						'success'=>'js:function(data) {
+							updateImages(data);
+							$("#LeadGen_int_modell").prop("disabled", false);
+						}'
+						)
+				) . 
+			'
 		}
 	}
 	
@@ -272,8 +223,24 @@ $cs->registerScript(
 		}
 		else
 		{
-			$("#LeadGen_int_modell").prop("disabled", false);
-		' . $model_image_update_code . '
+
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/photomodel'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{ "ajax":true, "model_id":$("#LeadGen_int_modell").val() }',
+					'success'=>'js:function(data){
+						$("#selected_model_img").attr("src", "/images/cars/no_pic.png");
+						$("#selected_model_img").attr("src", data.image_path);
+						$("#selected_model_txt").html(data.image_desc);
+						$("#selected_model_img").attr("alt", data.image_desc);
+						$("#LeadGen_int_modell").prop("disabled", false);
+					 }'
+			   )
+			) .
+			
+			'
 		}
 	}
 
@@ -286,14 +253,6 @@ $cs->registerScript(
 		else
 		{
 			$("#LeadGen_int_stadt").prop("disabled", false);
-		}
-	}
-
-	function cityChanged() 
- 	{
-		if($("#LeadGen_int_stadt").val() == "") 
-		{
-//			$("#LeadGen_int_plz").val("");
 		}
 	}
 	
@@ -328,7 +287,19 @@ $cs->registerScript(
 		{
 			makeChanged();
 			if($("#LeadGen_int_fabrikat").val() != "") 
-				' . $model_list_update . '
+			{
+			' .	CHtml::ajax(
+				   array(
+						'url' => Yii::app()->createUrl('site/models'), 
+						'type'=>'POST', 
+						'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
+						'success'=>'js:function(html){
+							jQuery("#LeadGen_int_modell").html(html)
+						}'
+				   )
+				) .
+				'				
+			}
 		}
 
 		if($("#LeadGen_int_stadt").val() != "")
@@ -339,7 +310,19 @@ $cs->registerScript(
 		{
 			stateChanged();
 			if($("#LeadGen_int_staat").val() != "")
-				' . $city_list_update . '
+			{
+			' .	CHtml::ajax(
+				   array(
+						'url' => Yii::app()->createUrl('site/cities'), 
+						'type'=>'POST',           
+						'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
+						'success'=>'js:function(html){
+							jQuery("#LeadGen_int_stadt").html(html)
+						}'
+				   )
+				) . 
+				'
+			}
 
 		}
 	});
