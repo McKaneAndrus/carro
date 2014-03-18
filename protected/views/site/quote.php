@@ -178,6 +178,7 @@ $trim_image_update_code = CHtml::ajax(
 		'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
 		'success'=>'js:function(data){
 			$("#mmt_img_1").attr("src", data.image_path);
+			$("#mmt_img_1").attr("alt", data.image_desc);
 			$("#mmt_txt_1").html(data.image_desc);
 		 }'
    )
@@ -191,6 +192,7 @@ $model_image_update_code = CHtml::ajax(
 		'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
 		'success'=>'js:function(data){
 			$("#mmt_img_1").attr("src", data.image_path);
+			$("#mmt_img_1").attr("alt", data.image_desc);
 			$("#mmt_txt_1").html(data.image_desc);
 		 }'
    )
