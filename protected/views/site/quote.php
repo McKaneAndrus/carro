@@ -160,6 +160,7 @@
                         <p class="quote_city">
 							<?php $cs_rec = $this->GetCityState($model->int_plz);?>
 							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
+							<?php echo '<br>' . bin2hex($cs_rec->state) ?>
 						</p>
 						
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
@@ -170,45 +171,6 @@
             </div>
         </div>        
 <?php
-$trim_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/phototrim'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
-		'success'=>'js:function(data){
-			$("#mmt_img_1").attr("src", data.image_path);
-			$("#mmt_img_1").attr("alt", data.image_desc);
-			$("#mmt_txt_1").html(data.image_desc);
-		 }'
-   )
-);
-
-$model_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/photomodel'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
-		'success'=>'js:function(data){
-			$("#mmt_img_1").attr("src", data.image_path);
-			$("#mmt_img_1").attr("alt", data.image_desc);
-			$("#mmt_txt_1").html(data.image_desc);
-		 }'
-   )
-);
-
-
-$color_list_update = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/colors'), 
-		'type'=>'POST',           
-		'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
-		'success'=>'js:function(html){
-			$("#LeadGen_int_farbe").html(html);
-		}'
-   )
-);
 
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
@@ -223,9 +185,21 @@ $cs->registerScript(
 			}
 			else
 			{
+			' .	CHtml::ajax(
+				   array(
+						'url' => Yii::app()->createUrl('site/phototrim'), 
+						'type'=>'POST',           
+						'dataType'=>'json',
+						'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
+						'success'=>'js:function(data){
+							$("#mmt_img_1").attr("src", data.image_path);
+							$("#mmt_img_1").attr("alt", data.image_desc);
+							$("#mmt_txt_1").html(data.image_desc);
+						 }'
+				   )
+				) . 
+			'
 				$("#LeadGen_int_farbe").prop("disabled", false);
-				
-			' . $trim_image_update_code . '
 			}
 	}
 	
@@ -233,12 +207,35 @@ $cs->registerScript(
 	{
 		if($("#LeadGen_int_ausstattung").val() == "" || $("#LeadGen_int_ausstattung").val() == -1) 
 		{
-		' . $model_image_update_code . '
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/photomodel'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
+					'success'=>'js:function(data){
+						$("#mmt_img_1").attr("src", data.image_path);
+						$("#mmt_img_1").attr("alt", data.image_desc);
+						$("#mmt_txt_1").html(data.image_desc);
+					 }'
+			   )
+			) .
+		'
 		}
 		else
 		{
 			trimChanged();
-			' . $color_list_update . ' 
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/colors'), 
+					'type'=>'POST',           
+					'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
+					'success'=>'js:function(html){
+						$("#LeadGen_int_farbe").html(html);
+					}'
+			   )
+			) .			
+			'
 		}
 	});	
 	',
