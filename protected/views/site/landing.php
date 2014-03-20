@@ -150,9 +150,6 @@ $cs->registerScript(
 	'function updateImages(data)
 	 {
 
-			$("#mm_img_1").attr("src", "/images/cars/no_pic.png");
-			$("#mm_img_2").attr("src", "/images/cars/no_pic.png");
-			$("#mm_img_3").attr("src", "/images/cars/no_pic.png"); 
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
 			$("#mm_img_3").attr("src", data[2].image_path); 
@@ -231,7 +228,6 @@ $cs->registerScript(
 					'dataType'=>'json',
 					'data'=>'js:{ "ajax":true, "model_id":$("#LeadGen_int_modell").val() }',
 					'success'=>'js:function(data){
-						$("#selected_model_img").attr("src", "/images/cars/no_pic.png");
 						$("#selected_model_img").attr("src", data.image_path);
 						$("#selected_model_txt").html(data.image_desc);
 						$("#selected_model_img").attr("alt", data.image_desc);
