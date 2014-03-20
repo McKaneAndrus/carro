@@ -62,40 +62,45 @@
             </div>
         </div>
 <?php
-$trim_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/phototrim'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "trim_id":$("#htrm").val() }',
-		'success'=>'js:function(data){
-			$("#mmt_img_1").attr("src", data.image_path);
-			$("#mmt_txt_1").html(data.image_desc);
-		 }'
-   )
-);
 
-$model_image_update_code = CHtml::ajax(
-   array(
-		'url' => Yii::app()->createUrl('site/photomodel'), 
-		'type'=>'POST',           
-		'dataType'=>'json',
-		'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
-		'success'=>'js:function(data){
-			$("#mmt_img_1").attr("src", data.image_path);
-			$("#mmt_txt_1").html(data.image_desc);
-		 }'
-   )
-);
 
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'$(document).ready(function() {
 		if($("#htrm").val() == -1)
-		' . $model_image_update_code . '
+		{
+		' .	CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/photomodel'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
+					'success'=>'js:function(data){
+						$("#mmt_img_1").attr("src", data.image_path);
+						$("#mmt_txt_1").html(data.image_desc);
+					 }'
+				)
+			) .
+			'
+		}
 		else
-		' . $trim_image_update_code . '
+		{
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/phototrim'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{ "ajax":true, "trim_id":$("#htrm").val() }',
+					'success'=>'js:function(data){
+						$("#mmt_img_1").attr("src", data.image_path);
+						$("#mmt_txt_1").html(data.image_desc);
+					 }'
+			   )
+			) .
+		'
+		
+		}
 	}
 	);	
 	',
