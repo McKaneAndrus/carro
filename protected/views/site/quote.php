@@ -153,15 +153,16 @@
 							<?php echo $form->textField($model,'int_str'); ?>
 							<?php echo $form->error($model,'int_str'); ?>
 
+							<p class="quote_city">
+								<?php $cs_rec = $this->GetCityState($model->int_plz);?>
+								<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
+							</p>
+
 							<?php echo $form->labelEx($model,'int_text'); ?>
 							<?php echo $form->textArea($model,'int_text'); ?>
 							<?php echo $form->error($model,'int_text'); ?>
+							<br>
                         
-                        <p class="quote_city">
-							<?php $cs_rec = $this->GetCityState($model->int_plz);?>
-							<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
-							<?php echo '<br>' . bin2hex($cs_rec->state) ?>
-						</p>
 						
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
 						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('name'=>'submit')); ?>
@@ -224,7 +225,8 @@ $cs->registerScript(
 		}
 		else
 		{
-			trimChanged();
+			save_color = $("#LeadGen_int_farbe").val();
+
 		' .	CHtml::ajax(
 			   array(
 					'url' => Yii::app()->createUrl('site/colors'), 
@@ -232,10 +234,12 @@ $cs->registerScript(
 					'data'=>'js:{"LeadGen[int_ausstattung]":$("#LeadGen_int_ausstattung").val() }',
 					'success'=>'js:function(html){
 						$("#LeadGen_int_farbe").html(html);
+						$("#LeadGen_int_farbe").val(save_color);
 					}'
 			   )
 			) .			
 			'
+			trimChanged();
 		}
 	});	
 	',
