@@ -691,11 +691,12 @@ class SiteController extends Controller
 			throw new CHttpException(400, 'Invalid Request');
 	
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('aus_id');									// vehicle/trim_id
+		$sql->select('aus_id, mod_bez');						// vehicle/trim_id
 		$sql->from('{{modelle}}');								// will prepend country
 		$sql->join('{{ausstattung}}', 'aus_modell=mod_id');
 		$sql->where('mod_fabrikat=:vehicle_make', array(':vehicle_make' => $make_id));
 		$sql->order('rand()');
+		$sql->group('mod_bez');
 		$sql->limit(10);		// get more then we think so empty images can be skipped
 		
 		$make_trims = $sql->queryAll();
