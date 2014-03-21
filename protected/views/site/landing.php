@@ -88,7 +88,6 @@
 							$city_list = array();
 							$disable='disable';
 						}?>
-
 					<?php echo $form->error($model,'int_stadt'); ?>
 					<?php echo $form->dropDownList($model, 'int_stadt', $city_list, array(
 							'disabled' =>$disable, 
@@ -140,6 +139,7 @@
                 
                 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa. Ut quis nisi eu turpis commodo pulvinar nec vitae quam. Phasellus ac orci ullamcorper, dapibus metus sit amet, ultrices ipsum. Mauris turpis ipsum, adipiscing quis sodales et, imperdiet eget massa. Phasellus vulputate accumsan luctus. Nunc erat magna, vulputate id orci eu, rutrum gravida odio. Suspendisse euismod magna nec augue feugiat, vel vulputate metus rutrum. Vivamus imperdiet pellentesque porta.</p>
                 <p>Integer eget viverra diam. Pellentesque tempor eros sapien, in pretium risus tincidunt id. Mauris mi ligula, gravida fermentum sapien sit amet, pellentesque placerat lorem. Mauris feugiat dictum elementum. Nunc pellentesque, mi sit amet faucibus facilisis, est ligula hendrerit leo, a iaculis urna ligula quis nisi. Praesent sit amet lectus quis mauris facilisis scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id erat nisl. Etiam vulputate nec lacus in consequat. Nulla pharetra enim sit amet justo condimentum luctus. Sed luctus arcu massa, ut euismod elit fermentum et. Praesent risus augue, tristique varius pellentesque ut, egestas vitae magna. </p>
+<p>version 1.01</p>
             </div>
         </div>
 <?php
@@ -210,11 +210,12 @@ $cs->registerScript(
 	
 	function modelChanged()
 	{
-		$("#show_makes").hide();
-		$("#show_models").show();
 
 		if($("#LeadGen_int_modell").val() == "") 
 		{
+			$("#show_makes").show();
+			$("#show_models").hide();
+
 			$("#selected_model_img").attr("src", "/images/cars/no_pic.png");
 			$("#selected_model_txt").html("");
 		}
@@ -237,6 +238,10 @@ $cs->registerScript(
 			) .
 			
 			'
+		
+			$("#show_makes").hide();
+			$("#show_models").show();
+
 		}
 	}
 
@@ -264,7 +269,7 @@ $cs->registerScript(
 				'type'=>'POST', 
 				'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
 				'success'=>'js:function(html){
-					jQuery("#LeadGen_int_modell").html(html)
+					jQuery("#LeadGen_int_modell").html(html);
 					$("#LeadGen_int_modell").prop("disabled", false);
 					$("#LeadGen_int_modell").val(model_id);
 					modelChanged();
@@ -275,52 +280,46 @@ $cs->registerScript(
 	}
 
 	$(document).ready(function() {
-		if($("#LeadGen_int_modell").val() != "")
+
+		save_model = $("#LeadGen_int_modell").val();
+
+		if($("#LeadGen_int_fabrikat").val() != "") 
 		{
-			modelChanged();
-		}
-		else
-		{
-			makeChanged();
-			if($("#LeadGen_int_fabrikat").val() != "") 
-			{
-			' .	CHtml::ajax(
-				   array(
-						'url' => Yii::app()->createUrl('site/models'), 
-						'type'=>'POST', 
-						'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
-						'success'=>'js:function(html){
-							jQuery("#LeadGen_int_modell").html(html)
-						}'
-				   )
-				) .
-				'				
-			}
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/models'), 
+					'type'=>'POST', 
+					'data'=>'js:{"LeadGen[int_fabrikat]":$("#LeadGen_int_fabrikat").val() }',
+					'success'=>'js:function(html){
+						jQuery("#LeadGen_int_modell").html(html);
+						$("#LeadGen_int_modell").val(save_model);
+					}'
+			   )
+			) .
+		'				
 		}
 
-		if($("#LeadGen_int_stadt").val() != "")
-		{
-			cityChanged();
-		}
-		else
-		{
-			stateChanged();
-			if($("#LeadGen_int_staat").val() != "")
-			{
-			' .	CHtml::ajax(
-				   array(
-						'url' => Yii::app()->createUrl('site/cities'), 
-						'type'=>'POST',           
-						'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
-						'success'=>'js:function(html){
-							jQuery("#LeadGen_int_stadt").html(html)
-						}'
-				   )
-				) . 
-				'
-			}
+		makeChanged();
+		modelChanged();	
 
+		save_city = $("#LeadGen_int_stadt").val()
+		if($("#LeadGen_int_staat").val() != "")
+		{
+		' .	CHtml::ajax(
+			   array(
+					'url' => Yii::app()->createUrl('site/cities'), 
+					'type'=>'POST',           
+					'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
+					'success'=>'js:function(html){
+						jQuery("#LeadGen_int_stadt").html(html);
+						$("#LeadGen_int_stadt").val(save_city);
+					}'
+			   )
+			) . 
+			'
 		}
+		
+		stateChanged();
 	});
 	'
 	,
