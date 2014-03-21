@@ -139,7 +139,6 @@
                 
                 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa. Ut quis nisi eu turpis commodo pulvinar nec vitae quam. Phasellus ac orci ullamcorper, dapibus metus sit amet, ultrices ipsum. Mauris turpis ipsum, adipiscing quis sodales et, imperdiet eget massa. Phasellus vulputate accumsan luctus. Nunc erat magna, vulputate id orci eu, rutrum gravida odio. Suspendisse euismod magna nec augue feugiat, vel vulputate metus rutrum. Vivamus imperdiet pellentesque porta.</p>
                 <p>Integer eget viverra diam. Pellentesque tempor eros sapien, in pretium risus tincidunt id. Mauris mi ligula, gravida fermentum sapien sit amet, pellentesque placerat lorem. Mauris feugiat dictum elementum. Nunc pellentesque, mi sit amet faucibus facilisis, est ligula hendrerit leo, a iaculis urna ligula quis nisi. Praesent sit amet lectus quis mauris facilisis scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id erat nisl. Etiam vulputate nec lacus in consequat. Nulla pharetra enim sit amet justo condimentum luctus. Sed luctus arcu massa, ut euismod elit fermentum et. Praesent risus augue, tristique varius pellentesque ut, egestas vitae magna. </p>
-<p>version 1.01</p>
             </div>
         </div>
 <?php
@@ -210,8 +209,7 @@ $cs->registerScript(
 	
 	function modelChanged()
 	{
-
-		if($("#LeadGen_int_modell").val() == "") 
+		if($("#LeadGen_int_modell").val() == "" || $("#LeadGen_int_modell").val() == null) 
 		{
 			$("#show_makes").show();
 			$("#show_models").hide();
@@ -221,7 +219,6 @@ $cs->registerScript(
 		}
 		else
 		{
-
 		' .	CHtml::ajax(
 			   array(
 					'url' => Yii::app()->createUrl('site/photomodel'), 
@@ -279,11 +276,12 @@ $cs->registerScript(
 			) . '
 	}
 
-	$(document).ready(function() {
+	$(window).load(function() {
 
 		save_model = $("#LeadGen_int_modell").val();
+		save_city = $("#LeadGen_int_stadt").val()
 
-		if($("#LeadGen_int_fabrikat").val() != "") 
+		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
 		{
 		' .	CHtml::ajax(
 			   array(
@@ -302,8 +300,7 @@ $cs->registerScript(
 		makeChanged();
 		modelChanged();	
 
-		save_city = $("#LeadGen_int_stadt").val()
-		if($("#LeadGen_int_staat").val() != "")
+		if($("#LeadGen_int_staat").val() != "" && $("#LeadGen_int_staat").val() != null)
 		{
 		' .	CHtml::ajax(
 			   array(
