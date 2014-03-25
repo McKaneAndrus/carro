@@ -7,8 +7,6 @@
         <div class="wrapper">
             <div class="confirm_wrapper">
 				
-				<!-- Need a form here -->
-				
 				<?php $form=$this->beginWidget('CActiveForm', array(
 						'id'=>'leadgen-form',
 						'enableAjaxValidation'=>false,
