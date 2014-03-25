@@ -108,20 +108,20 @@
 				<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_1" title="">
-							<img id="mm_img_1" src="" alt="" />
+							<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
 						</a>
 						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_2" title="">
-							<img id="mm_img_2" src="" alt="" />
+							<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
 						</a>
 						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_3" title="">
-							<img id="mm_img_3" src="" alt="" />
+							<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
 						</a>
 						<h4 id="mm_txt_3"></h4>
 					</div>
