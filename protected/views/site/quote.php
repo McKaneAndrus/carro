@@ -178,8 +178,6 @@ $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function trimChanged() 
  	{
-			// $("#LeadGen_int_farbe").empty(); 
-
 			if($("#LeadGen_int_ausstattung").val() == "") 
 			{
 				$("#LeadGen_int_farbe").prop("disabled", true);
