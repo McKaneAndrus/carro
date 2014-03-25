@@ -846,17 +846,18 @@ class SiteController extends Controller
 			{ 
 				$model = new LeadGen('landing');
 				
-				// get the postal code and stuff into the model so it can do it's validation. 
-				// if these are not set we will just let the yii fail the validation which will be
-				// due to either city or state not being set. NOTE : if we do encounter an invalid state/city
-				// for some reason the GetPostalCode() will still generate the default and valid postal code
-				// to keep the flow going. (might be a new city or something) Set the model after we checkpagestate()
-				// so it doesn't get wiped when we validate
 
-				$this->checkPageState($model, $_POST['LeadGen']);	// get all the post params (form vars) and save to the current state
+				// grab the city and state if set and valid data and look up postal code, for form to 
+				// validate city and state (stadt and staat) must have been set (it's ugly I know...)
+				
+				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']) 
+					&& !empty($_POST['LeadGen']['int_staat']) && !empty($_POST['LeadGen']['int_stadt']))
+						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
+					
+				$post_params = $_POST['LeadGen'];			// grab post params and add postal code to form state
+				$post_params["int_plz"] = $model->int_plz;	// stuff into the saved state the postal code
 
-				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']))
-					$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
+				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
 			
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
 				{
@@ -871,13 +872,14 @@ class SiteController extends Controller
 					
 					$view = 'landing';	// back to page one if the data on page one was invalid. 
 				}
+			
 			}
 			else // submit the complete set of data. 
 				if(isset($_POST['submit'])) 	// quote page has form submitted, get form data validate and save it!
 				{
 					$model = new LeadGen('quote');
-					$model->attributes = $this->getPageState('page', array()); // tricky, gets the state into the model, then erases it 
 
+					$model->attributes = $this->getPageState('page', array());	// also has postal int_plz!
 					$model->attributes = $_POST['LeadGen'];
 					  
 					if($model->validate())	
@@ -927,7 +929,7 @@ class SiteController extends Controller
 					else
 					{
 						// validation failed go back to the quote page and do it again
-						  					
+
 						$view = 'quote';	// fix up errors
 					}
 				}
