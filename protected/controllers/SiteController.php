@@ -446,7 +446,7 @@ class SiteController extends Controller
 		return CHtml::listData($colors, 'mf_farbe', 'color');	// fields color ID and name
 	}
 
-	public function GetDealers($postal_code_str, $limit)
+	public function GetDealers($make, $postal_code_str, $limit)
 	{
 
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
@@ -480,12 +480,13 @@ class SiteController extends Controller
 		*/
 		
 		
-		$q = 'CALL P_br_dealer_distance_km(:user_postal_code, :distance_km, :max_results)';
+		$q = 'CALL P_br_dealer_distance_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
 		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 		do
 		{
+			$cmd->bindParam(':make_id', $make, PDO::PARAM_INT); // set the so we can look at dealers make!
 			$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
 			$cmd->bindParam(':distance_km', $dist, PDO::PARAM_INT);
 			$cmd->bindParam(':max_results', $limit, PDO::PARAM_INT);

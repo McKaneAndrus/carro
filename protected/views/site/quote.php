@@ -78,9 +78,8 @@
                         
 						<?php $special_dealer_display_count = 3; // 0 = No display of Special Dealers div ?>
 						
-						<?php $dealer_list = $this->GetDealers($model->int_plz, 10); ?>
+						<?php $dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, 10); ?>
 						<?php $dealer_select_list = array_keys($dealer_list);?>
-						<?php //var_dump($dealer_list); ?>
 				
 						<?php 
 							$dlr_cnt = count($dealer_list);
