@@ -29,10 +29,8 @@
 	<div id="header">
         <header>
             <div class="header_wrapper">
-                <a href="http://carroonline.terra.com.br/"><img src="images/logo-carro.png" alt="Carro" class="header_logo"/></a>
+                <a href="http://carroonline.terra.com.br/"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/logo-carro.png" alt="Carro" class="header_logo"/></a>
                 <div style="width: 728px; height: 90px; background-color: #ccc;display: inline-block; vertical-align: middle">
-					<!--BANNER AD GOES HERE-->
-					
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-3657518844311529";
 /* Horizonal */
@@ -115,5 +113,13 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	</div><!-- footer -->
 </div><!-- page -->
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-42494165-1', 'carroglobo.com');
+  ga('send', 'pageview');
+</script>
 </body>
 </html>
