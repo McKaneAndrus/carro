@@ -16,7 +16,7 @@ span.required
 .errorMessage
 {
 	color: red;
-	font-size: 0.9em;
+	font-size: 0.8em;
 }
 
 .error input,
@@ -139,7 +139,7 @@ nav a:hover {
 
 .landing_main h2 {
     position: absolute;
-    top: 100px;
+    top: 90px;
     font-style: italic;
     font-size: 20px;
     width: 525px;
@@ -149,11 +149,11 @@ nav a:hover {
 
 .landing_main form {
     position: absolute;
-    top: 175px;
+    top: 150px;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     width: 480px;
-    padding: 10px 20px 10px;
+    padding: 9px 20px 10px;
 }
 
 .landing_main fieldset {
@@ -453,7 +453,7 @@ Quote form
 
 .quote_column h3 {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     margin: 0 0 8px;
 }
 
@@ -471,6 +471,7 @@ Quote form
 
 .quote_special .quote_dealer {
     border-top: 1px solid #d0cb92;
+    font-size: 12px;
 }
 
 .quote_special .quote_dealer:first-child,
@@ -482,6 +483,7 @@ Quote form
     max-height: 275px;
     overflow: auto;
     border: 1px solid #ccc;
+    font-size: 12px;
 }
 
 .quote_more_dealers .quote_dealer {
