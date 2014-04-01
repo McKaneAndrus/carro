@@ -44,8 +44,9 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+		
 		// uncomment the following to enable URLs in path-format
-		/*
+	
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'rules'=>array(
@@ -54,7 +55,7 @@ return array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
-		*/
+		
 
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=newcars', //revmaker',
@@ -101,6 +102,5 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@carro.br.com',	// sjg - need to fix if used
-		'Country_Code' =>'BR',					// pick something to make the app aware of cc, could be useful for database table prefix at some point too.
 	),
 );
