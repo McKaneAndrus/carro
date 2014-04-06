@@ -3,6 +3,20 @@
 /* @var $model LeadGen */
 /* @var $form CActiveForm */
 ?>
+		<!--main nav bar -->
+		<nav>
+			<?php $this->widget('zii.widgets.CMenu',array('encodeLabel'=>false, 'lastItemCssClass'=>'nav_social',
+				'items'=>array(
+					array('label'=>'Já dirigimos', 'url'=>"http://carroonline.terra.com.br/ja-dirigimos"),
+					array('label'=>'Notícias', 'url'=>"http://carroonline.terra.com.br/noticias"),
+					array('label'=>'Dicas e Serviços', 'url'=>"http://carroonline.terra.com.br/dicas-e-servicos" ),
+					array('label'=>'Vídeos', 'url'=>"http://carroonline.terra.com.br/videos" ),
+					array('label'=>'Teste 100 dias', 'url'=>"http://carroonline.terra.com.br/blogs"),
+					array('label'=>'Revista Racing', 'url'=>"http://racing.terra.com.br/", 'linkOptions'=>array('target'=>'_blank')),
+					array('label'=>'<a target="_blank" href="http://www.facebook.com/revistacarro"><img src="http://carroonline.terra.com.br/sitestatic/images/face-icon.png"></a><a target="_blank" href="http://www.twitter.com/carro_hoje"><img src="http://carroonline.terra.com.br/sitestatic/images/tweet-icon.png"></a>'),
+				),
+			)); ?>
+		</nav>
 
         <div class="wrapper">
             <div class="confirm_wrapper">
@@ -60,8 +74,6 @@
             </div>
         </div>
 <?php
-
-
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
