@@ -131,7 +131,7 @@ nav a:hover {
     position: absolute;
     top: 38px;
     left: 34px;
-    font-size: 26px;
+    font-size: 23px;
     font-weight: bold;
     color: #fff;
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
@@ -204,8 +204,8 @@ nav a:hover {
 
 .landing_main input[type="submit"] {
     display: block;
-    background: url('../images/btn-sm.png') no-repeat;
-    width: 172px;
+    background: url('../images/btn-lg.png') no-repeat;
+    width: 270px; /*172px;*/
     height: 44px;
     cursor: pointer;
 /*    margin: 10px 0 0; */
@@ -214,7 +214,7 @@ nav a:hover {
 	margin-right: auto;
 
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
 	color: #fff;
 }
@@ -229,12 +229,14 @@ nav a:hover {
 .landing_overview {
     width: 940px;
     margin: 0 auto;
-    padding: 20px 0 80px;
+    padding: 5px 0 20px;	/* 5 px was 20px, 20px was 80px */
 }
 
 .landing_overview h3 {
-    font-size: 22px;
+    font-size: 28px;	/* was 22px */
     font-weight: bold;
+    text-align: center;	/* added align and color */
+    color: rgb(214, 0, 8);
 }
 
 .landing_price {
@@ -290,6 +292,10 @@ nav a:hover {
 
 /* next few added sjg */ 
 
+.landing_overview #show_makes{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
 
 .landing_overview_modelCar {
     display: inline-block;
@@ -310,12 +316,23 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
-    height: 150px;
+	height: 150px;
     
+}
+
+.landing_overview ol li {
+	padding : 10px;
+	font-weight: bold;
+    font-size: 16px;
+    background: #FFC0CB;
 }
 
 .landing_overview_modelCar:first-child {
     margin: 0;
+}
+
+.landing_overview_below {
+    padding: 20px; 
 }
 
 /* hide the model div by default */ 
