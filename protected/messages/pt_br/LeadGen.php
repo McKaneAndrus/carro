@@ -30,9 +30,22 @@ return array(
 	// landing page 
 	
 	
-	'Let us help you get the best deal' => 'Deixe-nos ajudá-lo a obter o melhor negócio',
-	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, compare preços e opções de financiamento de vários revendedores e bancos',
-	'Get Started' => 'Começe Aqui',
+	'Let us help you get the best deal' => 'Deixe-nos ajudá-lo a obter o melhor negócio', // old
+	'Looking for a Great Deal On a New Car?' => 'Procurando uma Ótima Oferta no seu Carro Novo?',
+	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, compare preços e opções de financiamento de vários revendedores e bancos', // old
+	'Get a free Internet Price Quote now' => 'Receba uma Cotação Grátis',
+	'As easy as 1-2-3' => 'Fácil assim 1-2-3',
+	
+	'Get Started' => 'Começe Aqui', // old button title
+	'Start saving today' => 'Economize Agora',
+	
+	// 123 bullets
+	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
+	'Complete the email form and your selected dealers will contact you with their best internet pricing.' => 'Complete o formulário e as concessionárias selecionadas entrarão em contato com seus melhores preços de internet.',
+	'Choose the deal you like best, visit the dealership and complete your new car purchase.' => 'Escolha o negócio que você mais gosta, visite a concessionária e complete a compra do seu carro novo.',
+	
+	// below the fold copy
+	'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!' => 'Na Carro, oferecemos uma vasta seleção de carros novos, pick-ups, mini-vans, híbridos e muito mais para sua escolha.  Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo. Elas competem pelo seu negócio, então, aproveite agora nosso processo de cotação sem ter que pechinchar!',
 	
 	// quote page
 	
