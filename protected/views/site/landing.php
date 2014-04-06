@@ -5,8 +5,8 @@
 ?>
         <div class="wrapper">
             <div class="landing_main">
-                <h1><?php echo Yii::t('LeadGen', 'Let us help you get the best deal'); ?></h1>
-                <h2><?php echo Yii::t('LeadGen', 'Before you buy a new car, compare prices and financing from several dealers and banks'); ?></h2>
+                <h1><?php echo Yii::t('LeadGen', 'Looking for a Great Deal On a New Car?'); ?></h1>
+                <h2><?php echo Yii::t('LeadGen', 'Get a free Internet Price Quote now'); ?></h2>
                 
 					<?php $form=$this->beginWidget('CActiveForm', array(
 						'id'=>'leadgen-form',
@@ -99,13 +99,14 @@
 
                     </fieldset>
 					<div id="submit_button">
-						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Started'), array('name'=>'quote')); ?>
+						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Start saving today'), array('name'=>'quote')); ?>
 					</div>
 				<?php $this->endWidget(); ?>
             </div>
             <div class="landing_overview">
                 <!-- START MAKE LANDING -->
-				<div id="show_makes">
+				<h3><?php echo Yii::t('LeadGen', 'As easy as 1-2-3'); ?></h3>
+            	<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_1" title="">
 							<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
@@ -136,9 +137,14 @@
 						<h4>Lorem, Ipsum, Etc</h4>
 					</div>
                 </div>
-                
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa. Ut quis nisi eu turpis commodo pulvinar nec vitae quam. Phasellus ac orci ullamcorper, dapibus metus sit amet, ultrices ipsum. Mauris turpis ipsum, adipiscing quis sodales et, imperdiet eget massa. Phasellus vulputate accumsan luctus. Nunc erat magna, vulputate id orci eu, rutrum gravida odio. Suspendisse euismod magna nec augue feugiat, vel vulputate metus rutrum. Vivamus imperdiet pellentesque porta.</p>
-                <p>Integer eget viverra diam. Pellentesque tempor eros sapien, in pretium risus tincidunt id. Mauris mi ligula, gravida fermentum sapien sit amet, pellentesque placerat lorem. Mauris feugiat dictum elementum. Nunc pellentesque, mi sit amet faucibus facilisis, est ligula hendrerit leo, a iaculis urna ligula quis nisi. Praesent sit amet lectus quis mauris facilisis scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id erat nisl. Etiam vulputate nec lacus in consequat. Nulla pharetra enim sit amet justo condimentum luctus. Sed luctus arcu massa, ut euismod elit fermentum et. Praesent risus augue, tristique varius pellentesque ut, egestas vitae magna. </p>
+				<ol>
+					<li>1. <?php echo Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.'); ?></li>
+					<li>2. <?php echo Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.'); ?></li>
+					<li>3. <?php echo Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.'); ?></li>
+				</ol>
+				<div class="landing_overview_below">
+				<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
+				</div>
             </div>
         </div>
 <?php
