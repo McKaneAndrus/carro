@@ -139,7 +139,7 @@ nav a:hover {
 
 .landing_main h2 {
     position: absolute;
-    top: 90px;
+    top: 100px;
     font-style: italic;
     font-size: 20px;
     width: 525px;
@@ -149,7 +149,7 @@ nav a:hover {
 
 .landing_main form {
     position: absolute;
-    top: 150px;
+    top: 140px;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     width: 480px;
@@ -214,7 +214,7 @@ nav a:hover {
 	margin-right: auto;
 
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
 	color: #fff;
 }
@@ -314,10 +314,21 @@ nav a:hover {
     border: 1px solid #999;
     width: 318px;
     margin: 0 0 0 10px;
-    text-align: center;  
-    padding: 20px; 
+    text-align: left;  
+	padding: 10px 20px 30px 20px;
 	height: 150px;
-    
+}
+
+.landing_overview_adspace .testimonial {
+    background: url('../images/quote_bubble.png') no-repeat;
+    height: 152px;
+    padding : 20px;
+}
+
+.landing_overview_adspace img {
+	position: relative;
+	right: -210px;
+	top: -140px;
 }
 
 .landing_overview ol li {
@@ -338,6 +349,8 @@ nav a:hover {
 /* hide the model div by default */ 
 
 .landing_overview #show_models {
+	padding-top: 5px;
+	padding-bottom: 5px;
 	display: none;
 }
  
@@ -433,7 +446,7 @@ Quote form
     cursor: pointer;
 
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 22px;
+    font-size: 21px;
     font-weight: bold;
 	color: #fff;
 }
