@@ -138,7 +138,7 @@
 						<div class="testimonial">
 							<div> This needs to have a testimonial and such translated here...</div>
 						</div>
-						<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/testimonial-photo.png"  alt="testimonial"/>
+						<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/testimonial-photo-1.png"  alt="testimonial"/>
 					</div>
                 </div>
 				<ol>
