@@ -29,6 +29,8 @@ class SiteController extends Controller
 		* 
 		* $_SERVER['DOCUMENT_ROOT'] is typically something like '/var/www/' or '/var/www/html/ ......'
 		*
+		* $p_id - trim_id
+		*
 		* $url_image_path - path prepended to image filename returned to caller
 		* $file_check_path - Absolute filesystem path to the file 
 		* $p_filename - valid filename of an image, default is set at start of function!
@@ -482,7 +484,7 @@ class SiteController extends Controller
 		
 		$q = 'CALL P_br_dealer_distance_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
-		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
+		$dist = 250;	// 250 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 		do
 		{
@@ -608,56 +610,108 @@ class SiteController extends Controller
 
 	/*
 	* Ajax call's to return the image name for 
-	*  HomePagePhotos returns 3 random images for display. 
+	* HomePagePhotos returns 3 random images for display. These images
+	* are initally specified by an entry in the xx_ncp_image table. The
+	* image must be active (status=0), and related cobrand (cob_id, not currently used) 
+	* and destination set to 0 (Homepage) as a default for now. 
+    *
+    * IF < 3 images are available from the ncp_images table the next
+    * plan is to randomly pic images from the trim table (austattung) and
+    * if that fails suff the default empty image name.
     *
 	* NOTE NOTE : the rand() order is costly and if too slow, drop this type of sort!!
 	*/
-	
+
 	public function actionHomePagePhotos()
 	{
 		// This should only be allowed to be called by an ajax request, set access rules...
 
-		if(!isset($_POST['ajax']))
+		if(!isset($_POST['ajax']) && YII_DEBUG!=true)
 			throw new CHttpException(403, 'Not authorized');
 
-		// call to get a random make table is very small so should be fast
-		
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('aus_id');									// vehicle/trim_id
-		$sql->from('{{ausstattung}}');
-		$sql->where('aus_status=0');
+		$sql->select('model_id');									// vehicle/trim_id
+		$sql->from('{{ncp_images}}');
+		$sql->where('status=0 and cob_id=0 and destination=0');
 		$sql->order('rand()');
 		$sql->limit(10);		// get more then we think so empty images can be skipped
-		
-		$make_trims = $sql->queryAll();
 
-		$cnt = count($make_trims);
+		$models = $sql->queryAll();
+
+		$cnt = count($models);
 		$photo_urls = array();
-		
-		// scan the list for 3 valids
+		$valid_images = 0;
+
+		// scan the list for 3 valids models thave have trim_id's
 		
 		if($cnt)
 		{
-			$valid_images = 0;
-			foreach ($make_trims as $id) 
+			foreach ($models as $id) 
 			{
 				// get the image file names if valid, save to array (push on end)
+	
+				$sql1 = Yii::app()->db->createCommand();
+				$sql1->select('aus_id');										// vehicle/trim_id
+				$sql1->from('{{ausstattung}}');								// will prepend country
+				$sql1->where('aus_modell=:vehicle_model', array(':vehicle_model' => $id['model_id']));
+				$rec1 = $sql1->queryRow();
+
+				if($rec1)
+				{
+					if(($pic = $this->GetPic($rec1['aus_id'])) !== FALSE)
+					{ 
+						$photo_urls[] = $pic; 	// same as array_push()
+						$valid_images++;
+						
+						if($valid_images > 2)	// we need 3 valids
+							break;
+					}
+				}
+			}
+		}
+
+		// if we don't have any/enough in the ncp_images file then lets go back to just a random hit
+		// this prevents bad looking home page if mangled data in ncp_images or user error...
+
+		if($valid_images < 3)
+		{
+			// call to get a random make table is very small so should be fast
 			
-				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
-				{ 
-					
-					$photo_urls[] = $pic; 	// same as array_push()
-					$valid_images++;
-					
-					if($valid_images > 2)	// we need 3 valids
-						break;
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('aus_id');									// vehicle/trim_id
+			$sql->from('{{ausstattung}}');
+			$sql->where('aus_status=0');
+			$sql->order('rand()');
+			$sql->limit(10);		// get more then we think so empty images can be skipped
+			
+			$make_trims = $sql->queryAll();
+
+			$cnt = count($make_trims);
+			
+			// scan the list to try to back fill
+			
+			if($cnt)
+			{
+				$valid_images = 0;
+				foreach ($make_trims as $id) 
+				{
+					// get the image file names if valid, save to array (push on end)
+				
+					if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+					{ 
+						
+						$photo_urls[] = $pic; 	// same as array_push()
+						$valid_images++;
+						
+						if($valid_images > 2)	// we need 3 valids
+							break;
+					}
 				}
 			}
 		}
 		
-		// backfill empty images if we can't come up with any
+		// last resort backfill empty images if we can't come up with any
 		
-		$cnt = count($photo_urls);
 		while($cnt < 3)
 		{
 			$photo_urls[] = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
