@@ -38,6 +38,7 @@ return array(
 	
 	'Get Started' => 'Começe Aqui', // old button title
 	'Start saving today' => 'Economize Agora',
+	'Customer Testimonials' => 'Testemunho de Clientes',
 	
 	// 123 bullets
 	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
