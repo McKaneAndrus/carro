@@ -62,7 +62,7 @@
  * int_zahlungsart payment method smallint(2)
  * int_kontakt contact id smallint(2)
  * int_haendler dealer id int(8)
- * int_anlage creation date datetime
+ * int_anlage creation timestamp
  * int_suchmaschine search engine id int(8)
  * int_suchwort keyword id int(8)
  * int_erreichbar reachable varchar(40)
@@ -88,12 +88,6 @@ class LeadGen extends CActiveRecord
 	public function tableName()
 	{
 		return '{{interessenten}}';
-	}
-
-
-	public function init()
-	{
-		$this->int_anlage = date("Y-m-d"); // get current date hack to default it for the db
 	}
 
 	/**
