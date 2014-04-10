@@ -109,20 +109,20 @@
             	<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_1" title="">
-							<img id="mm_img_1" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
 						</a>
 						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_2" title="">
-							<img id="mm_img_2" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_2" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
 						</a>
 						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_3" title="">
-							<img id="mm_img_3" src="/images/cars/no_pic.png" alt="" />
+							<img id="mm_img_3" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
 						</a>
 						<h4 id="mm_txt_3"></h4>
 					</div>
@@ -138,7 +138,7 @@
 						<div class="testimonial">
 							<div> This needs to have a testimonial and such translated here...</div>
 						</div>
-						<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/testimonial-photo-1.png"  alt="testimonial"/>
+						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-1.png"  alt="testimonial"/>
 					</div>
                 </div>
 				<ol>
@@ -224,7 +224,7 @@ $cs->registerScript(
 			$("#show_makes").show();
 			$("#show_models").hide();
 
-			$("#selected_model_img").attr("src", "/images/cars/no_pic.png");
+			$("#selected_model_img").attr("src", "' . Yii::app()->request->baseUrl . '/images/no_pic.png");
 			$("#selected_model_txt").html("");
 		}
 		else

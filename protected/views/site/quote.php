@@ -18,7 +18,7 @@
 					)); ?>
 
                     <div class="quote_column">
-						<img id="mmt_img_1" src="/images/cars/no_pic.png" alt="" />
+						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
 						<h4 id="mmt_txt_1"></h4>
 						<label for=""><?php echo $form->labelEx($model,'int_ausstattung'); ?></label>
 			
