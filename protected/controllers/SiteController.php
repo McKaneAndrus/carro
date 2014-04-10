@@ -1,9 +1,12 @@
 <?php
 class SiteController extends Controller
 {
-	const DEFAULT_NOT_FOUND_CAR_PIC = 'no_pic.png';		// picture not found file name
-	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';		// default path (url) to images
-	const DEFAULT_ANY_VALUE = -1;						// change with caution, hard coded value in javascript
+	// note the default image is not in the image directory with the cars,
+	// it's in the app's image directory to keep deployment easy
+	
+	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.png';	// picture not found path (keep leading slash
+	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 		
 	/*
 	* Default layout for the views. Defaults to '//layouts/column2', meaning
@@ -452,22 +455,6 @@ class SiteController extends Controller
 	{
 
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
-		
-		/*
-		* // This is the old called that called the dealer lookup model
-		* // Replaced with the proc call that calc's distance 
-		*
-		* $postal_code_str = substr($postal_code_str, 0, 5);				// now we can safely clean to 5 digits
-		* 
-		* $dealers = DealerLookup::model()->findAll(
-		*	array(
-		*		'select'=>'hd_id, hd_name, hd_str, hd_ort, hd_plz',			// select only needed fields, this table has lots!
-		*		'condition'=>'hd_plz like :postal_code',					// use a like on the codes, cheeeezy but works
-		*		'limit'=> $limit,
-		*		'params'=>array(':postal_code' => $postal_code_str . '%'),	// tricky way to get the trailing '%' into the like
-		*	)
-		*);
-		*/
 
 		/*
 		* Proc returns number max number of results for a given distance of a user from a dealer
@@ -480,7 +467,6 @@ class SiteController extends Controller
 		* 
 		* The distance used for the start ($dist) should be chosen accordingly
 		*/
-		
 		
 		$q = 'CALL P_br_dealer_distance_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
@@ -626,7 +612,7 @@ class SiteController extends Controller
 	{
 		// This should only be allowed to be called by an ajax request, set access rules...
 
-		if(!isset($_POST['ajax']) && YII_DEBUG!=true)
+		if(!isset($_POST['ajax']))
 			throw new CHttpException(403, 'Not authorized');
 
 		$sql = Yii::app()->db->createCommand();
@@ -714,7 +700,7 @@ class SiteController extends Controller
 		
 		while($cnt < 3)
 		{
-			$photo_urls[] = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
+			$photo_urls[] = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
 			$cnt++;
 		}
 		
@@ -785,7 +771,7 @@ class SiteController extends Controller
 		$cnt = count($photo_urls);
 		while($cnt < 3)
 		{
-			$photo_urls[] = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
+			$photo_urls[] = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' =>'');
 			$cnt++;
 		}
 		
@@ -813,8 +799,6 @@ class SiteController extends Controller
 		if(!is_numeric($model_id))
 			throw new CHttpException(400, 'Invalid Request');
 
-		// $model_id = 38727;
-		
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');										// vehicle/trim_id
 		$sql->from('{{ausstattung}}');								// will prepend country
@@ -847,7 +831,7 @@ class SiteController extends Controller
 		if(count($photo_url) < 1)
 		{
 			$text = $this->GetModelText($model_id);	// always returns valid string or default unknown
-			$photo_url = array('image_path' => self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
+			$photo_url = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
 		}
 		
 		echo CJSON::encode($photo_url);
@@ -859,8 +843,6 @@ class SiteController extends Controller
 		// also picks up a few models for display and back fill. 
 		// Just fetches the image for a single specific make, if no images, returns the
 		// default. This returns a single element NOT an array like it's other counterparts
-				
-		// $trim_id = 7003609; 	// debug
 
 		if(!isset($_POST['ajax']))
 			throw new CHttpException(403, 'Not authorized');
@@ -874,7 +856,7 @@ class SiteController extends Controller
 			throw new CHttpException(400, 'Invalid Request');
 
 		if(($photo_url = $this->GetPic($trim_id)) === FALSE)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
-			$photo_url = self::DEFAULT_URL_IMAGE_PATH . self::DEFAULT_NOT_FOUND_CAR_PIC;
+			$photo_url = Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC;
 
 		echo CJSON::encode($photo_url); // ships it as a nice jason element
 	}
