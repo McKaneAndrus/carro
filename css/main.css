@@ -331,11 +331,16 @@ nav a:hover {
 	top: -140px;
 }
 
-.landing_overview ol li {
+.landing_overview ol {
 	padding : 10px;
 	font-weight: bold;
     font-size: 16px;
     background: #CCCCCC;
+    border: 1px solid rgb(153, 153, 153);
+}
+
+.landing_overview li {
+	padding : 10px;
 }
 
 .landing_overview_modelCar:first-child {
