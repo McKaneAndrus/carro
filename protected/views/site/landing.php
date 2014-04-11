@@ -130,13 +130,12 @@
                 
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
-						<h4 id="selected_model_txt">Year Make Model</h4>
+						<h4 id="selected_model_txt"> </h4>
 						<img id="selected_model_img" src="" alt="" />
 					</div>
 					<div class="landing_overview_adspace">
-						<!--<h4><?php echo Yii::t('LeadGen','Customer Testimonials'); ?></h4>-->
 						<div class="testimonial">
-							<div> This needs to have a testimonial and such translated here...</div>
+							<div> <?php echo Yii::t('LeadGen','Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.');?><br><p></p><b><?php echo Yii::t('LeadGen','Maria Delgado'); ?></b></div>
 						</div>
 						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-1.png"  alt="testimonial"/>
 					</div>
