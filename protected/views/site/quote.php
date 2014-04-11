@@ -84,7 +84,7 @@
 							if( $dlr_cnt == 0)
 							{
 								 echo '<h3>' . Yii::t('LeadGen', 'Unable to Locate Local Dealers') . '</h3>';
-								 echo Yii::t('LeadGen','Carro Specialist will forward request,') . '</br>';
+								 echo Yii::t('LeadGen','Carro Specialist will forward request,') . '</br></p>';
 								 echo Yii::t('LeadGen','Please continue with submission.'). '</br></br>' . Yii::t('LeadGen','Thank You');
 							}
 							
