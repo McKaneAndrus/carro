@@ -33,7 +33,6 @@
                 <div style="width: 728px; height: 90px; background-color: #ccc;display: inline-block; vertical-align: middle">
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-3657518844311529";
-/* Horizonal */
 google_ad_slot = "1283543855";
 google_ad_width = 728;
 google_ad_height = 90;
@@ -60,7 +59,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                         <a target="_blank" href="http://www.assinemotorpress.com.br/Assine-Carro.asp?Site_txt=ASSINEMOTORPRESS&amp;Origem_txt=&amp;Formato_txt=LINKDIRETO&amp;Banner_txt=&amp;Versao_txt=#.UfgjZZJQHzx"><img width="140" height="31" src="http://carroonline.terra.com.br/sitestatic/images/btn-assinar.png"></a>
                     </span>
                     <a href="/" class="footer_motorpress"><img width="155" height="44" src="http://carroonline.terra.com.br/sitestatic/images/logo-motorpress.png"></a>
-                    <p>Copyright &copy; 2010<br />Editora MotorPress Brasil</p>
+                    <p>Copyright &copy; 2014<br />Editora MotorPress Brasil</p>
                 </div>
                 
                 <div>
