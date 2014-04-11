@@ -137,7 +137,7 @@
 						<div class="testimonial">
 							<div> <?php echo Yii::t('LeadGen','Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.');?><br><p></p><b><?php echo Yii::t('LeadGen','Maria Delgado'); ?></b></div>
 						</div>
-						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-1.png"  alt="testimonial"/>
+						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-2.png"  alt="testimonial"/>
 					</div>
                 </div>
 				<ol>
