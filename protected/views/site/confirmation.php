@@ -114,6 +114,6 @@ $cs->registerScript(
 	}
 	);	
 	',
-	CClientScript::POS_END					// Script insert Position 
+	CClientScript::POS_END
 );
 ?>      
