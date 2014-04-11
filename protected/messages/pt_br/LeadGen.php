@@ -39,6 +39,8 @@ return array(
 	'Get Started' => 'Começe Aqui', // old button title
 	'Start saving today' => 'Economize Agora',
 	'Customer Testimonials' => 'Testemunho de Clientes',
+	'Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.' => 'Além de me conectar com uma concessionária super atenciosa na minha região, seu serviço gratuito também me ajudou a economizar muito na compra do meu carro novo. Eu já recomendei seu site para todos os meus amigos.',
+	'Maria Delgado' => 'Camila Pereira',
 	
 	// 123 bullets
 	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colacaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
@@ -57,6 +59,7 @@ return array(
 	'Color' => 'Cor',
 	
 	'Unable to Locate Local Dealers' => 'Impossível Localizar Revendedores Locais',
+	'Select more than one dealer to receive multiple price quotes. This will give you additional negotiation power at the dealership and save you money on your next new car purchase.' => 'Selecione mais de uma concessionária para receber várias cotações. Isso irá lhe proporcionar um poder de negociação adicional na concessionária e muita economia na compra do seu carro novo.',
 	'Best Dealers in Your Area' => 'Melhores Revendedores em sua área',
 	'More Dealers' => 'Mais Revendedores',
 	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
