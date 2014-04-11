@@ -58,12 +58,12 @@ return array(
 	'Trim' => 'Versão',
 	'Color' => 'Cor',
 	
-	'Unable to Locate Local Dealers' => 'Impossível Localizar Revendedores Locais',
+	'Unable to Locate Local Dealers' => 'Não foi possível localizar revendedores locais que tenham esse modelo em estoque disponível imediatamente.',
 	'Select more than one dealer to receive multiple price quotes. This will give you additional negotiation power at the dealership and save you money on your next new car purchase.' => 'Selecione mais de uma concessionária para receber várias cotações. Isso irá lhe proporcionar um poder de negociação adicional na concessionária e muita economia na compra do seu carro novo.',
 	'Best Dealers in Your Area' => 'Melhores Revendedores em sua área',
 	'More Dealers' => 'Mais Revendedores',
 	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
-	'Please continue with submission.' => 'Por favor, continue com a submissão',
+	'Please continue with submission.' => 'Por favor, preencha o formulário no próximo passo e um especialista da Carro irá verificar onde esse modelo estará disponível o mais breve possível.',
 	'Thank You' => 'Obrigado',
 	'Get Your Price Now' => 'Receba Seu Preço Agora',
 
