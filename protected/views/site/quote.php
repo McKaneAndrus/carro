@@ -73,14 +73,12 @@
                     
                     <!-- START COLUMN 2 -->
                     <div class="quote_column">
-                        
+
                         <!-- get premium dealers first -->
                         
 						<?php $special_dealer_display_count = 3; // 0 = No display of Special Dealers div ?>
-						
 						<?php $dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, 10); ?>
 						<?php $dealer_select_list = array_keys($dealer_list);?>
-				
 						<?php 
 							$dlr_cnt = count($dealer_list);
 							if( $dlr_cnt == 0)
@@ -92,6 +90,14 @@
 							
 							if($special_dealer_display_count > 0 && $dlr_cnt)
 							{
+
+								// have dealers so display check box prompt
+								
+								echo '<div class="quote_checkbox">';
+								echo '<img src="'. Yii::app()->request->baseUrl . '/images/checkbox-green-sm.png">';
+								echo '<div>' . Yii::t('LeadGen','Select more than one dealer to receive multiple price quotes. This will give you additional negotiation power at the dealership and save you money on your next new car purchase.') . '</div>';
+								echo '</div>';
+								
 								echo '<h3>' . Yii::t('LeadGen', 'Best Dealers in Your Area') . '</h3>';
 								echo '<div class="quote_special">';
 
