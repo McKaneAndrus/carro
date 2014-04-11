@@ -29,7 +29,8 @@ return array(
 		// uncomment the following to enable the Gii tool
 		// sjg - remove for production
 		//
-	/*	
+		
+		/*	
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=> false,
@@ -78,16 +79,21 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
-// uncomment to show sql in log
-/*
+				
+				// uncomment to show sql in log
+				/*
+				
 				array(
 					'class'=>'CFileLogRoute',
 					'categories'=>'system.db.*',				
 					'levels'=>'trace, info',
 				),
 				
-*/
+				
+				*/
+				
 				// uncomment the following to show log messages on web pages
+				
 				/*
 				array(
 					'class'=>'CWebLogRoute',
@@ -102,6 +108,7 @@ return array(
 	
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@carro.br.com',	// sjg - need to fix if used
+		'adminEmail'=>'webmaster@carro.br.com',
+		'version'=>'1.01',
 	),
 );
