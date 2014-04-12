@@ -65,7 +65,7 @@ return array(
 	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
 	'Please continue with submission.' => 'Por favor, preencha o formulário no próximo passo e um especialista da Carro irá verificar onde esse modelo estará disponível o mais breve possível.',
 	'Thank You' => 'Obrigado',
-	'Get Your Price Now' => 'Receba Seu Preço Agora',
+	'Get Your Price Now' => 'Solicite Cotações Agora', 
 
 	// Confirm page 
 	
