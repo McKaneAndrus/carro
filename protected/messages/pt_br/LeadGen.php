@@ -8,9 +8,13 @@
 
 return array(
 
+	// controller translates
+	
+	'Distance' => 'Distância',
+	
 	// view translates
 	
-	'Select a Make' =>'Selecione uma Marca',
+	'Select a Make' => 'Selecione uma Marca',
 	'Select a Model' => 'Selecione um Modelo',
 	'Select a Trim' => 'Selecione uma Versão', 
 	'Select a Color' => 'Selecione uma Cor',
@@ -28,8 +32,7 @@ return array(
 	'Unknown Color' => 'Cor Desconhecida',
 	
 	// landing page 
-	
-	
+		
 	'Let us help you get the best deal' => 'Deixe-nos ajudá-lo a obter o melhor negócio', // old
 	'Looking for a Great Deal On a New Car?' => 'Procurando uma Ótima Oferta no seu Carro Novo?',
 	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, compare preços e opções de financiamento de vários revendedores e bancos', // old
@@ -43,11 +46,13 @@ return array(
 	'Maria Delgado' => 'Camila Pereira',
 	
 	// 123 bullets
+	
 	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colacaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
 	'Complete the email form and your selected dealers will contact you with their best internet pricing.' => 'Complete o formulário e as concessionárias selecionadas entrarão em contato com seus melhores preços de internet.',
 	'Choose the deal you like best, visit the dealership and complete your new car purchase.' => 'Escolha o negócio que você mais gosta, visite a concessionária e complete a compra do seu carro novo.',
 	
 	// below the fold copy
+	
 	'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!' => 'Na Carro, oferecemos uma vasta seleção de carros novos, pick-ups, mini-vans, híbridos e muito mais para sua escolha.  Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo. Elas competem pelo seu negócio, então, aproveite agora nosso processo de cotação sem ter que pechinchar!',
 	
 	// quote page
@@ -62,6 +67,7 @@ return array(
 	'Select more than one dealer to receive multiple price quotes. This will give you additional negotiation power at the dealership and save you money on your next new car purchase.' => 'Selecione mais de uma concessionária para receber várias cotações. Isso irá lhe proporcionar um poder de negociação adicional na concessionária e muita economia na compra do seu carro novo.',
 	'Best Dealers in Your Area' => 'Melhores Revendedores em sua área',
 	'More Dealers' => 'Mais Revendedores',
+	'Local' => 'Local',
 	'Carro Specialist will forward request,' => 'Um Especialista da Carro encaminhará seu pedido.',
 	'Please continue with submission.' => 'Por favor, preencha o formulário no próximo passo e um especialista da Carro irá verificar onde esse modelo estará disponível o mais breve possível.',
 	'Thank You' => 'Obrigado',
@@ -71,12 +77,12 @@ return array(
 	
 	'Would you like to get another quote?' => 'Gostaria de obter outra cotação?',
 	'Get Another Quote' => 'Obter outra cotação',
-	'Thank you for your request' =>'Obrigado por seu pedido',
+	'Thank you for your request' =>'Obrigado por sua solicitação de preço',
 	'Your selected vehicle' => 'Seu veículo selecionado',
+	'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.' => 'Uma das concessionárias na sua região entrará em contato com você dentro de 48 horas para oferecer ótimos preços no carro que você procura.',
 	'Save even more with these offers' => 'Economize ainda mais com estas ofertas',
 	'Affiliate' => 'Afiliado',
 	'Get Deal' => 'Aproveite a Oferta',
-	
 	
 	// field names
 	
