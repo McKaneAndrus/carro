@@ -30,7 +30,7 @@
                 <h1><?php echo Yii::t('LeadGen', 'Thank you for your request'); ?></h1>
                 
                 <div class="confirm_message">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra. Integer hendrerit metus sed ultricies pharetra. Morbi cursus diam vulputate sapien eleifend, non vehicula mauris accumsan. Phasellus nec massa est. Praesent a congue massa. Donec sollicitudin ornare sapien eu aliquam. Etiam nulla elit, pretium in volutpat quis, mattis eu massa.</p>
+                    <p><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p>
                     <div class="confirm_anotherQuote">
                         <h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
 							<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart')); ?>
