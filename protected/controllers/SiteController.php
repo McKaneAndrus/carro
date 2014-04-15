@@ -4,7 +4,7 @@ class SiteController extends Controller
 	// note the default image is not in the image directory with the cars,
 	// it's in the app's image directory to keep deployment easy
 	
-	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.png';	// picture not found path (keep leading slash
+	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.png';	// picture not found path (keep leading slash)
 	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 		
@@ -17,10 +17,36 @@ class SiteController extends Controller
 	public $layout='//layouts/column1';	// Single layout no columns
 
 	/*
-	* Default Page for site should be the landing page not index.php which is not needed
+	* Default Page for site should be the landing
 	*/
 	
 	public $defaultAction = 'landing';	
+
+	/*
+    * Turn any object (e.g., an array) into a string you can save in a cookie
+    * @param object $obj
+    * @return string
+    *
+    * Remeber limits on size of cookie data
+    */
+    function CookieEncode($obj) 
+    {
+		$value = json_encode($obj);
+		$value = base64_encode($value);
+		return $value;
+    }
+     
+    /*
+    * Turn a string encoded by cookie_encode back into an object
+    * @param string $value
+    * @return object
+    */
+    function CookieDecode($value) 
+    {
+		$value = base64_decode($value);
+		$value = json_decode($value, true);
+		return $value;
+    }
 
 	public function GetPic($p_id)
 	{
@@ -502,7 +528,7 @@ class SiteController extends Controller
 			'<br>' . CHtml::encode($dealers['hd_str']) . 
 			'<br>' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_plz']) .
 			'<br>' . CHtml::encode($dealers['hd_tel']).
-			'<br>' . CHtml::encode('Distance : ' . $dealers['distance'] . 'km');
+			'<br>' . CHtml::encode(Yii::t('LeadGen','Distance') . ' : ' . (($dealers['distance'] > 5.0)? $dealers['distance'] . ' km' : Yii::t('LeadGen','Local')));
 		});
 	}
 
@@ -883,7 +909,6 @@ class SiteController extends Controller
 			{ 
 				$model = new LeadGen('landing');
 				
-
 				// grab the city and state if set and valid data and look up postal code, for form to 
 				// validate city and state (stadt and staat) must have been set (it's ugly I know...)
 				
@@ -900,6 +925,17 @@ class SiteController extends Controller
 				{
 					// Validate on landing page is good, not this is just the 'landing' scenario at this point not the whole set of pages
 				
+					/* 
+					*  Save a cookie of make, model info if desired (mm_hist) may be useful later
+					*/
+					
+					/*
+					* $dat = array('make_id' => $model->int_fabrikat, 'model_id' => $model->int_modell);
+					* $cookie = new CHttpCookie('mm_hist', $this->CookieEncode($dat));
+					* $cookie->expire = time()+60*60*24*180;
+					* Yii::app()->request->cookies['mm_hist'] = $cookie;
+					*/
+					
 					$view = 'quote';
 					$model->scenario = 'quote';
 				}
