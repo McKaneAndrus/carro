@@ -30,14 +30,12 @@ return array(
 		// sjg - remove for production
 		//
 		
-		/*	
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=> false,
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
-		*/
 	),
 
 	// application components
@@ -47,13 +45,19 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 		
+		'session' => array(
+			'timeout' => 10,	// session tko, affected after close of browser
+			'sessionName' => 'RevmakerNCP',
+		),
+		
+      
 		// uncomment the following to enable URLs in path-format
 	
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>', 
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
