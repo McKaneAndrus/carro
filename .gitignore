@@ -1,0 +1,4 @@
+# ignore stuff in the session folder
+protected/runtime/sessions
+#ignore the application log
+protected/runtime/application.log
