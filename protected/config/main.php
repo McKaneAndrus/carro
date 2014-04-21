@@ -27,15 +27,16 @@ return array(
 		
 		// 
 		// uncomment the following to enable the Gii tool
-		// sjg - remove for production
+		// sjg - dont forget to comment out for production!
 		//
-		
+		/*
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=> false,
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
+		*/
 	),
 
 	// application components
@@ -46,8 +47,9 @@ return array(
 		),
 		
 		'session' => array(
-			'timeout' => 10,	// session tko, affected after close of browser
+			'timeout' => 1440,	// 1440 seconds typical session tko, affected after close of browser
 			'sessionName' => 'RevmakerNCP',
+			'savePath' => dirname(__FILE__).DIRECTORY_SEPARATOR . '../runtime/sessions', // up from config, back down to runtime. Note dir must exist and be we writable 
 		),
 		
       
@@ -64,7 +66,7 @@ return array(
 		
 
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=newcars', //revmaker',
+			'connectionString' => 'mysql:host=localhost;dbname=newcars', 
 			'emulatePrepare' => true,
 			'username' => 'revmaker',
 			'password' => 'revmaker',
@@ -113,6 +115,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@carro.br.com',
-		'version'=>'1.01',
+		'version'=>'1.02',
 	),
 );
