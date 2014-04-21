@@ -1132,7 +1132,8 @@ class SiteController extends Controller
 		}
 
 		/*
-		* Hack to stuff the current session with a complete marker
+		* Hack to stuff the current session with a complete marker in sess_step4
+		* which the admin uses as a complete
 		*/
 		
 		if($page_id == self::CONFIRM_PAGE_ID)
