@@ -10,14 +10,12 @@
 
 	<link rel="shortcut icon" href="http://carroonline.terra.com.br/sitestatic/logocarro.ico" type="image/ico" />
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-
-	<link rel="stylesheet" type="text/css" href="http://carroonline.terra.com.br/sitestatic/css/reset.css"/> 
+	
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/reset.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" /> 
-	
-	<!--Fontawesome-->
-	<link href="http://carroonline.terra.com.br/sitestatic/css/font-awesome/css/font-awesome.css" rel="stylesheet">
-	
+
+
 	<!--[if lt IE 8]>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
 	<![endif]-->
