@@ -57,6 +57,7 @@ return array(
 	
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName'=>false, // added to not show script name
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>', 
