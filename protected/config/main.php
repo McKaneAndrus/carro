@@ -49,10 +49,10 @@ return array(
 		'session' => array(
 			'timeout' => 1440,	// 1440 seconds typical session tko, affected after close of browser
 			'sessionName' => 'RevmakerNCP',
+			'cookieMode' => 'only',
 			'savePath' => dirname(__FILE__).DIRECTORY_SEPARATOR . '../runtime/sessions', // up from config, back down to runtime. Note dir must exist and be we writable 
 		),
-		
-      
+	  
 		// uncomment the following to enable URLs in path-format
 	
 		'urlManager'=>array(
