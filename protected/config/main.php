@@ -29,21 +29,21 @@ return array(
 		// uncomment the following to enable the Gii tool
 		// sjg - dont forget to comment out for production!
 		//
-		/*
+/*
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
 			'password'=> false,
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
-		*/
+*/
 	),
 
 	// application components
 	'components'=>array(
 		'user'=>array(
 			// enable cookie-based authentication
-			'allowAutoLogin'=>true,
+			'allowAutoLogin'=>false,
 		),
 		
 		'session' => array(
