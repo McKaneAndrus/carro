@@ -11,7 +11,7 @@ class SiteController extends Controller
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
 	const QUOTE_PAGE_ID	= 1001;
 	const CONFIRM_PAGE_ID = 1002;
-			
+		
 	/*
 	* Default layout for the views. Defaults to '//layouts/column2', meaning
 	* using two-column layout. See 'protected/views/layouts/column2.php'. We
@@ -902,7 +902,7 @@ class SiteController extends Controller
 		if(isset($_POST['landing']))	// If here you came from the quote page using a back button (optional)
 		{
 
-			$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track
+			// $this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track
 
 			$model = new LeadGen('landing');
 		
@@ -951,7 +951,7 @@ class SiteController extends Controller
 				{
 					// oops, landing page fields didn't validate, back to the landing page (current scenario is landing still)
 					
-					$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track 
+					// $this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track 
 
 					$view = 'landing';	// back to page one if the data on page one was invalid. 
 				}
@@ -1013,12 +1013,24 @@ class SiteController extends Controller
 									Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
 							}
 						}
+
+						// kill any existing session and cookie and related
+						// kill now, takes a refresh of the browser to remove the cookie
+						// so after this remember we land on the confirm page and the cookie
+						// and session should be deleted
+						
+						if (Yii::app()->session->isStarted) 
+						{
+							Yii::app()->session->clear();
+							Yii::app()->session->destroy();
+							Yii::app()->request->cookies->clear();
+						}
 					}
 					else
 					{
 						// validation failed go back to the quote page and do it again
 
-						$this->updateSessionInfo(self::QUOTE_PAGE_ID); 	// track incoming
+						// $this->updateSessionInfo(self::QUOTE_PAGE_ID); 	// track incoming
 						
 						$view = 'quote';	// fix up errors
 					}
@@ -1037,6 +1049,8 @@ class SiteController extends Controller
 					echo'<br>';					
 					*/
 
+					// yii will start a new session from here 
+					
 					$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
 					
 					$model = new LeadGen('landing');
@@ -1078,33 +1092,52 @@ class SiteController extends Controller
 	*
 	* Last Note / Hack when the page id is set to the CONFIRM_PAGE_ID it sets the sess_step4 
 	* value to 1 since that indicates in the current system that a page was submitted.
+	*
+	* uses ugly global sessionTime 
 	*/
 	
 	public function updateSessionInfo($page_id, $data=null)
 	{
 		if(!is_numeric($page_id))	// @todo : write log warn
 		{
-			Yii::log("Invalid page_id",  CLogger::LEVEL_WARNING);
+			Yii::log("Invalid page_id, can't update session table",  CLogger::LEVEL_WARNING);
 			return;
 		}
 		
 		$sess_id = Yii::app()->session->sessionID;	// session ID (max size 32 - look in db)
-		
+
 		if(empty($sess_id))
 		{
-			Yii::log("Invalid session_id",  CLogger::LEVEL_WARNING);
+			Yii::log("Invalid session_id, can't update session table",  CLogger::LEVEL_WARNING);
 			return;
 		}
-			
-		$sess = Session::model()->findByPk($sess_id);
+
+		$sessionTime = Yii::app()->session['sess_time'];
+
+		// if session time is empty then we have a NEW session (or something really wrong!)
+		
+		if(empty($sessionTime))
+		{
+			$sessionTime = date('Y-m-d H:i:s');
+			Yii::app()->session['sess_time'] =  $sessionTime;	// save to the session which should be valid!
+			$sess = null;
+		}
+		else
+		{
+			// see if the session exists, note its a composite pri key of session id and session time
+			// no session then still need to create
+		
+			$sess = Session::model()->findByPk(array('sess_id'=>$sess_id, 'sess_datum' => $sessionTime));
+		}
 		
 		if($sess === null) // if null must be a new record, so create the rec
 		{
 			// new record to be created
-			
-			$sess = new Session;
+
+			$sess = new Session;								// db model not a html session
 			$sess->sess_url = Yii::app()->request->url;			// complete url logged
 			$sess->sess_id = $sess_id;
+			$sess->sess_datum = $sessionTime;
 		}
 		
 		/*
