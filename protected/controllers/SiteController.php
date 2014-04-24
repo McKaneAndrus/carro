@@ -73,7 +73,10 @@ class SiteController extends Controller
 		* This doesn't query on the status of any tables used so images can be
 		* retreived for active or inactive records
 		*
-		* RETURNS : Array of lots of stuff or FALSE if not found
+		* RETURNS : Array of lots of stuff or FALSE if nothing found
+		*
+		* @todo sjg - add parameter to allow enforcement of the status flags in ALL
+		* 			  queries
 		*/
 
 		$url_image_path = self::DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
@@ -657,7 +660,7 @@ class SiteController extends Controller
 		$photo_urls = array();
 		$valid_images = 0;
 
-		// scan the list for 3 valids models thave have trim_id's
+		// scan the list for 3 valids models that have trim_id's
 		
 		if($cnt)
 		{
@@ -666,7 +669,7 @@ class SiteController extends Controller
 				// get the image file names if valid, save to array (push on end)
 	
 				$sql1 = Yii::app()->db->createCommand();
-				$sql1->select('aus_id');										// vehicle/trim_id
+				$sql1->select('aus_id');									// vehicle/trim_id
 				$sql1->from('{{ausstattung}}');								// will prepend country
 				$sql1->where('aus_modell=:vehicle_model', array(':vehicle_model' => $id['model_id']));
 				$rec1 = $sql1->queryRow();
@@ -686,8 +689,8 @@ class SiteController extends Controller
 		}
 
 		// if we don't have any/enough in the ncp_images file then lets go back to just a random hit
-		// this prevents bad looking home page if mangled data in ncp_images or user error...
-
+		// this prevents bad looking home page if mangled data in ncp_images or user error.
+		
 		if($valid_images < 3)
 		{
 			// call to get a random make table is very small so should be fast
