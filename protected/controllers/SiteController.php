@@ -1095,8 +1095,6 @@ class SiteController extends Controller
 	*
 	* Last Note / Hack when the page id is set to the CONFIRM_PAGE_ID it sets the sess_step4 
 	* value to 1 since that indicates in the current system that a page was submitted.
-	*
-	* uses ugly global sessionTime 
 	*/
 	
 	public function updateSessionInfo($page_id, $data=null)
