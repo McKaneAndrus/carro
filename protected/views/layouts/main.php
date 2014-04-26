@@ -48,6 +48,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 	<div class="clear"></div>
 
+<!--
 	<div id="footer"> 
         <footer>
             <div class="footer_wrapper">
@@ -58,7 +59,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                 </div>
             </div>
         </footer>
-	</div><!-- footer -->
+	</div>
+-->
 </div><!-- page -->
 
 <script>
