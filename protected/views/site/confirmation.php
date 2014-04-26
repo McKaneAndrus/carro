@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 ?>
 		<!--main nav bar -->
-		<nav>
+		<!-- <nav> -->
 			<?php /*
 				nav is removed for now
 				$this->widget('zii.widgets.CMenu',array('encodeLabel'=>false, 'lastItemCssClass'=>'nav_social',
@@ -18,7 +18,7 @@
 					array('label'=>'<a target="_blank" href="http://www.facebook.com/revistacarro"><img src="http://carroonline.terra.com.br/sitestatic/images/face-icon.png"></a><a target="_blank" href="http://www.twitter.com/carro_hoje"><img src="http://carroonline.terra.com.br/sitestatic/images/tweet-icon.png"></a>'),
 				),
 			)); */ ?>
-		</nav>
+		<!-- </nav> -->
 
         <div class="wrapper">
             <div class="confirm_wrapper">
