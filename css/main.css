@@ -654,7 +654,7 @@ Footer
 footer {
     background: #474747 url('../images/footer-bg.png') repeat-x;
     color: #fff;
-    padding: 30px 0;
+/*    padding: 30px 0; */
 }
 
 .footer_wrapper {
@@ -703,7 +703,7 @@ footer {
 
 .footer_carro {
     display: block;
-    border-bottom: 1px solid #333;
+   /* border-bottom: 1px solid #333; */
     padding: 0 0 20px;
     margin: 0 0 20px;
 }
