@@ -116,7 +116,8 @@
 								// shift first top N elements off the list as they have been seen above
 								
 								$dealer_list = array_slice($dealer_list, $special_dealer_display_count, $dlr_cnt, true);
-								$dealer_select_list = array_keys($dealer_list);
+								// $dealer_select_list = array_keys($dealer_list); // set them to checked 
+								$dealer_select_list = array();
 								echo '</div>';
 							}
 						?>
