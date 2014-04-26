@@ -93,10 +93,13 @@
 
 								// have dealers so display check box prompt
 								
+								/* 
+								REMOVE, TEXT TOO LENGTHY 
 								echo '<div class="quote_checkbox">';
 								echo '<img src="'. Yii::app()->request->baseUrl . '/images/checkbox-green-sm.png">';
 								echo '<div>' . Yii::t('LeadGen','Select more than one dealer to receive multiple price quotes. This will give you additional negotiation power at the dealership and save you money on your next new car purchase.') . '</div>';
 								echo '</div>';
+								*/
 								
 								echo '<h3>' . Yii::t('LeadGen', 'Best Dealers in Your Area') . '</h3>';
 								echo '<div class="quote_special">';
