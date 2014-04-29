@@ -27,19 +27,7 @@
 	<div id="header">
         <header>
             <div class="header_wrapper">
-                <a href="http://www.achacarro.com"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/logo-carro.png" alt="Carro" class="header_logo"/></a>
-                <div style="width: 728px; height: 90px; background-color: #ccc;display: inline-block; vertical-align: middle">
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-3657518844311529";
-google_ad_slot = "1283543855";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>				
-					</div>
+                <a href="http://www.achacarro.com"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/ashacarro3.png" alt="AshaCarro" class="header_logo"/></a>
             </div>
 	</header>
 	</div><!-- header -->
