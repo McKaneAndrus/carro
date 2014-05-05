@@ -3,9 +3,6 @@
 
 	if(isset($dlr_list) && count($dlr_list) > 0)
 	{
-		if(isset($message)) 
-			echo '<p>' . $message . '</p>';
-
 		echo '<p>'; 
 		echo Yii::t('mail', 'We received your request for a price quote on a') . ' ';  
 		if(isset($make_name)) echo $make_name . ' '; 
@@ -13,7 +10,6 @@
 		if(isset($year)) echo $year . ' '; 
 		if(isset($color)) echo $color; 
 		echo ' ' . Yii::t('mail','from') . '</p>'; 
-
 		Yii::t('mail', 'Below is a list of your selected dealers');
 		echo '<ul>';
 		foreach($dlr_list as $dlr_id)
@@ -34,7 +30,8 @@
 			}
 		}
 		echo '</ul>';
-
+		if(isset($message)) 
+			echo '<p>' . $message . '</p>';
 		echo '<br>Eduardo Gonzales';
 	}
 	else
