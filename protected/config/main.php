@@ -8,7 +8,7 @@
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Carro',
+	'name'=>'Achacarro',
 	
 	//default language
 	'sourceLanguage' => 'en_us', 	// source 
