@@ -4,11 +4,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<meta name="description" content="Carro Online" />
-	<meta name="keywords" content="carro, online, carros" />
+	<meta name="description" content="Achacarro Online" />
+	<meta name="keywords" content="carro, online, carros, achacarro" />
 	<meta http-equiv="Content-Language" content="pt-BR" />
 
-	<link rel="shortcut icon" href="http://carroonline.terra.com.br/sitestatic/logocarro.ico" type="image/ico" />
+	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" type="image/ico" />
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/reset.css" />
@@ -27,7 +27,7 @@
 	<div id="header">
         <header>
             <div class="header_wrapper">
-                <a href="http://www.achacarro.com"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/ashacarro3.png" alt="AshaCarro" class="header_logo"/></a>
+                <a href="http://www.achacarro.com"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/achacarro_logo.png" alt="Achacarro" class="header_logo"/></a>
             </div>
 	</header>
 	</div><!-- header -->
