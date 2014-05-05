@@ -6,7 +6,7 @@
 	<tbody>
 		<tr>
             <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #EC1D25;">
-				<a style="outline : none;" href="http://achacarro.com.com/"><img style="border : 0" alt="achacarro.com" src="achacarro_mail_logo_sm.png" /></a>
+				<a style="outline : none;" href="http://achacarro.com/"><img style="border : 0" alt="achacarro.com" src="achacarro_mail_logo_sm.png" /></a>
             </td>
 		</tr>
 		<tr>
