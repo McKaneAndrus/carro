@@ -54,6 +54,111 @@ class SiteController extends Controller
 		return $value;
     }
 
+	/*
+	* Send an email to the AWS Simple Email Service. This is a specific call to SES
+	* but might later decouple the email parameters and put in a config
+	*
+	* $send_addr - Address to send the email to
+	* $subject - subject line of the email
+	* $template_name - name of the yii view to use, something in the protected/views/mail
+	* $template_data - all the required data that the template you use needs, validating data is up to the view
+	*
+	* If the email fails, only a warning is put into the Yii application log with the email address
+	*/
+
+	function SES_SendEmailAck($send_addr, $subject, $template_name, $template_data) 
+	{
+		if(YII_DEBUG)
+			Yii::log("Sending Email",  CLogger::LEVEL_INFO);
+	
+		if(!is_array($template_data))
+		{
+			Yii::log("Invalid template_data, it's not an array.",  CLogger::LEVEL_WARNING);
+			return;
+		}	
+		
+		$mail = new YiiMailer();
+
+		// $mail->SMTPDebug  = 1;		// debug and messages lost of output
+
+		$mail->IsSMTP(true);												// use SMTP
+		$mail->SMTPAuth   = true;											// enable SMTP authentication
+		$mail->Host       = "tls://email-smtp.us-east-1.amazonaws.com";		// Amazon SES server, note "tls://" protocol
+		$mail->Port       = 465;                    						// set the SMTP port
+		$mail->Username   = "AKIAII7CIQ5C6QM2KR4A";  						// SES SMTP username
+		$mail->Password   = "AsgnPhn+UkFTCEQ7GqjABNb6k6b5AGeZZBmu8YQD9PDW"; // SES SMTP password
+
+		$mail->setView($template_name);	//'contact');		// this is the view to render
+
+		// set view data here
+
+		$mail->setData($template_data);
+		
+		if(!isset(Yii::app()->params['AckEmailAdr']))
+		{
+			Yii::log("AckEmailAdr application variable not set, check config file",  CLogger::LEVEL_WARNING);
+			return;
+		}
+		
+		
+		if(!isset(Yii::app()->params['AckEmailName']))
+		{
+			Yii::log("AckEmailName application variable not set, check config file",  CLogger::LEVEL_WARNING);
+			return;
+		}
+		
+		$mail->setFrom(Yii::app()->params['AckEmailAdr'], Yii::app()->params['AckEmailName']);
+		$mail->setTo($send_addr);
+		$mail->setSubject($subject);
+
+		if(!$mail->send()) 
+			Yii::log("Can't Send Acknowledge Email to : " . $send_addr,  CLogger::LEVEL_WARNING);
+	}
+
+	/*
+	* Given a dealer id's will return a list of dealer info useful for 
+	* display or email, etc. 
+	* 
+	* Format is an array of dealer info elements as such for each 
+	*		( 'id'='123', (redundant, but might be useful bundled)
+	*		  'name' => 'Dealers name',
+	*		  'street' => '1234 Any Street',
+	*		  'city' => 'Your City',
+	*		  'state' => 'Some State'
+	*		  'postal' => '012345',
+	*		  'phone' => '123-342-435'
+	*		)
+	* >> Add any needed elements to the query and return <<
+	*		 
+	* returns the list, or an empty array if not found
+	*/
+	
+	public function GetDealerInfo($dlr_id)
+	{
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('hd_id, hd_name, hd_str, hd_ort, hd_state, hd_plz, hd_tel');
+		$sql->from('{{haendler}}');									// will prepend country
+		$sql->where('hd_id=:dlr_id', array(':dlr_id' => $dlr_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+			
+		if($rec)
+		{
+			$dlr_rec =	array(
+						'id' 		=> $rec['hd_id'], 
+						'name'		=> $rec['hd_name'],
+						'street'	=> $rec['hd_str'],
+						'city' 		=> $rec['hd_ort'],
+						'state'		=> $rec['hd_state'],
+						'postal'	=> $rec['hd_plz'], 
+						'phone'		=> $rec['hd_tel']
+					);
+		}
+		else
+			$dlr_rec = array();
+
+		return($dlr_rec);
+	}
+
 	public function GetPic($p_id)
 	{
 		/*
@@ -255,6 +360,8 @@ class SiteController extends Controller
 	*
 	* $make_id is currently an integer for the make
 	* Returns : string name of the make
+	*
+	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 	
 	public function GetMakeName($make_id)
@@ -273,6 +380,8 @@ class SiteController extends Controller
 	*
 	* $trim_id is currently an integer for the trim
 	* Returns : string name of the model
+	*
+	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 		
 	public function GetModelName($model_id)
@@ -292,6 +401,8 @@ class SiteController extends Controller
 	*
 	* $model_id is currently an integer for the trim
 	* Returns : string name of the model
+	*
+	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 		
 	public function GetModelText($model_id)
@@ -532,7 +643,8 @@ class SiteController extends Controller
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
 			return CHtml::encode($dealers['hd_name']) . 
 			'<br>' . CHtml::encode($dealers['hd_str']) . 
-			'<br>' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_plz']) .
+			'<br>' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_state']) .
+			'<br>' . CHtml::encode($dealers['hd_plz']) . 
 			'<br>' . CHtml::encode($dealers['hd_tel']).
 			'<br>' . CHtml::encode(Yii::t('LeadGen','Distance') . ' : ' . (($dealers['distance'] > 5.0)? $dealers['distance'] . ' km' : Yii::t('LeadGen','Local')));
 		});
@@ -920,6 +1032,7 @@ class SiteController extends Controller
 				
 				// grab the city and state if set and valid data and look up postal code, for form to 
 				// validate city and state (stadt and staat) must have been set (it's ugly I know...)
+				// agains assumes a city and state get a unique postal code from the db
 				
 				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']) 
 					&& !empty($_POST['LeadGen']['int_staat']) && !empty($_POST['LeadGen']['int_stadt']))
@@ -985,6 +1098,8 @@ class SiteController extends Controller
 
 						// First any of the special dealers 
 						
+						$dlr_id_list = array();
+						
 						if(isset($_POST['Inthae']['special_dlrs']))
 						{
 							$sdl = $_POST['Inthae']['special_dlrs'];
@@ -994,6 +1109,8 @@ class SiteController extends Controller
 								$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
 								$prospect_sdlr->ih_dealer_id = $dlr;
 								$prospect_sdlr->ih_status = 1;						// database value for special dealers = 1
+								
+								$dlr_id_list[] = $dlr; 								//	append to the list
 								
 								if (!$prospect_sdlr->save()) 
 									Yii::log("Can't Save Special Dealer Data to database",  CLogger::LEVEL_WARNING);
@@ -1012,22 +1129,46 @@ class SiteController extends Controller
 								$prospect_mdlr->ih_dealer_id = $dlr;
 								$prospect_mdlr->ih_status = 0;						// database value for regular = 0
 								
+								$dlr_id_list[] = $dlr; 								//	append to the list here too
+
 								if (!$prospect_mdlr->save()) 
 									Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
 							}
 						}
 
+					
+						// send thank you email, do this last after records are saved
+						
+						$make_name = $this->GetMakeName($model->int_fabrikat);
+						$model_name = $this->GetModelName($model->int_modell);
+						$color_name = $this->GetColorName($model->int_farbe);
+								
+						// todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
+						
+						$this->SES_SendEmailAck($model->int_mail, 
+									Yii::t('mail', 'Achacarro Confirmation Email'), 
+									'mail_thanks', 
+									array(
+										'message' => Yii::t('mail', 'Your dealer will contact you by phone or email in the next 24 hours. Please email us if you don’t hear from them or need further assistance.'),
+										'name' => ucfirst($model->int_vname), 
+										'make_name' => $make_name,
+										'model_name' => $model_name, 
+										'color'=>$color_name, 
+										'dlr_list'=>$dlr_id_list
+									));
+					
 						// kill any existing session and cookie and related
 						// kill now, takes a refresh of the browser to remove the cookie
 						// so after this remember we land on the confirm page and the cookie
 						// and session should be deleted
 						
-						if (Yii::app()->session->isStarted) 
+						if(Yii::app()->session->isStarted) 
 						{
 							Yii::app()->session->clear();
 							Yii::app()->session->destroy();
 							Yii::app()->request->cookies->clear();
 						}
+
 					}
 					else
 					{
@@ -1068,7 +1209,6 @@ class SiteController extends Controller
 		$expires = 300;  // in secs
 		header("Content-Type: text/html; charset: UTF-8");
 		header("Cache-Control: max-age={$expires}");
-//		header("Cache-Control: max-age={$expires}, public, s-maxage={$expires}");
 		header("Pragma: ");
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
     
@@ -1099,7 +1239,7 @@ class SiteController extends Controller
 	
 	public function updateSessionInfo($page_id, $data=null)
 	{
-		if(!is_numeric($page_id))	// @todo : write log warn
+		if(!is_numeric($page_id))
 		{
 			Yii::log("Invalid page_id, can't update session table",  CLogger::LEVEL_WARNING);
 			return;
