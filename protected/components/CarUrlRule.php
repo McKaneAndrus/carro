@@ -64,7 +64,7 @@ class CarUrlRule extends CBaseUrlRule
 				$sql = Yii::app()->db->createCommand();
 				$sql->select('fab_id');
 				$sql->from('{{fabrikate}}'); //and fab_status=0
-				$sql->where('fab_bez=:make_name', array(':make_name' => $matches[1]));
+				$sql->where('fab_bez=:make_name and fab_status=0', array(':make_name' => $matches[1]));
 				$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 				
 				if(!$rec)
@@ -78,7 +78,7 @@ class CarUrlRule extends CBaseUrlRule
 					$sql = Yii::app()->db->createCommand();
 					$sql->select('mod_id');
 					$sql->from('{{modelle}}');
-					$sql->where('mod_bez=:model_name', array(':model_name' => $matches[3]));
+					$sql->where('mod_bez=:model_name and mod_status=0', array(':model_name' => $matches[3]));
 					$rec1 = $sql->queryRow();	 // false if nothing set, row record otherwise
 				
 					// if we matched on model too...
