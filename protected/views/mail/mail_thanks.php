@@ -10,6 +10,10 @@
 		if(isset($year)) echo $year . ' '; 
 		if(isset($color)) echo $color; 
 		echo ' ' . Yii::t('mail','from') . '</p>'; 
+		if(isset($image) && $image != false)
+		{
+			echo '<img style="border : 0" alt="achacarro.com" src="' . $image . '" />';
+		}
 		Yii::t('mail', 'Below is a list of your selected dealers');
 		echo '<ul>';
 		foreach($dlr_list as $dlr_id)
@@ -50,6 +54,6 @@
 ?>
 <?php Yii::t('mail', 'Customer Support') ?>
 <br><a href="http://www.achacarro.com/">Achacarro.com</a>
-<br>support@achacarro.com
+<br>suporte@achacarro.com
 <p>	<?php if(isset($footer)) echo $footer; ?></p>
 
