@@ -6,6 +6,7 @@ class SiteController extends Controller
 	
 	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.png';	// picture not found path (keep leading slash)
 	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 	
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
@@ -178,7 +179,7 @@ class SiteController extends Controller
 		* This doesn't query on the status of any tables used so images can be
 		* retreived for active or inactive records
 		*
-		* RETURNS : Array of lots of stuff or FALSE if nothing found
+		* RETURNS : Array of lots of stuff or false if nothing found
 		*
 		* @todo sjg - add parameter to allow enforcement of the status flags in ALL
 		* 			  queries
@@ -186,7 +187,7 @@ class SiteController extends Controller
 
 		$url_image_path = self::DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
-		$p_filename = FALSE;
+		$p_filename = false;
 
 		if(is_numeric($p_id))	// test for existance and a number
 		{
@@ -208,7 +209,7 @@ class SiteController extends Controller
 				$rec1 = $sql1->queryRow();
 
 				if($rec1 == false)
-					return FALSE;
+					return false;
 					
 				$mod_text = $rec1['mod_text'];	// get the nice year, make, model text
 					
@@ -227,7 +228,7 @@ class SiteController extends Controller
 					$rec2 = $sql2->queryRow();
 				  
 					if($rec2 == false)
-						return FALSE;
+						return false;
 				  
 					// build path based on  make, model, year, doors, body type (JATO Specific)
 					// file names need no encoding, URL's do
@@ -243,7 +244,7 @@ class SiteController extends Controller
 						if (file_exists($file_check_path . strtoupper($rec2['fab_bez']) . '/' . 
 										strtoupper($rec1['mod_path']) . '/' . $image_ydb . $suffix))
 						{
-							// Exit here if we find it, otherwise we return FALSE at the bottom
+							// Exit here if we find it, otherwise we return false at the bottom
 							// return is in the form of an array with 'image_path' and 'image_desc' as
 							// keys to get at the data
 							
@@ -264,7 +265,7 @@ class SiteController extends Controller
 			} // found a modell record
 		} // $p_id was specified
 		
-		return FALSE;	// if here then not found
+		return false;	// if here then not found
 	}
 
 	/*
@@ -348,7 +349,7 @@ class SiteController extends Controller
 		$sql->where('state=:state_str and city=:city_str', array(':state_str' => $state, ':city_str' => $city));
 		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 	
-		if($rec == FALSE)
+		if($rec == false)
 			return '00000-000';
 			
 		return $rec['code'];
@@ -788,7 +789,7 @@ class SiteController extends Controller
 
 				if($rec1)
 				{
-					if(($pic = $this->GetPic($rec1['aus_id'])) !== FALSE)
+					if(($pic = $this->GetPic($rec1['aus_id'])) !== false)
 					{ 
 						$photo_urls[] = $pic; 	// same as array_push()
 						$valid_images++;
@@ -827,7 +828,7 @@ class SiteController extends Controller
 				{
 					// get the image file names if valid, save to array (push on end)
 				
-					if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+					if(($pic = $this->GetPic($id['aus_id'])) !== false)
 					{ 
 						
 						$photo_urls[] = $pic; 	// same as array_push()
@@ -898,7 +899,7 @@ class SiteController extends Controller
 			{
 				// get the image file names if valid, save to array (push on end)
 			
-				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+				if(($pic = $this->GetPic($id['aus_id'])) !== false)
 				{ 
 					
 					$photo_urls[] = $pic; 	// same as array_push()
@@ -962,7 +963,7 @@ class SiteController extends Controller
 			{
 				// get the image file names if valid, save to array (push on end)
 			
-				if(($pic = $this->GetPic($id['aus_id'])) !== FALSE)
+				if(($pic = $this->GetPic($id['aus_id'])) !== false)
 				{ 
 					$photo_url = $pic; 	// same as array_push()
 					break;
@@ -999,7 +1000,7 @@ class SiteController extends Controller
 		if(!is_numeric($trim_id))
 			throw new CHttpException(400, 'Invalid Request');
 
-		if(($photo_url = $this->GetPic($trim_id)) === FALSE)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
+		if(($photo_url = $this->GetPic($trim_id)) === false)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
 			$photo_url = Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC;
 
 		echo CJSON::encode($photo_url); // ships it as a nice jason element
@@ -1135,7 +1136,6 @@ class SiteController extends Controller
 									Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
 							}
 						}
-
 					
 						// send thank you email, do this last after records are saved
 						
@@ -1143,7 +1143,14 @@ class SiteController extends Controller
 						$model_name = $this->GetModelName($model->int_modell);
 						$color_name = $this->GetColorName($model->int_farbe);
 								
-						// todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
+						$img_name = self::DEFAULT_MAIL_CAR_IMAGE_PATH;	// car images are at web root, email is /webroot/carro/images/mail so back up the ladder
+						
+						if(($pic = $this->GetPic($model->int_ausstattung)) !== false)
+							$img_name .= $pic['image_path']; 	// get the images path 
+						else 
+							$img_name = false;
+								
+						// @todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
 						
 						$this->SES_SendEmailAck($model->int_mail, 
 									Yii::t('mail', 'Achacarro Confirmation Email'), 
@@ -1154,6 +1161,7 @@ class SiteController extends Controller
 										'make_name' => $make_name,
 										'model_name' => $model_name, 
 										'color'=>$color_name, 
+										'image'=>$img_name,
 										'dlr_list'=>$dlr_id_list
 									));
 					
@@ -1191,13 +1199,31 @@ class SiteController extends Controller
 					echo'<br>';		
 					echo Yii::app()->request->baseUrl . '/protected/runtime/sessions';
 					echo'<br>';					
+					
+					echo'<br>';
+					echo'Make : ';  
+					if(isset($_GET['make'])) echo $_GET['make'];
+					echo'<br>';
+					echo'Model : ';  
+					if(isset($_GET['model'])) echo $_GET['model'];
+					echo'<br>';
+	
 					*/
-
+					
 					// yii will start a new session from here 
 					
 					$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
 					
 					$model = new LeadGen('landing');
+
+					// stuff the models fields (which will update when the form is displayed)
+					
+					if(isset($_GET['make'])) 
+					 $model->int_fabrikat = $_GET['make'];
+					 
+					if(isset($_GET['model'])) 
+						$model->int_modell = $_GET['model'];
+
 					$view = 'landing';
 					$model->scenario = 'landing';	// set validation scenario to landing page 
 				}
@@ -1319,7 +1345,7 @@ class SiteController extends Controller
 	
 	/**
 	* @return array action filters
-	* sjg - needs some work. No delete ever needed, not using access crotrol or crud stuff
+	* sjg - needs some work. No delete ever needed, not using access control or crud stuff
 	*/
 	 
 	public function filters()
