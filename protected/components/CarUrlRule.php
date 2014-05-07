@@ -81,8 +81,6 @@ class CarUrlRule extends CBaseUrlRule
 						$_GET['model'] = $rec1['mod_id'];
 						return '/';
 					}
-					else
-						return false;
 				}
 				
 				if($rec)			// well if we have a make we are still valid
