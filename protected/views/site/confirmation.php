@@ -4,7 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 		<!--main nav bar -->
-		<!-- <nav> -->
 			<?php /*
 				nav is removed for now
 				$this->widget('zii.widgets.CMenu',array('encodeLabel'=>false, 'lastItemCssClass'=>'nav_social',
@@ -18,7 +17,6 @@
 					array('label'=>'<a target="_blank" href="http://www.facebook.com/revistacarro"><img src="http://carroonline.terra.com.br/sitestatic/images/face-icon.png"></a><a target="_blank" href="http://www.twitter.com/carro_hoje"><img src="http://carroonline.terra.com.br/sitestatic/images/tweet-icon.png"></a>'),
 				),
 			)); */ ?>
-		<!-- </nav> -->
 
         <div class="wrapper">
             <div class="confirm_wrapper">
@@ -48,34 +46,29 @@
 						</br>
 						<h4 id="mmt_txt_1"></h4>
                 </div>
-          <!--
-                
-                <div class="confirm_affiliates">
-                    <h3><?php echo Yii::t('LeadGen', 'Save even more with these offers');?></h3>
-                    <span>
-                        <div>
-                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
-                        </div>
-                        <div>
-                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
-                        </div>
-                        <div>
-                            <h5><?php echo Yii::t('LeadGen', 'Affiliate'); ?></h5>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat purus ac neque eleifend, vitae pretium ligula pharetra.</p>
-                            <button><?php echo Yii::t('LeadGen', 'Get Deal'); ?></button>
-                        </div>
-                    </span>
-                </div>
-         -->       
                 <!-- end yii form here -->
 				<?php $this->endWidget(); ?>
 				
             </div>
         </div>
+		<script type="text/javascript">
+		/* <![CDATA[ */
+		var google_conversion_id = 975361460;
+		var google_conversion_language = "en";
+		var google_conversion_format = "3";
+		var google_conversion_color = "ffffff";
+		var google_conversion_label = "LqAACMzMoAkQtKuL0QM";
+		var google_remarketing_only = false;
+		/* ]]> */
+		</script>
+		<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+		</script>
+		<noscript>
+		<div style="display:inline;">
+		<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/975361460/?label=LqAACMzMoAkQtKuL0QM&amp;guid=ON&amp;script=0"/>
+		</div>
+		</noscript>        
+        
 <?php
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
