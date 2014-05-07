@@ -61,9 +61,18 @@ return array(
 			'urlFormat'=>'path',
 			'showScriptName'=>false, // added to not show script name
 			'rules'=>array(
+
+				// a custom rule to handle '/Make/Model' see CarUrlRule.php in /components
+				
+				array(
+					'class' => 'application.components.CarUrlRule',
+				),
+
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>', 
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				
+				
 			),
 		),
 		
