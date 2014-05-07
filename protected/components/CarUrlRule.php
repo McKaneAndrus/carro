@@ -24,11 +24,14 @@ class CarUrlRule extends CBaseUrlRule
  
     public function parseUrl($manager,$request,$pathInfo,$rawPathInfo)
     {
-		// '%^(\w+)(/(\w+))?$%'
-		// Simple case match above, doesn't work for cases where the url has a encodes space (aston+martin, etc)
 		//
-		// %^(?|(\w+)|(\w+\s\w+))(/(?|([A-Za-z0-9!]+)|(\w+\s\w+)|(\w+\s\w+\s\w+)))?$%
-		// Extended case
+		// %^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%
+		//
+		// Extended case where the character class of [\w\-\x80-\xff] will match ascii words (see pcre/preg-match docs) and the 
+		// Odd case for the VW 'Up!' is handled by [\w!\-\x80-\xff] as well as the DASH '-' character which is escaped as well
+		// 
+		// The \x80-\xff hex in the character class allow the accented characters to be accepted. It's a hack...
+		// The DASH '\-' is allowed and will be stripped from the URL if used
 		//
 		// This will match things like
 		// \ford
@@ -37,11 +40,13 @@ class CarUrlRule extends CBaseUrlRule
 		// \citroen\Grand C4 Picasso
 		// \jeep\grand cherokee
 		// \volkswagen\up! (note the `!` is not a word character so handled with special case [A-Za-z0-9!]) 
+		// \bmw\series-1 is accepted and the '-' is replaced with a ' ' space.  
+		// \bmw\series 1 is the same result as above
 		// 
 		// Note the Make has only a 1 or 2 word scan and the Model has a 1 to 3 word scan 
 		// Might be a better way to do this but that is left as an exercise for the reader...
 		
-        if(preg_match('%^(?|(\w+)|(\w+\s\w+))(/(?|([A-Za-z0-9!]+)|(\w+\s\w+)|(\w+\s\w+\s\w+)))?$%', $pathInfo, $matches))	// /make/model
+        if(preg_match('%^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%', $pathInfo, $matches))	// /make/model
         {
             // check $matches[1] and $matches[3] to see
             // if they match a manufacturer and a model in the database
@@ -54,11 +59,12 @@ class CarUrlRule extends CBaseUrlRule
 
 			if(isset($matches[1]))
 			{
-
+				
+				$matches[1] = str_replace('-',' ', $matches[1]);	// replace dash with space
 				$sql = Yii::app()->db->createCommand();
 				$sql->select('fab_id');
-				$sql->from('{{fabrikate}}');
-				$sql->where('fab_bez=:make_name and fab_status=0', array(':make_name' => $matches[1]));
+				$sql->from('{{fabrikate}}'); //and fab_status=0
+				$sql->where('fab_bez=:make_name', array(':make_name' => $matches[1]));
 				$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 				
 				if(!$rec)
@@ -68,10 +74,11 @@ class CarUrlRule extends CBaseUrlRule
 					
 				if(isset($matches[3]))
 				{
+					$matches[3] = str_replace('-',' ', $matches[3]);	// replace dash with space
 					$sql = Yii::app()->db->createCommand();
 					$sql->select('mod_id');
 					$sql->from('{{modelle}}');
-					$sql->where('mod_bez=:model_name and mod_status=0', array(':model_name' => $matches[3]));
+					$sql->where('mod_bez=:model_name', array(':model_name' => $matches[3]));
 					$rec1 = $sql->queryRow();	 // false if nothing set, row record otherwise
 				
 					// if we matched on model too...
