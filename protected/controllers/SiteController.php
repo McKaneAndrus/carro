@@ -80,7 +80,7 @@ class SiteController extends Controller
 		
 		$mail = new YiiMailer();
 
-		// $mail->SMTPDebug  = 1;		// debug and messages lost of output
+		// $mail->SMTPDebug  = 1;		// debug and messages lots of output to webpage
 
 		$mail->IsSMTP(true);												// use SMTP
 		$mail->SMTPAuth   = true;											// enable SMTP authentication
@@ -89,11 +89,8 @@ class SiteController extends Controller
 		$mail->Username   = "AKIAII7CIQ5C6QM2KR4A";  						// SES SMTP username
 		$mail->Password   = "AsgnPhn+UkFTCEQ7GqjABNb6k6b5AGeZZBmu8YQD9PDW"; // SES SMTP password
 
-		$mail->setView($template_name);	//'contact');		// this is the view to render
-
-		// set view data here
-
-		$mail->setData($template_data);
+		$mail->setView($template_name);		// this is the view to render for the email
+		$mail->setData($template_data);		// pass the data long to the view
 		
 		if(!isset(Yii::app()->params['AckEmailAdr']))
 		{
