@@ -18,7 +18,7 @@ return array(
 	'We received your request for a price quote on a' => 'Nós recebemos seu pedido para cotação de um',
 	'Below is a list of your selected dealers' => 'Abaixo está uma lista de seus revendedores selecionados',
 	'Unfortunately, we could not find a participating dealer near you.' => 'Nesse momento não conseuimos localizar uma concessionária participante próxima.',
-	'Our apologies for the inconvenience' => 'Pedimos desculpas pelo inconveniente',
+	'Our apologies for the inconvenience,' => 'Pedimos desculpas pelo inconveniente',
 	'We appreciate your business' => 'Nós apreciamos o seu negócio,',
 );
 ?>
