@@ -12,7 +12,7 @@
 		echo ' ' . Yii::t('mail','from') . '</p>'; 
 		if(isset($image) && $image != false)
 		{
-			echo '<img style="border : 0" alt="achacarro.com" src="' . $image . '" />';
+			echo '<img style="border : 0" src="' . $image . '" />';
 		}
 		Yii::t('mail', 'Below is a list of your selected dealers');
 		echo '<ul>';
