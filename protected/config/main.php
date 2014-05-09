@@ -127,8 +127,8 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@carro.br.com',
-		'AckEmailAdr' => 'sandy@revmaker.us', // Thank You Email FROM address
-		'AckEmailName' => 'Suporte ao Cliente',				// Thank You Email Human Name
+		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
+		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
 		'version'=>'1.02',
 	),
 );
