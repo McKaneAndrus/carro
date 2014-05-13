@@ -176,7 +176,7 @@ class SiteController extends Controller
 		* This doesn't query on the status of any tables used so images can be
 		* retreived for active or inactive records
 		*
-		* RETURNS : Array of lots of stuff or false if nothing found
+		* RETURNS : Array of lots of stuff or false if nothing found, note image is URL ENCODED!!!
 		*
 		* @todo sjg - add parameter to allow enforcement of the status flags in ALL
 		* 			  queries
@@ -1143,12 +1143,12 @@ class SiteController extends Controller
 						$img_name = self::DEFAULT_MAIL_CAR_IMAGE_PATH;	// car images are at web root, email is /webroot/carro/images/mail so back up the ladder
 						
 						if(($pic = $this->GetPic($model->int_ausstattung)) !== false)
-							$img_name .= $pic['image_path']; 	// get the images path 
+							$img_name .= urldecode($pic['image_path']); 	// get the images path MUST NOT BE ENCODED as GetPic encodes!!!
 						else 
 							$img_name = false;
 								
 						// @todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
-						
+
 						$this->SES_SendEmailAck($model->int_mail, 
 									Yii::t('mail', 'Achacarro Confirmation Email'), 
 									'mail_thanks', 
