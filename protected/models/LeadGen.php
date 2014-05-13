@@ -154,6 +154,7 @@ class LeadGen extends CActiveRecord
 			array('int_alt_ausstattung, int_bericht_wv, int_bericht_status, int_bericht_ma', 'safe'),
 			array('int_kenntnis, int_suchwort, int_suchmaschine, int_kontakt', 'safe'),
 			array('int_zahlungsart, int_kaufzeitpunkt, int_bauart', 'safe'),
+			array('int_leadcomment, int_leadstatus', 'safe'),
 			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
