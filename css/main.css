@@ -16,7 +16,8 @@ span.required
 .errorMessage
 {
 	color: red;
-	font-size: 0.8em;
+	font-size: 0.9em;
+    font-weight: bold;
 }
 
 .error input,
