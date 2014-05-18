@@ -11,6 +11,8 @@ return array(
 	// controller translates
 	
 	'Distance' => 'Distância',
+	'Free price quotes on new cars' => 'Cotações de preços livres em carros novos',
+	'Get the best prices on' => 'Obter os melhores preços',
 	
 	// view translates
 	
