@@ -159,7 +159,7 @@ class LeadGen extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			
-			array('int_id, int_name, int_vname, int_plz, int_status', 'safe', 'on'=>'search'),
+			array('int_id, int_name, int_vname, int_plz, int_status, int_mail, int_fabrikat, int_modell', 'safe', 'on'=>'search'),
 		);
 	}
 
