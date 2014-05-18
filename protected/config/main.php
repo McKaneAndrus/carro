@@ -76,7 +76,6 @@ return array(
 			),
 		),
 		
-
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=newcars', 
 			'emulatePrepare' => true,
@@ -129,6 +128,7 @@ return array(
 		'adminEmail'=>'webmaster@carro.br.com',
 		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
 		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
-		'version'=>'1.02',
+		'EmailDupeDays' => 7,						// Number of days to check back for dupes, 0 disables
+		'version'=>'1.03',
 	),
 );
