@@ -62,7 +62,7 @@ class CarUrlRule extends CBaseUrlRule
 				
 				$matches[1] = str_replace('-',' ', $matches[1]);	// replace dash with space
 				$sql = Yii::app()->db->createCommand();
-				$sql->select('fab_id');
+				$sql->select('fab_id, fab_bez');
 				$sql->from('{{fabrikate}}'); //and fab_status=0
 				$sql->where('fab_bez=:make_name and fab_status=0', array(':make_name' => $matches[1]));
 				$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
@@ -70,13 +70,14 @@ class CarUrlRule extends CBaseUrlRule
 				if(!$rec)
 					return false;
 
-				$_GET['make'] = $rec['fab_id']; 	// set to post params
+				$_GET['make'] = $rec['fab_id']; 		// set to post params
+				$_GET['make_name'] = $rec['fab_bez'];		// hack to pass text name
 					
 				if(isset($matches[3]))
 				{
 					$matches[3] = str_replace('-',' ', $matches[3]);	// replace dash with space
 					$sql = Yii::app()->db->createCommand();
-					$sql->select('mod_id');
+					$sql->select('mod_id, mod_bez');
 					$sql->from('{{modelle}}');
 					$sql->where('mod_bez=:model_name and mod_status=0', array(':model_name' => $matches[3]));
 					$rec1 = $sql->queryRow();	 // false if nothing set, row record otherwise
@@ -86,6 +87,7 @@ class CarUrlRule extends CBaseUrlRule
 					if($rec1)
 					{
 						$_GET['model'] = $rec1['mod_id'];
+						$_GET['model_name'] = $rec1['mod_bez'];	// hack to pass text name
 						return '/';
 					}
 				}
