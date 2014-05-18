@@ -8,6 +8,7 @@ class SiteController extends Controller
 	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
+	const DEFAULT_DUPE_CHECK_DAYS = 7;							// Length of time to check back for dupes (in the last X days check)
 	
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
 	const QUOTE_PAGE_ID	= 1001;
@@ -265,6 +266,40 @@ class SiteController extends Controller
 		return false;	// if here then not found
 	}
 
+	/*
+	* Simple check to see if the prospect has been already added to the interstessten table.
+	* It looks for a matching email address, make, model to see if it has been added already
+	* 
+	* $email - email address of prospect
+	* $make - make ID of the vehicle
+	* $model - model ID of the vehicle
+	*
+	* more advanced checking could be done here as well.
+	*
+	* returns true if a dupe or false if not found
+	*/
+	
+	public function ProspectDupeCheck($email, $make_id, $model_id)
+	{
+
+		if(!isset(Yii::app()->params['EmailDupeDays']))
+		{
+			Yii::log("EmailDupeDays application variable not set, check config file, default value used",  CLogger::LEVEL_WARNING);
+			$num_days = self::DEFAULT_DUPE_CHECK_DAYS;
+		}
+		else
+			$num_days = Yii::app()->params['EmailDupeDays'];
+
+		if($num_days == 0)	// skip the call to the db returns not found
+			return false;
+			
+		$criteria = new CDbCriteria();
+		$criteria->condition = 'int_mail=:email AND int_fabrikat=:make AND int_modell=:model and (int_anlage + INTERVAL :num_days DAY > NOW())';
+		$criteria->params = array(':email'=>$email, ':make'=>$make_id, ':model'=>$model_id, ':num_days'=>$num_days);
+		
+		return LeadGen::model()->exists($criteria); 
+	}
+	
 	/*
 	* Get the zip to city and state from the zipcode database
 	* currently if unknown we return defaults to allow entry to go on, but
@@ -1008,11 +1043,14 @@ class SiteController extends Controller
 	* but we render each page until the end. Note this is a poor man's state machine. Remember
 	* the $_POST contains the form for the page that is sending the request. If no matches for any
 	* known page we have a NEW user on the landing page so deliver a fresh set.
+	*
+	* Note Each page should also set the title if not using the default make/model in the GET params
 	*/
 
 	public function actionLanding()
 	{
-		if(isset($_POST['landing']))	// If here you came from the quote page using a back button (optional)
+		
+		if(isset($_POST['landing']))	// If here you came from the quote page using a back button (optional, not currently used)
 		{
 
 			// $this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track
@@ -1040,13 +1078,17 @@ class SiteController extends Controller
 				$post_params['int_plz'] = $model->int_plz;	// stuff into the saved state the postal code
 
 				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
-			
+
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
 				{
 					// Validate on landing page is good, not this is just the 'landing' scenario at this point not the whole set of pages
 
 					$this->updateSessionInfo(self::QUOTE_PAGE_ID, array('make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell)); 	// track 
 				
+					// update these fields so they can be used even if user changes values
+					
+					$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell);
+
 					/* 
 					*  Save a cookie of make, model info if desired (mm_hist) may be useful later
 					*/
@@ -1068,8 +1110,8 @@ class SiteController extends Controller
 					// $this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track 
 
 					$view = 'landing';	// back to page one if the data on page one was invalid. 
+					$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');
 				}
-			
 			}
 			else // submit the complete set of data. 
 				if(isset($_POST['submit'])) 	// quote page has form submitted, get form data validate and save it!
@@ -1079,89 +1121,96 @@ class SiteController extends Controller
 
 					$model->attributes = $this->getPageState('page', array());	// also has postal int_plz!
 					$model->attributes = $_POST['LeadGen'];
-					  
+					$view = 'confirmation';		// jump to the confirmation page
+
+					$make_name = $this->GetMakeName($model->int_fabrikat);
+					$model_name = $this->GetModelName($model->int_modell);
+					$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+  
 					if($model->validate())	
 					{
-						// we have valid data
 
-						$model->save();	// also updates active record with current record id, how nice!
-
-						$this->updateSessionInfo(self::CONFIRM_PAGE_ID, 
-							array('lead_id'=>$model->int_id, 'make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell, 
-								  'trim_id'=>$model->int_ausstattung, 'color_id'=>$model->int_farbe)); 	// track 
-
-						$view = 'confirmation';		// jump to the confirmation page
-						
-						// at this point $model->int_id has the key for the inthae table inserts
-
-						// First any of the special dealers 
-						
-						$dlr_id_list = array();
-						
-						if(isset($_POST['Inthae']['special_dlrs']))
+						if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
 						{
-							$sdl = $_POST['Inthae']['special_dlrs'];
-							foreach($sdl as $dlr)
-							{
-								$prospect_sdlr = new Inthae;	
-								$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
-								$prospect_sdlr->ih_dealer_id = $dlr;
-								$prospect_sdlr->ih_status = 1;						// database value for special dealers = 1
-								
-								$dlr_id_list[] = $dlr; 								//	append to the list
-								
-								if (!$prospect_sdlr->save()) 
-									Yii::log("Can't Save Special Dealer Data to database",  CLogger::LEVEL_WARNING);
-							}
-						}
 
-						// Now the 'More' dealers, same table just from different form element
-						
-						if(isset($_POST['Inthae']['more_dlrs']))
-						{
-							$mdl = $_POST['Inthae']['more_dlrs'];
-							foreach($mdl as $dlr)
-							{
-								$prospect_mdlr = new Inthae;	
-								$prospect_mdlr->ih_prospect_id = $model->int_id; 	// current models updated id
-								$prospect_mdlr->ih_dealer_id = $dlr;
-								$prospect_mdlr->ih_status = 0;						// database value for regular = 0
-								
-								$dlr_id_list[] = $dlr; 								//	append to the list here too
+								// we have valid data, no dupe
 
-								if (!$prospect_mdlr->save()) 
-									Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
-							}
-						}
-					
-						// send thank you email, do this last after records are saved
-						
-						$make_name = $this->GetMakeName($model->int_fabrikat);
-						$model_name = $this->GetModelName($model->int_modell);
-						$color_name = $this->GetColorName($model->int_farbe);
-								
-						$img_name = self::DEFAULT_MAIL_CAR_IMAGE_PATH;	// car images are at web root, email is /webroot/carro/images/mail so back up the ladder
-						
-						if(($pic = $this->GetPic($model->int_ausstattung)) !== false)
-							$img_name .= urldecode($pic['image_path']); 	// get the images path MUST NOT BE ENCODED as GetPic encodes!!!
-						else 
-							$img_name = false;
-								
-						// @todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
+								$model->save();	// also updates active record with current record id, how nice!
 
-						$this->SES_SendEmailAck($model->int_mail, 
-									Yii::t('mail', 'Achacarro Confirmation Email'), 
-									'mail_thanks', 
-									array(
-										'message' => Yii::t('mail', 'Your dealer will contact you by phone or email in the next 24 hours. Please email us if you don’t hear from them or need further assistance.'),
-										'name' => ucfirst($model->int_vname), 
-										'make_name' => $make_name,
-										'model_name' => $model_name, 
-										'color'=>$color_name, 
-										'image'=>$img_name,
-										'dlr_list'=>$dlr_id_list
-									));
-					
+								$this->updateSessionInfo(self::CONFIRM_PAGE_ID, 
+									array('lead_id'=>$model->int_id, 'make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell, 
+										  'trim_id'=>$model->int_ausstattung, 'color_id'=>$model->int_farbe)); 	// track 
+
+								
+								// at this point $model->int_id has the key for the inthae table inserts
+
+								// First any of the special dealers 
+								
+								$dlr_id_list = array();
+								
+								if(isset($_POST['Inthae']['special_dlrs']))
+								{
+									$sdl = $_POST['Inthae']['special_dlrs'];
+									foreach($sdl as $dlr)
+									{
+										$prospect_sdlr = new Inthae;	
+										$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
+										$prospect_sdlr->ih_dealer_id = $dlr;
+										$prospect_sdlr->ih_status = 1;						// database value for special dealers = 1
+										
+										$dlr_id_list[] = $dlr; 								//	append to the list
+										
+										if (!$prospect_sdlr->save()) 
+											Yii::log("Can't Save Special Dealer Data to database",  CLogger::LEVEL_WARNING);
+									}
+								}
+
+								// Now the 'More' dealers, same table just from different form element
+								
+								if(isset($_POST['Inthae']['more_dlrs']))
+								{
+									$mdl = $_POST['Inthae']['more_dlrs'];
+									foreach($mdl as $dlr)
+									{
+										$prospect_mdlr = new Inthae;	
+										$prospect_mdlr->ih_prospect_id = $model->int_id; 	// current models updated id
+										$prospect_mdlr->ih_dealer_id = $dlr;
+										$prospect_mdlr->ih_status = 0;						// database value for regular = 0
+										
+										$dlr_id_list[] = $dlr; 								//	append to the list here too
+
+										if (!$prospect_mdlr->save()) 
+											Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
+									}
+								}
+							
+								// send thank you email, do this last after records are saved
+								
+								$color_name = $this->GetColorName($model->int_farbe);
+										
+								$img_name = self::DEFAULT_MAIL_CAR_IMAGE_PATH;	// car images are at web root, email is /webroot/carro/images/mail so back up the ladder
+								
+								if(($pic = $this->GetPic($model->int_ausstattung)) !== false)
+									$img_name .= urldecode($pic['image_path']); 	// get the images path MUST NOT BE ENCODED as GetPic encodes!!!
+								else 
+									$img_name = false;
+										
+								// @todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
+
+								$this->SES_SendEmailAck($model->int_mail, 
+											Yii::t('mail', 'Achacarro Confirmation Email'), 
+											'mail_thanks', 
+											array(
+												'message' => Yii::t('mail', 'Your dealer will contact you by phone or email in the next 24 hours. Please email us if you don’t hear from them or need further assistance.'),
+												'name' => ucfirst($model->int_vname), 
+												'make_name' => $make_name,
+												'model_name' => $model_name, 
+												'color'=>$color_name, 
+												'image'=>$img_name,
+												'dlr_list'=>$dlr_id_list
+											));
+						}// dupe
+						
 						// kill any existing session and cookie and related
 						// kill now, takes a refresh of the browser to remove the cookie
 						// so after this remember we land on the confirm page and the cookie
@@ -1174,6 +1223,7 @@ class SiteController extends Controller
 							Yii::app()->request->cookies->clear();
 						}
 
+						// $this->pageTitle = Yii::t('LeadGen', 'Thank you for your request');	// set the page title
 					}
 					else
 					{
@@ -1186,26 +1236,6 @@ class SiteController extends Controller
 				}
 				else // New user landing here, didn't come from quote page send to the landing page (landing.php)
 				{
-					/*
-					echo'<br>';					
-					echo Yii::app()->request->url;					
-					echo'<br>';					
-					echo Yii::app()->session->sessionID;
-					echo'<br>';					
-					echo Yii::app()->session->savePath;
-					echo'<br>';		
-					echo Yii::app()->request->baseUrl . '/protected/runtime/sessions';
-					echo'<br>';					
-					
-					echo'<br>';
-					echo'Make : ';  
-					if(isset($_GET['make'])) echo $_GET['make'];
-					echo'<br>';
-					echo'Model : ';  
-					if(isset($_GET['model'])) echo $_GET['model'];
-					echo'<br>';
-	
-					*/
 					
 					// yii will start a new session from here 
 					
@@ -1216,15 +1246,31 @@ class SiteController extends Controller
 					// stuff the models fields (which will update when the form is displayed)
 					
 					if(isset($_GET['make'])) 
-					 $model->int_fabrikat = $_GET['make'];
-					 
-					if(isset($_GET['model'])) 
-						$model->int_modell = $_GET['model'];
+					{
+						$model->int_fabrikat = $_GET['make'];
+
+						if(isset($_GET['model'])) 
+							$model->int_modell = $_GET['model'];
+					}
+
+					// set page title from validated make/model fields uses get params for text names
+					
+					if(isset($_GET['make_name'])) 
+					{
+						$make_name = $_GET['make_name'];
+						$model_name = '';
+					
+						if(isset($_GET['model_name'])) 
+							$model_name = $_GET['model_name'];
+							
+						$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+					}
 
 					$view = 'landing';
 					$model->scenario = 'landing';	// set validation scenario to landing page 
-				}
-    
+				}//fresh user
+
+
 		// hack to make browser back button work by enabling the page to be cached
 		// otherwise you get the dreaded 'Re-send data popup'
 		// this can cause odd side effects with logging and the views javascript code...
