@@ -1265,6 +1265,9 @@ class SiteController extends Controller
 							
 						$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
 					}
+					else
+						$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');	// default
+
 
 					$view = 'landing';
 					$model->scenario = 'landing';	// set validation scenario to landing page 
