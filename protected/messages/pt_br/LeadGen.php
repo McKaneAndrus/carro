@@ -11,8 +11,8 @@ return array(
 	// controller translates
 	
 	'Distance' => 'Distância',
-	'Free price quotes on new cars' => 'Cotações de preços livres em carros novos',
-	'Get the best prices on' => 'Obter os melhores preços',
+	'Free price quotes on new cars' => 'Cotações grátis para carros novos',
+	'Get the best prices on' =>  'Obter os melhores preços para',
 	
 	// view translates
 	
@@ -49,7 +49,7 @@ return array(
 	
 	// 123 bullets
 	
-	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colacaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
+	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colocaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
 	'Complete the email form and your selected dealers will contact you with their best internet pricing.' => 'Complete o formulário e as concessionárias selecionadas entrarão em contato com seus melhores preços de internet.',
 	'Choose the deal you like best, visit the dealership and complete your new car purchase.' => 'Escolha o negócio que você mais gosta, visite a concessionária e complete a compra do seu carro novo.',
 	
