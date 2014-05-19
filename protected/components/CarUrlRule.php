@@ -25,7 +25,7 @@ class CarUrlRule extends CBaseUrlRule
     public function parseUrl($manager,$request,$pathInfo,$rawPathInfo)
     {
 		//
-		// %^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%
+		// %^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x26\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x26\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%
 		//
 		// Extended case where the character class of [\w\-\x80-\xff] will match ascii words (see pcre/preg-match docs) and the 
 		// Odd case for the VW 'Up!' is handled by [\w!\-\x80-\xff] as well as the DASH '-' character which is escaped as well
@@ -34,19 +34,21 @@ class CarUrlRule extends CBaseUrlRule
 		// The DASH '\-' is allowed and will be stripped from the URL if used
 		//
 		// This will match things like
-		// \ford
-		// \ford\fiesta 
-		// \aston martin\db9 
-		// \citroen\Grand C4 Picasso
-		// \jeep\grand cherokee
-		// \volkswagen\up! (note the `!` is not a word character so handled with special case [A-Za-z0-9!]) 
-		// \bmw\series-1 is accepted and the '-' is replaced with a ' ' space.  
-		// \bmw\series 1 is the same result as above
-		// 
+		//  /ford
+		// /ford/fiesta 
+		// /aston martin/db9 
+		// /citroen/Grand C4 Picasso
+		// /jeep/grand cherokee
+		// /volkswagen/up! (note the `!` is not a word character so handled with special case [A-Za-z0-9!]) 
+		// /bmw/series-1 is accepted and the '-' is replaced with a ' ' space.  
+		// /bmw/series 1 is the same result as above
+		// /chrysler/town-%26-country    (town-&-country)    NEW
+		// /chrysler/town%20%26%20country    (town & country) NEW
+
 		// Note the Make has only a 1 or 2 word scan and the Model has a 1 to 3 word scan 
 		// Might be a better way to do this but that is left as an exercise for the reader...
-		
-        if(preg_match('%^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%', $pathInfo, $matches))	// /make/model
+	
+        if(preg_match('%^(?|([\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+))(/(?|([\w!\-\x26\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x80-\xff]+)|([\w\-\x80-\xff]+\s[\w\-\x26\x80-\xff]+\s[\w\-\x80-\xff]+)))?$%', $pathInfo, $matches))	// /make/model
         {
             // check $matches[1] and $matches[3] to see
             // if they match a manufacturer and a model in the database
