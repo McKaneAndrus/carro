@@ -2,3 +2,5 @@
 protected/runtime/sessions
 #ignore the application log
 protected/runtime/application.log
+#ignore the assets folder
+assets
