@@ -2,6 +2,40 @@
 * sjg - CSS for Revmaker pages
 */
 
+/*
+* Bootstrap skin changes
+*/
+
+select, textarea, input[type="text"], input[type="password"], 
+input[type="datetime"], input[type="datetime-local"], input[type="date"], 
+input[type="month"], input[type="time"], input[type="week"], input[type="number"], 
+input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input 
+{
+    color: #000;	/* change all input colors was too light */
+}
+
+
+.btn-custom { 
+	background-color: hsl(360, 100%, 44%) !important; 
+	background-repeat: repeat-x; 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff4747", endColorstr="#e00000"); 
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#ff4747), to(#e00000)); 
+	background-image: -moz-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -ms-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff4747), color-stop(100%, #e00000)); 
+	background-image: -webkit-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -o-linear-gradient(top, #ff4747, #e00000); 
+	background-image: linear-gradient(#ff4747, #e00000); 
+	border-color: #e00000 #e00000 hsl(360, 100%, 39%); 
+		
+	color: #fff !important; 
+	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
+    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
+
+	-webkit-font-smoothing: antialiased; 
+	}
+	
+.btn { font-weight: bold; }
 
 /*
 * the required and errorMessage are for yii error feedback,
@@ -43,6 +77,50 @@ div.error h1
     font-size: 40px;
     font-weight: bold;
 }
+
+strong 
+{
+	font-weight: bold;
+}
+
+/*
+* Modal dialog overrides (bootstrap)
+*/
+
+.modal {
+		width: 800px;
+		margin-left: -400px;
+		/*background-color: #ec1d25;*/
+}
+
+.modal-header {
+  border-bottom: 1px solid #eee;	/* line under header, 0 remove */
+  
+  background-color: #fff;	/* messes with rounded corners */
+
+  -webkit- border-top-left-radius: 6px;		/* only needed if changing the header background color */
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  line-height: 30px;
+  font-weight: bold;
+}
+
+.modal-body {
+  max-height: 400px;	/* height before scroll */
+}
+
+.modal-footer {
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+}
+
 
 /*
 * End mods
@@ -130,7 +208,7 @@ nav a:hover {
 
 .landing_main h1 {
     position: absolute;
-    top: 38px;
+    top: 23px;  /* sjg Bootstrap fix */
     left: 34px;
     font-size: 23px;
     font-weight: bold;
@@ -140,7 +218,7 @@ nav a:hover {
 
 .landing_main h2 {
     position: absolute;
-    top: 100px;
+    top: 72px;	/* sjg bootstrap fix */
     font-style: italic;
     font-size: 20px;
     width: 525px;
@@ -150,7 +228,7 @@ nav a:hover {
 
 .landing_main form {
     position: absolute;
-    top: 140px;
+    top: 125px;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     width: 480px;
@@ -167,12 +245,12 @@ nav a:hover {
 }
 
 .landing_main select {
-    border: 1px solid #999;
+/*    border: 1px solid #999;
     padding: 2px;
     font-size: 16px;
     width: 225px;
     display: block;
-    margin: 0px 0 10px;
+    margin: 0px 0 10px; */ /* SJG HACK FOR BOOTSTRAP */
 }
 
 .landing_main label {
@@ -182,15 +260,17 @@ nav a:hover {
 .landing_main input[type="text"] {
     width: 80px;
     border: 1px solid #999;
-    padding: 3px;
+    margin-bottom: 0px;
+    /*padding: 3px;*/  /* SJG HACK FOR BOOTSTRAP */
 }
 
-.landing_main input[type="submit"] {
+.landing_main .input-append {	/* sjg hack for bootstrap to make error msg right under field */
+    margin-bottom: 0px;
+}
+
+.landing_main #landing_submit {	
     display: block;
-    background: url('../images/btn-lg.png') no-repeat;
-    width: 270px; /*172px;*/
-    height: 44px;
-    cursor: pointer;
+    width: 300px; /*172px;*/
 	margin-left: auto;
 	margin-right: auto;
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
@@ -199,12 +279,31 @@ nav a:hover {
 	color: #fff;
 }
 
+
+.landing_main input[type="submit"] {
+    display: block;
+	margin-left: auto;
+	margin-right: auto;
+
+/*    background: url('../images/btn-lg.png') no-repeat; sjg BOOTSTRAP cleanup
+    width: 270px; 
+    height: 44px;
+    cursor: pointer;
+    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
+    font-size: 22px;
+    font-weight: bold;
+	color: #fff; 
+*/
+}
+
+/*
 .landing_main input[type="submit"]:hover {
     background-position: 0 -45px;
 }
 .landing_main input[type="submit"]:active {
     background-position: 0 -91px;
 }
+*/
 
 .landing_overview {
     width: 940px;
@@ -319,6 +418,9 @@ nav a:hover {
     font-size: 16px;
     background: #CCCCCC;
     border: 1px solid rgb(153, 153, 153);
+    margin: 0; /* sjg bootstrap fix */
+    
+   list-style-position: inside; /* sjg hack for bootstrap */
 }
 
 .landing_overview li {
@@ -341,6 +443,12 @@ nav a:hover {
 	display: none;
 }
  
+.landing_overview .landing_overview_below .make_logo img {
+	float: left;
+	padding: 20px;
+	margin-right: 10px;
+    border: 1px solid #ccc;
+} 
 /*-----------
 Quote form 
 ------------*/
@@ -359,6 +467,7 @@ Quote form
     font-weight: bold;
     font-size: 17px;
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
+    margin: 0px;	 /* sjg overrides bootstrap */
 
 }
 
@@ -389,6 +498,13 @@ Quote form
     margin: 0 0 10px;
 }
 
+.quote_column h3 {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 10px;
+}
+
 .quote_column h4 {
     font-weight: bold;
     font-size: 16px;
@@ -400,6 +516,8 @@ Quote form
 .quote_column img {
     display: block;
     margin: 0 auto 20px;
+    padding: 20px;
+    cursor: pointer;
 }
 
 .quote_column select,
@@ -413,22 +531,35 @@ Quote form
     display: block;
     font-size: 14px;
     width: 267px;
+    margin-bottom: 0px; /* sjg bootstrap fix */
 }
 
 .quote_column label {
     display: block;
     font-weight: bold;
-    margin: 20px 0 3px;
+    margin: 10px 0 3px;	/* sjg bootstrap fix */
 }
 
 .quote_column label:first-child {
     margin: 0 0 3px;
 }
 
+
+.quote_column #quote_submit {	
+    display: block;
+/*    width: 300px; */ /*172px;*/
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .quote_column input[type="submit"] {
-    background: url('../images/btn-lg.png') no-repeat;
+/*
     height: 44px;
     width: 270px;
+	margin-left: auto;
+	margin-right: auto;
+
+    background: url('../images/btn-lg.png') no-repeat;
     display: block;
     cursor: pointer;
 
@@ -436,14 +567,19 @@ Quote form
     font-size: 21px;
     font-weight: bold;
 	color: #fff;
+*/
+	
 }
-
+/*
 .quote_column input[type="submit"]:hover {
     background-position: 0 -45px;
 }
 .quote_column input[type="submit"]:active {
     background-position: 0 -91px;
 }
+sjg Bootstrap Hack
+
+*/
 
 .quote_column #back {
     background: url('../images/btn-getNewMakeModel.png') no-repeat;
@@ -492,15 +628,21 @@ Quote form
     padding: 5px 0 5px 5px;
 }
 
+.quote_dealer label 
+{
+    font-size: 12px;	/* needed for bootstrap fix */
+    line-height: 1.25;
+}
+
 .quote_special {
     border: 1px solid #d0cb92;
     background-color: #feffe6;
-    margin: 0 0 20px;
+    margin: 5px 0 20px;
 }
 
 .quote_special .quote_dealer {
     border-top: 1px solid #d0cb92;
-    font-size: 12px;
+    font-size: 12px; /* may not work for bootstrap */
 }
 
 .quote_special .quote_dealer:first-child,

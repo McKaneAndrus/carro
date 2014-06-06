@@ -18,7 +18,7 @@
 					)); ?>
 
                     <div class="quote_column">
-						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
+						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						<h4 id="mmt_txt_1"></h4>
 						<label for=""><?php echo $form->labelEx($model,'int_ausstattung'); ?></label>
 			
@@ -69,6 +69,16 @@
 								'disabled' =>$disable, 'prompt' => Yii::t('LeadGen','Select a Color')));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
 
+<div class="check_box_options">
+<?php
+$options_list = array('One-1' => 'One', 'Two-2' => 'Two', 'Three-3' => 'Three');
+$options_select_list = array_keys($options_list);
+var_dump($options_select_list);
+
+echo TbHtml::checkBoxList('optionsCb', $options_select_list, $options_list, $htmlOptions = array()); 
+?>
+</div>		
+
                     </div>
                     
                     <!-- START COLUMN 2 -->
@@ -76,23 +86,21 @@
 
                         <!-- get premium dealers first -->
                         
-						<?php $special_dealer_display_count = 3; // 0 = No display of Special Dealers div ?>
-						<?php $dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, 10); ?>
-						<?php $dealer_select_list = array_keys($dealer_list);?>
 						<?php 
+							$special_dealer_display_count = 5; // 0 = No display of Special Dealers div
+							$dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, $special_dealer_display_count);
+							$dealer_select_list = array_keys($dealer_list);
+
 							$dlr_cnt = count($dealer_list);
 							if( $dlr_cnt == 0)
 							{
-								 echo '<h3>' . Yii::t('LeadGen', 'Unable to Locate Local Dealers') . '</h3>';
-								 echo Yii::t('LeadGen','Carro Specialist will forward request,') . '</br></p>';
+								 echo '<strong>' . Yii::t('LeadGen', 'Unable to Locate Local Dealers') . '</strong>';
+								 echo '<p>' . Yii::t('LeadGen','Carro Specialist will forward request,') . '</br></p>';
 								 echo Yii::t('LeadGen','Please continue with submission.'). '</br></br>' . Yii::t('LeadGen','Thank You');
 							}
 							
 							if($special_dealer_display_count > 0 && $dlr_cnt)
 							{
-
-								// have dealers so display check box prompt
-								
 								/* 
 								REMOVE, TEXT TOO LENGTHY 
 								echo '<div class="quote_checkbox">';
@@ -101,7 +109,7 @@
 								echo '</div>';
 								*/
 								
-								echo '<h3>' . Yii::t('LeadGen', 'Best Dealers in Your Area') . '</h3>';
+								echo '<strong>' . Yii::t('LeadGen', 'Best Dealers in Your Area') . '</strong>';
 								echo '<div class="quote_special">';
 
 								// Get results, but only top X
@@ -113,26 +121,6 @@
 								array('separator'=>'', 
 										'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
 								
-								// shift first top N elements off the list as they have been seen above
-								
-								$dealer_list = array_slice($dealer_list, $special_dealer_display_count, $dlr_cnt, true);
-								// $dealer_select_list = array_keys($dealer_list); // set them to checked 
-								$dealer_select_list = array();
-								echo '</div>';
-							}
-						?>
-				
-						<!-- Then all the rest if any -->
-						
-						<?php
-							// if we have more then three, render the more box...
-							if(($cnt = count($dealer_list)) > 0)
-							{	
-								echo '<h3>' . Yii::t('LeadGen', 'More Dealers') . ' (' . $cnt . ') </h3>';
-								echo '<div class="quote_more_dealers">';
-								echo CHtml::checkBoxList('Inthae[more_dlrs]', $dealer_select_list, $dealer_list,
-								array('separator'=>'', 
-									'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
 								echo '</div>';
 							}
 						?>
@@ -141,45 +129,54 @@
                     
                     <!-- START COLUMN 3 -->
                     <div class="quote_column">
-						
-							<?php echo $form->labelEx($model,'int_vname'); ?>
-							<?php echo $form->textField($model,'int_vname'); ?>
-							<?php echo $form->error($model,'int_vname'); ?>
+					<?php	echo $form->labelEx($model,'int_vname');
+							echo $form->textField($model,'int_vname');
+							echo $form->error($model,'int_vname');
 
-							<?php echo $form->labelEx($model,'int_name'); ?>
-							<?php echo $form->textField($model,'int_name'); ?>
-							<?php echo $form->error($model,'int_name'); ?>
+							echo $form->labelEx($model,'int_name');
+							echo $form->textField($model,'int_name');
+							echo $form->error($model,'int_name');
 
-							<?php echo $form->labelEx($model,'int_tel'); ?>
-							<?php echo $form->textField($model,'int_tel'); ?>
-							<?php echo $form->error($model,'int_tel'); ?>
+							echo $form->labelEx($model,'int_tel');
+							echo $form->textField($model,'int_tel');
+							echo $form->error($model,'int_tel');
 
-							<?php echo $form->labelEx($model,'int_mail'); ?>
-							<?php echo $form->textField($model,'int_mail'); ?>
-							<?php echo $form->error($model,'int_mail'); ?>
+							echo $form->labelEx($model,'int_mail');
+							echo $form->textField($model,'int_mail');
+							echo $form->error($model,'int_mail');
 
-							<?php echo $form->labelEx($model,'int_str'); ?>
-							<?php echo $form->textField($model,'int_str'); ?>
-							<?php echo $form->error($model,'int_str'); ?>
+							echo $form->labelEx($model,'int_str');
+							echo $form->textField($model,'int_str');
+							echo $form->error($model,'int_str'); 
+					
+							$cs_rec = $this->GetCityState($model->int_plz);
+							echo '<p class="quote_city">' . $cs_rec['city'] . ', ' . $cs_rec['state'] . ' ' . $model->int_plz . '</p>';
 
-							<p class="quote_city">
-								<?php $cs_rec = $this->GetCityState($model->int_plz);?>
-								<?php echo $cs_rec->city . ', ' . $cs_rec->state . ' ' . $model->int_plz; ?>
-							</p>
+							echo $form->labelEx($model,'int_text');
+							echo $form->textArea($model,'int_text');
+							echo $form->error($model,'int_text'); 
+							echo '<br>';
+							echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl'));
+							
+							echo '<div class="submit_button">' . TbHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('id'=>'quote_submit', 'name'=>'submit', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE));
 
-							<?php echo $form->labelEx($model,'int_text'); ?>
-							<?php echo $form->textArea($model,'int_text'); ?>
-							<?php echo $form->error($model,'int_text'); ?>
-							<br>
-                        
-						
-						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl')); ?>
-						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('name'=>'submit')); ?>
-                        
+
+							$this->widget('bootstrap.widgets.TbModal', array(
+								'id' => 'ModalTrust',
+								'header' => 'Trust Information', // translate
+								'show'=> false,
+								'content' => 'This site is fully protected and a good site!',
+								'footer' => array(TbHtml::button('Close', array('data-dismiss' => 'modal', 'color'=> 'custom'))),
+							));
+
+							echo '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png"></div>'; 
+						?>
                     </div>
 				<?php $this->endWidget(); ?>
             </div>
-        </div>        
+        </div>    
+      
+		
 <?php
 
 $cs = Yii::app()->getClientScript();  

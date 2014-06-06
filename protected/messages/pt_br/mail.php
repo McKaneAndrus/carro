@@ -10,7 +10,7 @@ return array(
 
 	'Achacarro Confirmation Email' => 'Achacarro Confirmação de E-mail',
 	'Customer Support' => 'Suporte ao Cliente',
-	'Your dealer will contact you by phone or email in the next 24 hours. Please email us if you don’t hear from them or need further assistance.' =>'Uma das nossas concessionárias entrará em contato com você por telefone ou email nas próximas 24 horas. Por favor, nos envie um email caso você não seja contatado ou tenha alguma dúvida.',
+	'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.' => 'Uma das concessionárias na sua região entrará em contato com você dentro de 48 horas para oferecer ótimos preços no carro que você procura.',
 
 	'Dear' => 'Prezado',
 	'from' => 'da',
@@ -20,6 +20,7 @@ return array(
 	'Unfortunately, we could not find a participating dealer near you.' => 'Nesse momento não conseuimos localizar uma concessionária participante próxima.',
 	'Our apologies for the inconvenience,' => 'Pedimos desculpas pelo inconveniente',
 	'We appreciate your business' => 'Nós apreciamos o seu negócio,',
+
 );
 ?>
 

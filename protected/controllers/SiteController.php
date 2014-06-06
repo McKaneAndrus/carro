@@ -4,8 +4,10 @@ class SiteController extends Controller
 	// note the default image is not in the image directory with the cars,
 	// it's in the app's image directory to keep deployment easy
 	
-	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.png';	// picture not found path (keep leading slash)
+	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.jpg';	// picture not found path (keep leading slash)
 	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_URL_LOGO_PATH = '/images/logos/';				// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_NOT_FOUND_LOGO_PIC =  '/images/1x1.gif';		// picture not found path (keep leading slash)
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 	const DEFAULT_DUPE_CHECK_DAYS = 7;							// Length of time to check back for dupes (in the last X days check)
@@ -124,7 +126,7 @@ class SiteController extends Controller
 	*		  'street' => '1234 Any Street',
 	*		  'city' => 'Your City',
 	*		  'state' => 'Some State'
-	*		  'postal' => '012345',
+	*		  'postal' => '012345-123',
 	*		  'phone' => '123-342-435'
 	*		)
 	* >> Add any needed elements to the query and return <<
@@ -158,6 +160,45 @@ class SiteController extends Controller
 		return($dlr_rec);
 	}
 
+	/*
+	* Given a make id this will get the logo. Currently their is 
+	* only one size logo 56px tall and a variety of widths
+	*
+	* Params -
+	* 	$make_id - int make id
+	*
+	* Returns -
+	*
+	*	string to the  full url to the image, or false if not found.
+	*/
+	
+	public function GetMakeLogo($make_id)
+	{
+
+		if(!is_numeric($make_id))
+		{
+			Yii::log("Invalid make_id, it's non-numeric",  CLogger::LEVEL_WARNING);
+			return false;
+		}
+
+		$url_logo_path = self::DEFAULT_URL_LOGO_PATH; 									// can be different then file path
+		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_URL_LOGO_PATH;		// MUST NOT BE RELATIVE PATH
+		
+		// Check for .png primary  and .jpg fallback as the only valid extensions
+
+		$image_name = $make_id . '.png';				// primary logo type
+
+		if (file_exists($file_check_path . $image_name))
+			return $url_logo_path . $image_name;		// should be something like /var/www/html/logo/123.png when all done
+
+		$image_name = $make_id . '.jpg';				// secondary logo type
+
+		if (file_exists($file_check_path . $image_name))
+			return $url_logo_path . $image_name;		// should be something like /var/www/html/logo/123.jpg when all done
+			
+		return false;
+	}
+
 	public function GetPic($p_id)
 	{
 		/*
@@ -184,7 +225,7 @@ class SiteController extends Controller
 		*/
 
 		$url_image_path = self::DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
-		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . '/images/cars/';		// MUST NOT BE RELATIVE PATH
+		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_URL_IMAGE_PATH;		// MUST NOT BE RELATIVE PATH
 		$p_filename = false;
 
 		if(is_numeric($p_id))	// test for existance and a number
@@ -313,13 +354,17 @@ class SiteController extends Controller
 	* Returns a normalized postal code that matches the db format. 
 	* keeping simple for now, but could add knowledge of country and each
 	* would have the specific case as needed.
+	*
+	* Currently the postal code can be a 5 digit or a 9 digit in either of these formats
+	*    12345 or 12345-123
+	*
+	* The dash must be in the long version.
+	* 
+	* returns a 9 digit code
 	*/
 	
 	public function NormalizePostalCode($postal_code_str)
 	{
-		// for the BR postal code we only have the first 5 digits, so we need to make sure we hack off
-		// last 3 and replace with 000 as that is what the database has for lookup.
-		// format must come in as 00000 or 00000-000 or we return default.
 		
 		$len = strlen($postal_code_str);
 		
@@ -327,7 +372,7 @@ class SiteController extends Controller
 			return $postal_code_str . '-000'; // format came in as just the 5 digit
 		else
 			if($len == 9)
-				return substr($postal_code_str, 0, 6) . '000';	// get the '00000-' add suffix
+				return $postal_code_str;		
 			else
 				return '00000-000'; // NULL might be good, not sure yet...
 	}
@@ -341,35 +386,40 @@ class SiteController extends Controller
 	* as lattitude and longitude if needed. No record found returns the default 
 	* city and state of unknown, and all other fields as empty. Might have a better
 	* return value indicating success and return the results as a parameter TODO!
+	*
+	* Note this uses the EXTENDED_POSTAL_CODE table
 	*/
 	
 	public function GetCityState($postal_code_str)
 	{
-
-		// might also check for null or empty here as invalid zip would return that
-		// Also may be faster to just use DBO for looks ups like this
-			
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
 
-		$city_state = PostalCodeLookup::model()->find('code=:postal_code', array(':postal_code' => $postal_code_str));
-
-		if($city_state == NULL)
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('city, state');
+		$sql->from('{{extended_postal_codes}}');									// will prepend country
+		$sql->where('code=:postal_code', array(':postal_code' => $postal_code_str));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+	
+		if($rec == false)
 		{
-			// create a record and ship it back with some defaults. Log Error as it might be an indication
-			// of a missing zipcode and something that could be fixed
-			
-			$city_state = new PostalCodeLookup();
-			$city_state->city = Yii::t('LeadGen', 'Unknown City');
-			$city_state->state = Yii::t('LeadGen', 'Unknown State');
+			$city_state['city'] = Yii::t('LeadGen', 'Unknown City');
+			$city_state['state'] = Yii::t('LeadGen', 'Unknown State');
+		}
+		else
+		{
+			$city_state['city'] = $rec['city'];
+			$city_state['state'] = $rec['state'];
 		}
 
-		return $city_state;	// record with City, State, if no match NULL or Empty Array
+		return $city_state;	// record with City, State, if no match lang specific unknown text
 	}
 
 	/*
 	* Given a state and a city will return the postal code. This may
 	* not work correcly for all countries, but for Brazil the mapping
 	* seems to hold true. 
+	*
+	* NOTE : This uses the EXTENDED table, and better have indexes on city and state!
 	*/
 	
 	public function GetPostalCode($city, $state)
@@ -377,10 +427,10 @@ class SiteController extends Controller
 
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('code');
-		$sql->from('{{postal_codes}}');									// will prepend country
+		$sql->from('{{extended_postal_codes}}');									// will prepend country
 		$sql->where('state=:state_str and city=:city_str', array(':state_str' => $state, ':city_str' => $city));
 		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
-	
+
 		if($rec == false)
 			return '00000-000';
 			
@@ -394,57 +444,69 @@ class SiteController extends Controller
 	* $make_id is currently an integer for the make
 	* Returns : string name of the make
 	*
-	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 	
 	public function GetMakeName($make_id)
 	{
-		$make_rec = MakeLookup::model()->find('fab_id=:id_make', array(':id_make' => $make_id));
-		
-		if($make_rec == NULL)
-			return(Yii::t('LeadGen', 'Unknown Make'));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('fab_bez');
+		$sql->from('{{fabrikate}}');									// will prepend country
+		$sql->where('fab_id=:make_id', array(':make_id' => $make_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+
+		if($rec == false)
+			return Yii::t('LeadGen', 'Unknown Make');
 			
-		return($make_rec->fab_bez);
+		return $rec['fab_bez'];
 	}
 	
 	/*
 	* Get the Model name (string) from a model ID. 
 	* currently if unknown we return default
 	*
-	* $trim_id is currently an integer for the trim
+	* $model_id is currently an integer for the model
 	* Returns : string name of the model
 	*
-	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 		
 	public function GetModelName($model_id)
 	{
-		$model_rec = ModelLookup::model()->find('mod_id=:id_model', array(':id_model' => $model_id));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('mod_bez');
+		$sql->from('{{modelle}}');									// will prepend country
+		$sql->where('mod_id=:model_id', array(':model_id' => $model_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		if($model_rec == NULL)
-			return(Yii::t('LeadGen', 'Unknown Model'));		
-		return($model_rec->mod_bez);
+		if($rec == false)
+			return Yii::t('LeadGen', 'Unknown Model');
+			
+		return $rec['mod_bez'];
 	}
-
+	
 	/*
 	* Get the Model text (string) from a model ID. 
 	* Model text is Year, Make, Model 
 	*
-	* currently if unknown we return default
+	* currently if unknown we return default translated text
 	*
-	* $model_id is currently an integer for the trim
-	* Returns : string name of the model
+	* $model_id is currently an integer for the model
+	* Returns : string text field of the model (year, make, model) format as defined by JATO
 	*
-	* sjg Note : this might be better of as DBO since just a simple look up
 	*/
 		
 	public function GetModelText($model_id)
 	{
-		$model_rec = ModelLookup::model()->find('mod_id=:id_model', array(':id_model' => $model_id));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('mod_text');
+		$sql->from('{{modelle}}');									// will prepend country
+		$sql->where('mod_id=:model_id', array(':model_id' => $model_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		if($model_rec == NULL)
-			return(Yii::t('LeadGen', 'Unknown Model'));		
-		return($model_rec->mod_text);
+		if($rec == false)
+			return Yii::t('LeadGen', 'Unknown Model');
+			
+		return $rec['mod_text'];
+
 	}
 
 	/*
@@ -461,12 +523,16 @@ class SiteController extends Controller
 		if($trim_id == self::DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
 			return(Yii::t('LeadGen', 'Any Trim'));
 		
-		$trim_rec = TrimLookup::model()->find('aus_id=:id_trim', array(':id_trim' => $trim_id));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_bez');
+		$sql->from('{{ausstattung}}');						// will prepend country
+		$sql->where('aus_id=:trim_id', array(':trim_id' => $trim_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		if($trim_rec == NULL)
-			return(Yii::t('LeadGen', 'Unknown Trim'));
-					
-		return($trim_rec->aus_bez);
+		if($rec == false)
+			return Yii::t('LeadGen', 'Unknown Trim');
+			
+		return $rec['aus_bez'];
 	}
 
 	/*
@@ -483,12 +549,16 @@ class SiteController extends Controller
 		if($color_id == self::DEFAULT_ANY_VALUE)	// our default id for ANY which is not in the database
 			return(Yii::t('LeadGen', 'Any Color'));
 		
-		$color_rec = ColorLookup::model()->find('farb_id=:id_color', array(':id_color' => $color_id));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('farb_bez');
+		$sql->from('{{farben}}');						// will prepend country
+		$sql->where('farb_id=:color_id', array(':color_id' => $color_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		if($color_rec == NULL)
-			return(Yii::t('LeadGen', 'Unknown Color'));
-		
-		return($color_rec->farb_bez);
+		if($rec == false)
+			return Yii::t('LeadGen', 'Unknown Color');
+			
+		return $rec['farb_bez'];
 	}
 
 	/*
@@ -500,17 +570,19 @@ class SiteController extends Controller
 	
 	public function GetMakes()
 	{
-		$criteria = new CDbCriteria();
-		$criteria->select = 'fab_id, fab_bez';	// fields of interest
-		$criteria->condition = 'fab_status=0';	// active
-		$criteria->order = 'fab_bez';
-		$makes = MakeLookup::model()->findAll($criteria);
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('fab_id, fab_bez');
+		$sql->from('{{fabrikate}}');						// will prepend country
+		$sql->where('fab_status=0');						// active makes = 0
+		$sql->order('fab_bez');
+		
+		$makes = $sql->queryAll();	 
 
 		return CHtml::listData($makes, 'fab_id', 'fab_bez');	// fields from the model table
 	}
 
 	/*
-	* Given a Make Id will generate an HTML list data of id, name for use
+	* Given a Make Id will generate an HTML list data of associated model for use
 	* in such places as select fields.
 	*
 	* Uses mod_status to determine if the record is visible in the display
@@ -520,14 +592,13 @@ class SiteController extends Controller
 	
 	public function GetModels($make_id)
 	{
-		$criteria = new CDbCriteria();
-		$criteria->select = 'mod_id, mod_bez';	// fields of interest
-		$criteria->condition = 'mod_fabrikat=:id_model_make and mod_status=0';
-		$criteria->order = 'mod_bez';
-		$criteria->params = array(':id_model_make' => (int) $make_id);
-		$models = ModelLookup::model()->findAll($criteria);
-
-		//$models = ModelLookup::model()->findAll('mod_fabrikat=:id_model_make', array(':id_model_make' => (int) $make_id));
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('mod_id, mod_bez');
+		$sql->from('{{modelle}}');						// will prepend country
+		$sql->where('mod_fabrikat=:make_id and mod_status=0', array(':make_id'=>$make_id));					// active makes = 0
+		$sql->order('mod_bez');
+		
+		$models = $sql->queryAll();	 
 
 		return CHtml::listData($models, 'mod_id', 'mod_bez');	// fields from the model table
 	}
@@ -538,19 +609,19 @@ class SiteController extends Controller
 	* 
 	* For the br_postal_codes table a mapping of state and city deliver
 	* a unique postal code (or so I think).
+	*
+	* This must NOT use the extended postal codes table, only the postal_codes
 	*/
 	
 	public function GetStates()
 	{
-		$criteria = new CDbCriteria();
-		$criteria->select = 'state';	// fields of interest, state is the only part of interest
-		$criteria->distinct=true;
-		$criteria->order = 'state';
-		$states = PostalCodeLookup::model()->findAll($criteria);
 
-		// we have no unique key on state, and the state will be used for the id and value in the
-		// select
-		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('state');
+		$sql->from('{{postal_codes}}');									// will prepend country
+		$sql->order('state');
+		$states = $sql->queryall();
+	
 		return CHtml::listData($states, 'state', 'state');	// fields from the model table
 	}
 
@@ -559,21 +630,21 @@ class SiteController extends Controller
 	*  
 	* For the br_postal_codes table a mapping of state and city deliver
 	* a unique postal code (or so I think).
-	* the value of the select list item is the ZIP CODE
 	*
 	* CAUTION : THIS ASSUMES THAT THE CITY IS UNIQUE TO A SINGLE ZIP CODE
-	*           
+	* >>>>> This must NOT use the extended postal codes table, only br_postal_codes which makes the above true
+	*
 	*/
 
 	public function GetCities($state)
 	{
-		$criteria = new CDbCriteria();
-		$criteria->select = 'city';	// fields of interest, state is the only part of interest
-		$criteria->order = 'city';
-		$criteria->condition = 'state=:state_str';
-		$criteria->params = array(':state_str' => $state);
-		$cities = PostalCodeLookup::model()->findAll($criteria);
-		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('city');
+		$sql->from('{{postal_codes}}');									// will prepend country
+		$sql->where('state=:state', array(':state'=>$state));
+		$sql->order('city');
+		$cities = $sql->queryall();
+
 		return CHtml::listData($cities, 'city', 'city');
 	}
 
@@ -590,12 +661,12 @@ class SiteController extends Controller
 	{
 		// set up query, make easy to read and change
 		
-		$criteria = new CDbCriteria();
-		$criteria->select = 'aus_id, aus_modell, aus_bez, aus_extended_trim';	// fields of interest
-		$criteria->condition = 'aus_modell=:id_trim_model and aus_status=0';
-		$criteria->order = 'aus_extended_trim';
-		$criteria->params = array(':id_trim_model' => (int) $model_id);
-		$trims = TrimLookup::model()->findAll($criteria);
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_id, aus_extended_trim');
+		$sql->from('{{ausstattung}}');									// will prepend country
+		$sql->where('aus_modell=:id_trim_model and aus_status=0', array(':id_trim_model'=>$model_id));
+		$sql->order('aus_extended_trim');
+		$trims = $sql->queryall();
 	
 		return CHtml::listData($trims, 'aus_id', 'aus_extended_trim');	// fields from the model table, use unique extended trim
 	}
@@ -604,25 +675,18 @@ class SiteController extends Controller
 	* Given a Trim Id will generate an HTML list data of id, name for use
 	* in such places as select fields.
 	*
-	* Calls the ColorLookup() with the trim_id
-	*
 	* Returns array of color_id, name for building the html select field
 	*/
 
 	public function GetColors($trim_id)
 	{
-
-		// note that the 'as color' requred a public variable in the model to access
-		// the data. Live and learn...
-		
-		$criteria = new CDbCriteria();
-		$criteria->alias = 'mf';
-		$criteria->select = 'mf.mf_trim, mf.mf_farbe, s1.farb_bez as color';				// fields of interest (from 2 tables)
-		$criteria->join = 'join br_farben s1 on (mf.mf_farbe = s1.farb_id)';
-		$criteria->condition = 'mf.mf_trim=:id_color_trim and farb_status=0';
-		$criteria->params = array(':id_color_trim' => (int) $trim_id);	// related key
-
-		$colors = TrimToColor::model()->findAll($criteria);
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('mf_farbe, farb_bez as color');
+		$sql->from('{{modellfarben}} as mf');									// will prepend country
+		$sql->join('{{farben}}', 'mf_farbe = farb_id');							// joins the modelcolor with the color
+		$sql->where('mf_trim=:id_color_trim and farb_status=0', array(':id_color_trim' => (int) $trim_id));
+		$sql->order('color');
+		$colors = $sql->queryall();
 
 		return CHtml::listData($colors, 'mf_farbe', 'color');	// fields color ID and name
 	}
@@ -644,9 +708,9 @@ class SiteController extends Controller
 		* The distance used for the start ($dist) should be chosen accordingly
 		*/
 		
-		$q = 'CALL P_br_dealer_distance_km(:make_id, :user_postal_code, :distance_km, :max_results)';
+		$q = 'CALL P_br_dealer_distance_ext_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
-		$dist = 250;	// 250 sq km box for the start, remember ordered by distance
+		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 		do
 		{
@@ -682,6 +746,31 @@ class SiteController extends Controller
 			'<br>' . CHtml::encode(Yii::t('LeadGen','Distance') . ' : ' . (($dealers['distance'] > 5.0)? $dealers['distance'] . ' km' : Yii::t('LeadGen','Local')));
 		});
 	}
+
+
+
+	/*
+	* Returns full postal code given state and city in post params
+	* called based on the select's ajax call. 
+	*
+	* returns the postal code in a string or default not found value
+	*/
+
+	public function actionPostalCode() 
+	{
+		if(!isset($_POST['city']) || !isset($_POST['state']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+		$pc = $this->GetPostalCode($_POST['city'], $_POST['state']);
+		
+		if($pc == '00000-000')	// hack to remove default. 
+			$pc = '';
+			
+		echo $pc;
+		
+	 }
 
 	/*
 	* Returns models given a make id (id_make)
@@ -720,15 +809,19 @@ class SiteController extends Controller
 	* that are passed back to the select. This is called directly by component to populate a dependent
 	* dropdown.
 	*/
-
+///////////////////////////////////////// hack testing
 	public function actionCities() 
 	{
-		if(!isset($_POST['LeadGen']['int_staat']))	// state
+//		if(!isset($_POST['LeadGen']['int_staat_help']))	// state
+//			throw new CHttpException(400, 'Invalid Request');
+
+		if(!isset($_POST['state_helper']))	// state
 			throw new CHttpException(400, 'Invalid Request');
 
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as state
 			
-		$return = $this->GetCities( ($_POST['LeadGen']['int_staat']));
+//		$return = $this->GetCities($_POST['LeadGen']['int_staat_help']);
+		$return = $this->GetCities($_POST['state_helper']);
 
 		// if we have results gen the html, always create the default option
 		
@@ -793,7 +886,7 @@ class SiteController extends Controller
 			throw new CHttpException(403, 'Not authorized');
 
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('model_id');									// vehicle/trim_id
+		$sql->select('model_id');									// model Id
 		$sql->from('{{ncp_images}}');
 		$sql->where('status=0 and cob_id=0 and destination=0');
 		$sql->order('rand()');
@@ -1038,6 +1131,30 @@ class SiteController extends Controller
 		echo CJSON::encode($photo_url); // ships it as a nice jason element
 	}
 
+	public function actionMakeLogoImage()
+	{
+		// This should only be allowed to be called by an ajax request, set access rules...
+		// also picks up a few models for display and back fill. 
+		// Just fetches the image for a single specific make, if no images, returns the
+		// default. This returns a single element NOT an array like it's other counterparts
+
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['make_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		$make_id = $_POST['make_id'];
+		
+		if(!is_numeric($make_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(($logo_url = $this->GetMakeLogo($make_id)) === false)
+			$logo_url = Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_LOGO_PIC;
+
+		echo CJSON::encode($logo_url); // ships it as a nice jason element
+	}
+
 	/*
 	* This is where most of the navigation and page state work is done. We never change the page url
 	* but we render each page until the end. Note this is a poor man's state machine. Remember
@@ -1069,13 +1186,16 @@ class SiteController extends Controller
 				// grab the city and state if set and valid data and look up postal code, for form to 
 				// validate city and state (stadt and staat) must have been set (it's ugly I know...)
 				// agains assumes a city and state get a unique postal code from the db
-				
-				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']) 
-					&& !empty($_POST['LeadGen']['int_staat']) && !empty($_POST['LeadGen']['int_stadt']))
-						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
+	
+// rework to remove the need to stuff the zipcode. Not sure if city, state will be stuff here on on completion of
+// quote form...
+//				
+//				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']) 
+//					&& !empty($_POST['LeadGen']['int_staat']) && !empty($_POST['LeadGen']['int_stadt']))
+//						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
 					
 				$post_params = $_POST['LeadGen'];			// grab post params and add postal code to form state
-				$post_params['int_plz'] = $model->int_plz;	// stuff into the saved state the postal code
+//				$post_params['int_plz'] = $model->int_plz;	// stuff into the saved state the postal code
 
 				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
 
@@ -1116,11 +1236,14 @@ class SiteController extends Controller
 			else // submit the complete set of data. 
 				if(isset($_POST['submit'])) 	// quote page has form submitted, get form data validate and save it!
 				{
-
 					$model = new LeadGen('quote');
 
-					$model->attributes = $this->getPageState('page', array());	// also has postal int_plz!
-					$model->attributes = $_POST['LeadGen'];
+// only gets, does not save to the next page if getPageState is used here hack for passing data to confirm page
+//					$model->attributes = $this->getPageState('page', array());	// also has postal int_plz!
+//					$model->attributes = $_POST['LeadGen'];
+
+					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
+
 					$view = 'confirmation';		// jump to the confirmation page
 
 					$make_name = $this->GetMakeName($model->int_fabrikat);
@@ -1129,23 +1252,27 @@ class SiteController extends Controller
   
 					if($model->validate())	
 					{
-
 						if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
 						{
-
 								// we have valid data, no dupe
+								
+								// update the $model->int_text with the fake options data...
+						
+								$tmp = "Options : ABCDEFGHI - " . $model->int_text;
+								
+								if(strlen($tmp) > 255) // get max length from the model if exists
+									$tmp = substr($tmp,0,255); 
+								$model->int_text = $tmp; 
 
-								$model->save();	// also updates active record with current record id, how nice!
+								if(!$model->save())				// also updates active record with current record id, how nice!
+									Yii::log("Can't Save Prospect Record to database",  CLogger::LEVEL_WARNING);
 
 								$this->updateSessionInfo(self::CONFIRM_PAGE_ID, 
 									array('lead_id'=>$model->int_id, 'make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell, 
 										  'trim_id'=>$model->int_ausstattung, 'color_id'=>$model->int_farbe)); 	// track 
 
-								
 								// at this point $model->int_id has the key for the inthae table inserts
 
-								// First any of the special dealers 
-								
 								$dlr_id_list = array();
 								
 								if(isset($_POST['Inthae']['special_dlrs']))
@@ -1156,34 +1283,15 @@ class SiteController extends Controller
 										$prospect_sdlr = new Inthae;	
 										$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
 										$prospect_sdlr->ih_dealer_id = $dlr;
-										$prospect_sdlr->ih_status = 1;						// database value for special dealers = 1
+										$prospect_sdlr->ih_status = 0;						// database value for special dealers = 0
 										
-										$dlr_id_list[] = $dlr; 								//	append to the list
+										$dlr_id_list[] = $dlr; 								//	append to the list for later email
 										
 										if (!$prospect_sdlr->save()) 
 											Yii::log("Can't Save Special Dealer Data to database",  CLogger::LEVEL_WARNING);
 									}
 								}
 
-								// Now the 'More' dealers, same table just from different form element
-								
-								if(isset($_POST['Inthae']['more_dlrs']))
-								{
-									$mdl = $_POST['Inthae']['more_dlrs'];
-									foreach($mdl as $dlr)
-									{
-										$prospect_mdlr = new Inthae;	
-										$prospect_mdlr->ih_prospect_id = $model->int_id; 	// current models updated id
-										$prospect_mdlr->ih_dealer_id = $dlr;
-										$prospect_mdlr->ih_status = 0;						// database value for regular = 0
-										
-										$dlr_id_list[] = $dlr; 								//	append to the list here too
-
-										if (!$prospect_mdlr->save()) 
-											Yii::log("Can't Save More Dealer Data to database",  CLogger::LEVEL_WARNING);
-									}
-								}
-							
 								// send thank you email, do this last after records are saved
 								
 								$color_name = $this->GetColorName($model->int_farbe);
@@ -1195,13 +1303,12 @@ class SiteController extends Controller
 								else 
 									$img_name = false;
 										
-								// @todo - sjg add check in db for last time an email was sent to prevent flooding by a hacker
-
 								$this->SES_SendEmailAck($model->int_mail, 
 											Yii::t('mail', 'Achacarro Confirmation Email'), 
 											'mail_thanks', 
 											array(
-												'message' => Yii::t('mail', 'Your dealer will contact you by phone or email in the next 24 hours. Please email us if you don’t hear from them or need further assistance.'),
+												'message' => Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.') .
+												' ' . Yii::t('LeadGen', 'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.'),
 												'name' => ucfirst($model->int_vname), 
 												'make_name' => $make_name,
 												'model_name' => $model_name, 
@@ -1235,43 +1342,75 @@ class SiteController extends Controller
 					}
 				}
 				else // New user landing here, didn't come from quote page send to the landing page (landing.php)
-				{
-					
-					// yii will start a new session from here 
-					
-					$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
-					
-					$model = new LeadGen('landing');
-
-					// stuff the models fields (which will update when the form is displayed)
-					
-					if(isset($_GET['make'])) 
+					if(isset($_POST['conquest']))
 					{
-						$model->int_fabrikat = $_GET['make'];
 
-						if(isset($_GET['model'])) 
-							$model->int_modell = $_GET['model'];
-					}
+						$model = new LeadGen('quote');
+				
+						// $model->attributes = $_POST['LeadGen'];
 
-					// set page title from validated make/model fields uses get params for text names
-					
-					if(isset($_GET['make_name'])) 
-					{
-						$make_name = $_GET['make_name'];
-						$model_name = '';
-					
-						if(isset($_GET['model_name'])) 
-							$model_name = $_GET['model_name'];
+						$this->checkPageState($model, array());	// also has postal int_plz!
+
+						$view = 'landing';		// jump to the confirmation page
+
+						$model->int_fabrikat = -1;
+						$model->int_modell = -1;
+						$model->int_ausstattung = -1;
+						$model->int_text = 'ADDED BY CONQUEST';
+
+						if($model->validate())	
+						{
+							// also dupe check the conquest
 							
-						$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+							if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
+							{	
+
+								$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
+								if(!$model->save())				// also updates active record with current record id, how nice!
+									Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_WARNING);
+							}
+						}
+						else
+							Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_WARNING);
+						
 					}
 					else
-						$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');	// default
+					{
+						// yii will start a new session from here 
+						
+						$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
+						
+						$model = new LeadGen('landing');
+
+						// stuff the models fields (which will update when the form is displayed)
+						
+						if(isset($_GET['make'])) 
+						{
+							$model->int_fabrikat = $_GET['make'];
+
+							if(isset($_GET['model'])) 
+								$model->int_modell = $_GET['model'];
+						}
+
+						// set page title from validated make/model fields uses get params for text names
+						
+						if(isset($_GET['make_name'])) 
+						{
+							$make_name = $_GET['make_name'];
+							$model_name = '';
+						
+							if(isset($_GET['model_name'])) 
+								$model_name = $_GET['model_name'];
+								
+							$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+						}
+						else
+							$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');	// default
 
 
-					$view = 'landing';
-					$model->scenario = 'landing';	// set validation scenario to landing page 
-				}//fresh user
+						$view = 'landing';
+						$model->scenario = 'landing';	// set validation scenario to landing page 
+					}//fresh user
 
 
 		// hack to make browser back button work by enabling the page to be cached
@@ -1417,8 +1556,8 @@ class SiteController extends Controller
 		return array(
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
-				'models', 'colors', 'dealers', 'cities', 'error', 
-				'photomakes', 'photomodel', 'phototrim', 'homepagephotos'),  // added create to all users no login needed 
+				'models', 'colors', 'dealers', 'cities', 'error', 'postalcode', 
+				'photomakes', 'photomodel', 'phototrim', 'homepagephotos', 'makelogoimage'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 

@@ -42,7 +42,7 @@ return array(
 	'As easy as 1-2-3' => 'Fácil assim 1-2-3',
 	
 	'Get Started' => 'Começe Aqui', // old button title
-	'Start saving today' => 'Economize Agora',
+	'Start saving today' => 'Consiga o Melhor Preco',
 	'Customer Testimonials' => 'Testemunho de Clientes',
 	'Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.' => 'Além de me conectar com uma concessionária super atenciosa na minha região, seu serviço gratuito também me ajudou a economizar muito na compra do meu carro novo. Eu já recomendei seu site para todos os meus amigos.',
 	'Maria Delgado' => 'Camila Pereira',
@@ -82,9 +82,11 @@ return array(
 	'Thank you for your request' =>'Obrigado por sua solicitação de preço',
 	'Your selected vehicle' => 'Seu veículo selecionado',
 	'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.' => 'Uma das concessionárias na sua região entrará em contato com você dentro de 48 horas para oferecer ótimos preços no carro que você procura.',
+	'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.' => 	'O Achacarro é um facilitador de negócios entre compradores e concessionárias e como tal não pode se responsabilizar caso as concessionárias selecionadas não entrem em contato ou enviem uma proposta ao comprador.',
 	'Save even more with these offers' => 'Economize ainda mais com estas ofertas',
 	'Affiliate' => 'Afiliado',
 	'Get Deal' => 'Aproveite a Oferta',
+
 	
 	// field names
 	

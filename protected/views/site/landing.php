@@ -3,6 +3,14 @@
 /* @var $model LeadGen */
 /* @var $form CActiveForm */
 ?>
+
+<style type="text/css">
+.modal {
+		width: 512px;
+		margin-left: -256px;
+}
+</style>
+
         <div class="wrapper">
             <div class="landing_main">
                 <h1><?php echo Yii::t('LeadGen', 'Looking for a Great Deal On a New Car?'); ?></h1>
@@ -59,47 +67,59 @@
                     </fieldset>
 
                     <fieldset id="zip_button">
-					<?php 
-						if(!empty($model->attributes['int_staat']))	// (int_staat == state) post vars are saved from page to page in the state, so pick up from here if EVER set
-							$state = $model->attributes['int_staat']; 
-					?>
-					<?php echo $form->error($model,'int_staat'); ?>
-					<?php $states = $this->getStates(); 
-						echo $form->dropDownList($model, 'int_staat', $states, array(
+
+<?php echo $form->labelEx($model,'int_plz'); ?>
+
+ <div class="input-append">
+<?php echo $form->textField($model,'int_plz'); ?>
+<?php echo TbHtml::button('x', array(
+			'color' => TbHtml::BUTTON_COLOR_DEFAULT,
+			'onclick'=> 'erasePostalCode();',
+			'tabindex' => '-1'
+			)); ?>
+			
+<?php echo TbHtml::button('?', array(
+			'color' => 'custom',
+			'onclick'=> 'showPostalModal();',
+			'tabindex' => '-1'
+			)); ?>
+			
+</div>			
+<?php echo $form->error($model,'int_plz'); ?>
+ 
+ 
+
+<?php					
+			$states = $this->getStates(); 	
+		 $this->widget('bootstrap.widgets.TbModal', array(
+			'id' => 'ModalZipHelper',
+			'header' => 'Postal Code Helper', // translate
+			'show'=> false,
+			'content' => CHtml::dropDownList('state_helper', '', $states, array(
 							'prompt' =>  Yii::t('LeadGen', 'Select Your State'),
 							'ajax' => array(
 									'type' => 'POST',
 									'url' => CController::createUrl('cities'),
-									'update' =>   '#'. CHtml::activeId($model, 'int_stadt'), //selector to update - '#LeadGen_int_stadt'
-									),			 
-									'onchange'=>'stateChanged();'
-							)
-						);
-					?>
+									'update' =>   '#city_helper', //selector to update - '#LeadGen_int_stadt_help'
+									),
+									'onchange' => 'stateHelperChanged();'
 
-					<?php 
-						if(!empty($state))
-						{
-							$city_list = $this->GetCities($state); // get the models if existing post
-							$disable='';
-						}
-						else
-						{
-							$city_list = array();
-							$disable='disable';
-						}?>
-					<?php echo $form->error($model,'int_stadt'); ?>
-					<?php echo $form->dropDownList($model, 'int_stadt', $city_list, array(
-							'disabled' =>$disable, 
-							'prompt' => Yii::t('LeadGen', 'Select Your City'), 
-							)
-						); 
-					?>
-					<?php // echo CHtml::hiddenField('LeadGen[int_plz]',$model->int_plz, array('id' => 'LeadGen_int_plz')); ?>
+								)
+							) .  CHtml::dropDownList('city_helper','', array('prompt' => Yii::t('LeadGen', 'Select Your City'))),
+			
+			'footer' => array(
+				TbHtml::button('Save', array('name'=>'save_zip', 'data-dismiss' => 'modal',  'color' => 'custom', 'onclick'=>'getPostalCode();')),
+				TbHtml::button('Cancel', array('data-dismiss' => 'modal')),
+					),	
+				)); 
 
+			
+?>
+						
                     </fieldset>
 					<div id="submit_button">
-						<?php echo CHtml::submitButton(Yii::t('LeadGen', 'Start saving today'), array('name'=>'quote')); ?>
+						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Start saving today'), array('id'=> 'landing_submit','name' => 'quote', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE)); ?>
+					
 					</div>
 				<?php $this->endWidget(); ?>
             </div>
@@ -109,20 +129,20 @@
             	<div id="show_makes">
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_1" title="">
-							<img id="mm_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
+							<img id="mm_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						</a>
 						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_2" title="">
-							<img id="mm_img_2" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
+							<img id="mm_img_2" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						</a>
 						<h4 id="mm_txt_2"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
 						<a href="#" id="mm_click_3" title="">
-							<img id="mm_img_3" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.png" alt="" />
+							<img id="mm_img_3" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						</a>
 						<h4 id="mm_txt_3"></h4>
 					</div>
@@ -140,14 +160,17 @@
 						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-3.png"  alt="testimonial"/>
 					</div>
                 </div>
+                <div class="easy123">
 				<ol>
-					<li>1. <?php echo Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.'); ?></li>
-					<li>2. <?php echo Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.'); ?></li>
-					<li>3. <?php echo Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.'); ?></li>
+					<li><?php echo Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.'); ?></li>
+					<li><?php echo Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.'); ?></li>
+					<li><?php echo Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.'); ?></li>
 				</ol>
-				<div class="landing_overview_below">
-				<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
 				</div>
+				<div class="landing_overview_below">
+					<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
+				</div>
+
             </div>
         </div>
 <?php
@@ -223,7 +246,7 @@ $cs->registerScript(
 			$("#show_makes").show();
 			$("#show_models").hide();
 
-			$("#selected_model_img").attr("src", "' . Yii::app()->request->baseUrl . '/images/no_pic.png");
+			$("#selected_model_img").attr("src", "' . Yii::app()->request->baseUrl . '/images/no_pic.jpg");
 			$("#selected_model_txt").html("");
 		}
 		else
@@ -285,6 +308,50 @@ $cs->registerScript(
 			) . '
 	}
 
+	function showPostalModal()
+	{
+		$("#state_helper").val("");
+		$("#city_helper").val("");
+		$("select[id$=city_helper] > option").remove();
+		$("#ModalZipHelper").modal("toggle");		
+	}
+	
+	function getPostalCode() 
+ 	{
+
+			' . CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/postalcode'), 
+					'type'=>'POST',           
+					'data'=>'js:{ "ajax":true, "state":$("#state_helper").val(), "city":$("#city_helper").val()}',
+					'success'=>'js:function(html) {
+						$("#LeadGen_int_plz").val(html);
+					}'
+					)		
+				) .
+			'
+			$("#city_helper").prop("disabled", true);
+
+	}
+
+	function erasePostalCode()
+	{
+		$("#LeadGen_int_plz").val("");
+	}
+
+	function stateHelperChanged() 
+ 	{
+		if($("#state_helper").val() == "") 
+		{
+			$("#city_helper").prop("disabled", true);
+		}
+		else
+		{
+			$("#city_helper").prop("disabled", false);
+		}
+	}
+
+
 	$(window).load(function() {
 
 		save_model = $("#LeadGen_int_modell").val();
@@ -326,6 +393,8 @@ $cs->registerScript(
 		}
 		
 		stateChanged();
+		$("#city_helper").prop("disabled", true);
+
 	});
 	'
 	,

@@ -106,9 +106,13 @@ class LeadGen extends CActiveRecord
 
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
-			array('int_stadt', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your City')),
-			array('int_staat', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your State')),
-			// not a form field anymore array('int_plz','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
+
+/////////////////// need to validate on the submit, not landing anymore. Add to non-scenaro validations...
+
+//			array('int_stadt', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your City')),
+//			array('int_staat', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your State')),
+			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
+
 			
 			// Quote Page - Trim, Color, Email
 			
@@ -173,7 +177,6 @@ class LeadGen extends CActiveRecord
 		
 		return array(
 			
-			// the inthae (this table is the many part, which is selected dealers of a particular lead
 		);
 	}
 

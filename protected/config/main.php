@@ -22,8 +22,19 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'ext.YiiMailer.YiiMailer',	// simple mailer component
-
+		'bootstrap.helpers.TbHtml',	// Yiistrap bootstrap related
+		'bootstrap.helpers.TbArray',
+		'bootstrap.behaviors.*',	
+		'bootstrap.components.*',
 	),
+
+	'aliases' => array(
+        // yiistrap configuration
+        'bootstrap' => realpath(__DIR__ . '/../extensions/bootstrap'), // change if necessary
+        // yiiwheels configuration
+        'yiiwheels' => realpath(__DIR__ . '/../extensions/yiiwheels'), // change if necessary
+    ),
+
 
 	'modules'=>array(
 		
@@ -47,6 +58,18 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>false,
 		),
+
+		// yiistrap configuration
+ 	 	'bootstrap' => array(
+ 	    	'class' => 'bootstrap.components.TbApi',   
+ 	   	),
+
+ 	   	// yiiwheels configuration
+ 	   	'yiiwheels' => array(
+ 	   		'class' => 'yiiwheels.YiiWheels',   
+ 	   	),
+
+
 		
 		'session' => array(
 			'timeout' => 1440,	// 1440 seconds typical session tko, affected after close of browser
@@ -129,6 +152,6 @@ return array(
 		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
 		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
 		'EmailDupeDays' => 7,						// Number of days to check back for dupes, 0 disables
-		'version'=>'1.03',
+		'version'=>'1.04',
 	),
 );
