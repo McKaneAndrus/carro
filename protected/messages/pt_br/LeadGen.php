@@ -13,6 +13,16 @@ return array(
 	'Distance' => 'Distância',
 	'Free price quotes on new cars' => 'Cotações grátis para carros novos',
 	'Get the best prices on' =>  'Obter os melhores preços para',
+
+	// Common buttons
+	
+	'Save' => 'Salvar',
+    'Close' =>  'Fechar',
+    'Cancel' => 'Cancelar',
+    
+    // Modal Dialogs
+	'Postal Code Help'  => 'Código Postal Ajuda',
+	'Privacy Information' => 'Informações de privacidade',
 	
 	// view translates
 	
@@ -40,12 +50,13 @@ return array(
 	'Before you buy a new car, compare prices and financing from several dealers and banks' => 'Antes de comprar um carro novo, compare preços e opções de financiamento de vários revendedores e bancos', // old
 	'Get a free Internet Price Quote now' => 'Receba uma Cotação Grátis',
 	'As easy as 1-2-3' => 'Fácil assim 1-2-3',
-	
-	'Get Started' => 'Começe Aqui', // old button title
-	'Start saving today' => 'Consiga o Melhor Preco',
+
 	'Customer Testimonials' => 'Testemunho de Clientes',
 	'Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.' => 'Além de me conectar com uma concessionária super atenciosa na minha região, seu serviço gratuito também me ajudou a economizar muito na compra do meu carro novo. Eu já recomendei seu site para todos os meus amigos.',
 	'Maria Delgado' => 'Camila Pereira',
+	
+	'Start saving today' => 'Consiga o Melhor Preco',
+
 	
 	// 123 bullets
 	

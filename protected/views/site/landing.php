@@ -93,7 +93,7 @@
 			$states = $this->getStates(); 	
 		 $this->widget('bootstrap.widgets.TbModal', array(
 			'id' => 'ModalZipHelper',
-			'header' => 'Postal Code Helper', // translate
+			'header' => Yii::t('LeadGen', 'Postal Code Help'),
 			'show'=> false,
 			'content' => CHtml::dropDownList('state_helper', '', $states, array(
 							'prompt' =>  Yii::t('LeadGen', 'Select Your State'),
@@ -108,8 +108,8 @@
 							) .  CHtml::dropDownList('city_helper','', array('prompt' => Yii::t('LeadGen', 'Select Your City'))),
 			
 			'footer' => array(
-				TbHtml::button('Save', array('name'=>'save_zip', 'data-dismiss' => 'modal',  'color' => 'custom', 'onclick'=>'getPostalCode();')),
-				TbHtml::button('Cancel', array('data-dismiss' => 'modal')),
+				TbHtml::button(Yii::t('LeadGen', 'Save'), array('name'=>'save_zip', 'data-dismiss' => 'modal',  'color' => 'custom', 'onclick'=>'getPostalCode();')),
+				TbHtml::button(Yii::t('LeadGen', 'Cancel'), array('data-dismiss' => 'modal')),
 					),	
 				)); 
 
