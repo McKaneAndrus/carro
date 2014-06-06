@@ -69,15 +69,20 @@
 								'disabled' =>$disable, 'prompt' => Yii::t('LeadGen','Select a Color')));?>
                         <?php echo $form->error($model,'int_farbe'); ?>
 
-<div class="check_box_options">
-<?php
-$options_list = array('One-1' => 'One', 'Two-2' => 'Two', 'Three-3' => 'Three');
-$options_select_list = array_keys($options_list);
-var_dump($options_select_list);
-
-echo TbHtml::checkBoxList('optionsCb', $options_select_list, $options_list, $htmlOptions = array()); 
-?>
-</div>		
+						<?php
+						
+						// get check box options from db
+						
+						$options_list = $this->getQuoteOptions();
+						if(count($options_list))
+						{
+							echo CHtml::label(Yii::t('LeadGen', 'Select Options'), false);
+							echo '<div class="quote_options_cb">';
+							$options_select_list = array_keys($options_list);
+							echo TbHtml::checkBoxList('optionsCb', $options_select_list, $options_list, $htmlOptions = array()); 
+							echo '</div>';
+						}	
+						?>
 
                     </div>
                     

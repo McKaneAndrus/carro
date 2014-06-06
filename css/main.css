@@ -483,6 +483,15 @@ Quote form
     width: 100%;
 }
 
+
+.quote_options_cb
+{
+    border: 1px solid #d0cb92;
+    background-color: #feffe6;
+    margin: 5px 0 20px;
+    padding: 5px;
+}
+
 .quote_column {
     display: table-cell;
     vertical-align: top;

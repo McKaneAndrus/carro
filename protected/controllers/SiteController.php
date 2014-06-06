@@ -747,6 +747,27 @@ class SiteController extends Controller
 		});
 	}
 
+	/*
+	* Simple helper to get a list of the check box options for the quote page
+	*/
+	
+	public function getQuoteOptions()
+	{
+		// set up query, make easy to read and change
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('value, display');
+		$sql->from('{{ncp_quote_opts}}');						// will prepend country
+		$sql->where('status=0 and cob_id=0');					// specific cobrand id needed if other then 0 for the app
+		$sql->order('display_order');
+		$opts = $sql->queryall();
+	
+		return CHtml::listData($opts, 'value', 'display');	// fields from the model table, use unique extended trim
+	}
+
+	/*
+	* ==================== ALL ACTIONS BELOW ====================
+	*/
 
 
 	/*
@@ -1256,9 +1277,19 @@ class SiteController extends Controller
 						{
 								// we have valid data, no dupe
 								
-								// update the $model->int_text with the fake options data...
-						
-								$tmp = "Options : ABCDEFGHI - " . $model->int_text;
+								if(isset($_POST['optionsCb']))
+								{
+									$cbOptions = $_POST['optionsCb'];
+									$tmp = "";
+									foreach($cbOptions as $opt)
+									{
+										$tmp .= $opt . ' ';
+									}
+								}
+								
+								// set the source of prospect here, should be something to indicate it's a prospect
+
+								$tmp = $tmp . ' : ' . $model->int_text;
 								
 								if(strlen($tmp) > 255) // get max length from the model if exists
 									$tmp = substr($tmp,0,255); 
@@ -1366,6 +1397,9 @@ class SiteController extends Controller
 							{	
 
 								$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
+
+								// set the source of prospect here, should be something to indicate it's a conquest
+								
 								if(!$model->save())				// also updates active record with current record id, how nice!
 									Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_WARNING);
 							}
