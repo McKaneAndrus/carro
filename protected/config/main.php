@@ -33,7 +33,7 @@ return array(
         'bootstrap' => realpath(__DIR__ . '/../extensions/bootstrap'), // change if necessary
         // yiiwheels configuration
         'yiiwheels' => realpath(__DIR__ . '/../extensions/yiiwheels'), // change if necessary
-    ),
+   ),
 
 
 	'modules'=>array(
@@ -68,8 +68,6 @@ return array(
  	   	'yiiwheels' => array(
  	   		'class' => 'yiiwheels.YiiWheels',   
  	   	),
-
-
 		
 		'session' => array(
 			'timeout' => 1440,	// 1440 seconds typical session tko, affected after close of browser
