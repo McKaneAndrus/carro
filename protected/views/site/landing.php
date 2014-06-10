@@ -10,12 +10,10 @@
 		margin-left: -256px;
 }
 </style>
-
         <div class="wrapper">
             <div class="landing_main">
                 <h1><?php echo Yii::t('LeadGen', 'Looking for a Great Deal On a New Car?'); ?></h1>
                 <h2><?php echo Yii::t('LeadGen', 'Get a free Internet Price Quote now'); ?></h2>
-                
 					<?php $form=$this->beginWidget('CActiveForm', array(
 						'id'=>'leadgen-form',
 						'enableAjaxValidation'=>false,
@@ -68,58 +66,53 @@
 
                     <fieldset id="zip_button">
 
-<?php echo $form->labelEx($model,'int_plz'); ?>
+					<?php echo $form->labelEx($model,'int_plz'); ?>
 
- <div class="input-append">
-<?php echo $form->textField($model,'int_plz'); ?>
-<?php echo TbHtml::button('x', array(
-			'color' => TbHtml::BUTTON_COLOR_DEFAULT,
-			'onclick'=> 'erasePostalCode();',
-			'tabindex' => '-1'
-			)); ?>
-			
-<?php echo TbHtml::button('?', array(
-			'color' => 'custom',
-			'onclick'=> 'showPostalModal();',
-			'tabindex' => '-1'
-			)); ?>
-			
-</div>			
-<?php echo $form->error($model,'int_plz'); ?>
- 
- 
+					 <div class="input-append">
+					<?php echo $form->textField($model,'int_plz'); ?>
+					<?php echo TbHtml::button('x', array(
+								'color' => TbHtml::BUTTON_COLOR_DEFAULT,
+								'onclick'=> 'erasePostalCode();',
+								'tabindex' => '-1',
+								)); 
+						  echo TbHtml::button(Yii::t('LeadGen', 'Postal Code Help'), array(
+								'color' => 'custom',
+								'onclick'=> 'showPostalModal();',
+								'tabindex' => '-1'
+								)); ?>
+					</div>			
+					<?php echo $form->error($model,'int_plz'); ?>
+ 					<?php					
+						$states = $this->getStates(); 	
+						$this->widget('bootstrap.widgets.TbModal', array(
+						'id' => 'ModalZipHelper',
+						'header' => Yii::t('LeadGen', 'Postal Code Help'),
+						'show'=> false,
+						'content' => CHtml::dropDownList('state_helper', '', $states, array(
+										'prompt' =>  Yii::t('LeadGen', 'Select Your State'),
+										'ajax' => array(
+												'type' => 'POST',
+												'url' => CController::createUrl('cities'),
+												'update' =>   '#city_helper', //selector to update - '#LeadGen_int_stadt_help'
+												),
+												'onchange' => 'stateHelperChanged();'
 
-<?php					
-			$states = $this->getStates(); 	
-		 $this->widget('bootstrap.widgets.TbModal', array(
-			'id' => 'ModalZipHelper',
-			'header' => Yii::t('LeadGen', 'Postal Code Help'),
-			'show'=> false,
-			'content' => CHtml::dropDownList('state_helper', '', $states, array(
-							'prompt' =>  Yii::t('LeadGen', 'Select Your State'),
-							'ajax' => array(
-									'type' => 'POST',
-									'url' => CController::createUrl('cities'),
-									'update' =>   '#city_helper', //selector to update - '#LeadGen_int_stadt_help'
-									),
-									'onchange' => 'stateHelperChanged();'
-
-								)
-							) .  CHtml::dropDownList('city_helper','', array('prompt' => Yii::t('LeadGen', 'Select Your City'))),
-			
-			'footer' => array(
-				TbHtml::button(Yii::t('LeadGen', 'Save'), array('name'=>'save_zip', 'data-dismiss' => 'modal',  'color' => 'custom', 'onclick'=>'getPostalCode();')),
-				TbHtml::button(Yii::t('LeadGen', 'Cancel'), array('data-dismiss' => 'modal')),
-					),	
-				)); 
-
-			
-?>
+											)
+										) .  
+									  CHtml::dropDownList('city_helper','', array(
+											'prompt' => Yii::t('LeadGen', 'Select Your City')),
+											 array('onchange' => 'cityHelperChanged();')) . '<BR>' .
+											 Yii::t('LeadGen','Please Select Nearest City and State'),
 						
+						'footer' => array(
+							TbHtml::button(Yii::t('LeadGen', 'Save'), array('data-dismiss' => 'modal', 'id' => 'save_zip', 'name'=>'save_zip', 'color' => 'custom', 'onclick'=>'getPostalCode();')),
+							TbHtml::button(Yii::t('LeadGen', 'Cancel'), array('data-dismiss' => 'modal')),
+								),	
+							)); 
+					?>
                     </fieldset>
 					<div id="submit_button">
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Start saving today'), array('id'=> 'landing_submit','name' => 'quote', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE)); ?>
-					
 					</div>
 				<?php $this->endWidget(); ?>
             </div>
@@ -131,7 +124,6 @@
 						<a href="#" id="mm_click_1" title="">
 							<img id="mm_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						</a>
-						
 						<h4 id="mm_txt_1"></h4>
 					</div>
 					<div class="landing_overview_makeCar">
@@ -147,7 +139,6 @@
 						<h4 id="mm_txt_3"></h4>
 					</div>
                 </div>
-                
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
 						<h4 id="selected_model_txt"> </h4>
@@ -170,7 +161,6 @@
 				<div class="landing_overview_below">
 					<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
 				</div>
-
             </div>
         </div>
 <?php
@@ -267,22 +257,9 @@ $cs->registerScript(
 			) .
 			
 			'
-		
 			$("#show_makes").hide();
 			$("#show_models").show();
 
-		}
-	}
-
-	function stateChanged() 
- 	{
-		if($("#LeadGen_int_staat").val() == "") 
-		{
-			$("#LeadGen_int_stadt").prop("disabled", true);
-		}
-		else
-		{
-			$("#LeadGen_int_stadt").prop("disabled", false);
 		}
 	}
 	
@@ -312,13 +289,15 @@ $cs->registerScript(
 	{
 		$("#state_helper").val("");
 		$("#city_helper").val("");
+		$("#save_zip").attr("disabled", "disabled");
 		$("select[id$=city_helper] > option").remove();
 		$("#ModalZipHelper").modal("toggle");		
 	}
 	
 	function getPostalCode() 
  	{
-
+			if($("#state_helper").val() != "")
+			{
 			' . CHtml::ajax(
 				array(
 					'url' => Yii::app()->createUrl('site/postalcode'), 
@@ -330,8 +309,9 @@ $cs->registerScript(
 					)		
 				) .
 			'
+			}
+			$("#LeadGen_int_plz").removeAttr("class");
 			$("#city_helper").prop("disabled", true);
-
 	}
 
 	function erasePostalCode()
@@ -344,6 +324,7 @@ $cs->registerScript(
 		if($("#state_helper").val() == "") 
 		{
 			$("#city_helper").prop("disabled", true);
+			$("#save_zip").attr("disabled", "disabled");
 		}
 		else
 		{
@@ -351,11 +332,22 @@ $cs->registerScript(
 		}
 	}
 
+	function cityHelperChanged() 
+ 	{
+
+		if($("#state_helper").val() != "" && $("#city_helper").val() != "") 
+		{
+			$("#save_zip").removeAttr("disabled");
+		}
+		else
+		{
+			$("#save_zip").attr("disabled", "disabled");
+		}
+	}
 
 	$(window).load(function() {
 
 		save_model = $("#LeadGen_int_modell").val();
-		save_city = $("#LeadGen_int_stadt").val()
 
 		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
 		{
@@ -372,29 +364,10 @@ $cs->registerScript(
 			) .
 		'				
 		}
-
 		makeChanged();
 		modelChanged();	
-
-		if($("#LeadGen_int_staat").val() != "" && $("#LeadGen_int_staat").val() != null)
-		{
-		' .	CHtml::ajax(
-			   array(
-					'url' => Yii::app()->createUrl('site/cities'), 
-					'type'=>'POST',           
-					'data'=>'js:{"LeadGen[int_staat]":$("#LeadGen_int_staat").val() }',
-					'success'=>'js:function(html){
-						jQuery("#LeadGen_int_stadt").html(html);
-						$("#LeadGen_int_stadt").val(save_city);
-					}'
-			   )
-			) . 
-			'
-		}
-		
-		stateChanged();
 		$("#city_helper").prop("disabled", true);
-
+		$("#save_zip").attr("disabled", "disabled");
 	});
 	'
 	,
