@@ -3,8 +3,6 @@
 /* @var $model LeadGen */
 /* @var $form CActiveForm */
 ?>
-<?php if($model->skipConquest) 	echo 'Skipping'; else echo 'Not Skipping'; ?>
-
         <div class="wrapper">
             <div class="confirm_wrapper">
 
