@@ -1290,7 +1290,7 @@ class SiteController extends Controller
 								// set the source of prospect here, should be something to indicate it's a prospect
 
 								$tmp = $tmp . ' : ' . $model->int_text;
-								
+
 								if(strlen($tmp) > 255) // get max length from the model if exists
 									$tmp = substr($tmp,0,255); 
 								$model->int_text = $tmp; 
@@ -1382,8 +1382,10 @@ class SiteController extends Controller
 
 						$this->checkPageState($model, array());	// also has postal int_plz!
 
-						$view = 'landing';		// jump to the confirmation page
-
+						$view = 'confirmation';		// jump to the confirmation page
+						
+						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
+						
 						$model->int_fabrikat = -1;
 						$model->int_modell = -1;
 						$model->int_ausstattung = -1;
