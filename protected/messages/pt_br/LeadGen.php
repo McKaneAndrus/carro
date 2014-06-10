@@ -21,8 +21,10 @@ return array(
     'Cancel' => 'Cancelar',
     
     // Modal Dialogs
-	'Postal Code Help'  => 'Código Postal Ajuda',
-	'Privacy Information' => 'Informações de privacidade',
+	'Postal Code Help'  => 'Achar CEP',
+	'Privacy Information' => 'Política de Privacidade',
+	'Please Select Nearest City and State' => 'Por favor, selecione o Estado e a Cidade mais próxima',
+	'We do not sell or release your information to anyone but the dealers.' => 'O AchaCarro não comercializa ou cede sua informação a terceiros, exceto para as concessionárias selecionadas.',
 	
 	// view translates
 	
