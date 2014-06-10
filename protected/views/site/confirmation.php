@@ -3,6 +3,7 @@
 /* @var $model LeadGen */
 /* @var $form CActiveForm */
 ?>
+<?php if($model->skipConquest) 	echo 'Skipping'; else echo 'Not Skipping'; ?>
 
         <div class="wrapper">
             <div class="confirm_wrapper">
@@ -16,6 +17,9 @@
 
 		
 		 <?php
+		 
+		  if($model->skipConquest === false)
+		  {
 		  $this->widget('bootstrap.widgets.TbModal', array(
 			'id' => 'myModal',
 			'header' => 'Conquest Header - You are being Conquested right now!',
@@ -29,6 +33,7 @@
 				TbHtml::button('Cancel', array('data-dismiss' => 'modal')),
 					),	
 				)); 
+			}
 		?>
 				
                 <h1><?php echo Yii::t('LeadGen', 'Thank you for your request'); ?></h1>
