@@ -82,6 +82,8 @@
  
 class LeadGen extends CActiveRecord
 {
+	public $skipConquest = false;
+	
 	/**
 	 * @return string the associated database table name
 	 */
