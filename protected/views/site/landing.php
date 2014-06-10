@@ -141,8 +141,8 @@
                 </div>
                 <div id="show_models" >
 					<div class="landing_overview_modelCar">
-						<h4 id="selected_model_txt"> </h4>
 						<img id="selected_model_img" src="" alt="" />
+						<h4 id="selected_model_txt"> </h4>
 					</div>
 					<div class="landing_overview_adspace">
 						<div class="testimonial">
