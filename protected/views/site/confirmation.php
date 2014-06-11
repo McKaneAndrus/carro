@@ -20,15 +20,15 @@
 		  {
 		  $this->widget('bootstrap.widgets.TbModal', array(
 			'id' => 'myModal',
-			'header' => 'Conquest Header - You are being Conquested right now!',
+			'header' => 'Conquest Header',
 			'show'=> true,
 			'content' => '<img id="mmt_img_conq" src="' . Yii::app()->request->baseUrl . '/images/no_pic.jpg" alt="" />
-<p>This is a test of a modal window that is popped up. It will scroll if the content is too tall, but only if taller then the preset height</p>' 
+<p>Interested in the comparable JAC J3? It\'s as easy as 1-2-3 just click OK and we will do the rest!</p>' 
 			. 'Model Id ' . $model->int_modell
 			. '<br>Make  Id ' . $model->int_fabrikat,
 			'footer' => array(
-				TbHtml::submitButton('Conquest Me', array('name'=>'conquest', 'color' => 'custom')),
-				TbHtml::button('Cancel', array('data-dismiss' => 'modal')),
+				TbHtml::submitButton(Yii::t('LeadGen', 'OK'), array('name'=>'conquest', 'color' => 'custom')),
+				TbHtml::button(Yii::t('LeadGen', 'Close'), array('data-dismiss' => 'modal')),
 					),	
 				)); 
 			}
@@ -93,6 +93,7 @@ $cs->registerScript(
 					'success'=>'js:function(data){
 						$("#mmt_img_1").attr("src", data.image_path);
 						$("#mmt_txt_1").html(data.image_desc);
+						$("#mmt_img_conq").attr("src", data.image_path);
 					 }'
 				)
 			) .
@@ -109,7 +110,7 @@ $cs->registerScript(
 					'success'=>'js:function(data){
 						$("#mmt_img_1").attr("src", data.image_path);
 						$("#mmt_txt_1").html(data.image_desc);
-						$("#mmt_img_conq").attr("src", data.image_path); // hack test REMOVE 
+						$("#mmt_img_conq").attr("src", data.image_path);
 					 }'
 			   )
 			) .
