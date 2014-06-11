@@ -154,8 +154,8 @@
 							echo $form->textField($model,'int_str');
 							echo $form->error($model,'int_str'); 
 					
-							$cs_rec = $this->GetCityState($model->int_plz);
-							echo '<p class="quote_city">' . $cs_rec['city'] . ', ' . $cs_rec['state'] . ' ' . $model->int_plz . '</p>';
+
+							echo '<p class="quote_city">' . $model->int_stadt . ', ' . $model->int_staat . ' ' . $model->int_plz . '</p>';
 
 							echo $form->labelEx($model,'int_text');
 							echo $form->textArea($model,'int_text');
@@ -168,10 +168,10 @@
 
 							$this->widget('bootstrap.widgets.TbModal', array(
 								'id' => 'ModalTrust',
-								'header' => 'Trust Information', // translate
+								'header' => Yii::t('LeadGen', 'Privacy Information'),
 								'show'=> false,
-								'content' => 'This site is fully protected and a good site!',
-								'footer' => array(TbHtml::button('Close', array('data-dismiss' => 'modal', 'color'=> 'custom'))),
+								'content' => '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
+								'footer' => array(TbHtml::button(Yii::t('LeadGen','Close'), array('data-dismiss' => 'modal', 'color'=> 'custom'))),
 							));
 
 							echo '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png"></div>'; 
