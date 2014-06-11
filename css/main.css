@@ -121,7 +121,6 @@ strong
   border-top: 1px solid #ddd;
 }
 
-
 /*
 * End mods
 */
@@ -246,12 +245,6 @@ nav a:hover {
 }
 
 .landing_main select {
-/*    border: 1px solid #999;
-    padding: 2px;
-    font-size: 16px;
-    width: 225px;
-    display: block;
-    margin: 0px 0 10px; */ /* SJG HACK FOR BOOTSTRAP */
 }
 
 .landing_main label {
@@ -274,10 +267,7 @@ nav a:hover {
     width: 300px; /*172px;*/
 	margin-left: auto;
 	margin-right: auto;
-    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
     font-size: 22px;
-    font-weight: bold;
-	color: #fff;
 }
 
 
@@ -285,26 +275,7 @@ nav a:hover {
     display: block;
 	margin-left: auto;
 	margin-right: auto;
-
-/*    background: url('../images/btn-lg.png') no-repeat; sjg BOOTSTRAP cleanup
-    width: 270px; 
-    height: 44px;
-    cursor: pointer;
-    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 22px;
-    font-weight: bold;
-	color: #fff; 
-*/
 }
-
-/*
-.landing_main input[type="submit"]:hover {
-    background-position: 0 -45px;
-}
-.landing_main input[type="submit"]:active {
-    background-position: 0 -91px;
-}
-*/
 
 .landing_overview {
     width: 940px;
@@ -317,6 +288,7 @@ nav a:hover {
     font-weight: bold;
     text-align: center;
     color: rgb(214, 0, 8);
+    line-height: 15px;		/* did not exist */
 }
 
 .landing_price {
@@ -333,16 +305,16 @@ nav a:hover {
 .landing_overview_car {
     float: right;
     border: 1px solid #999;
-    width: 260px;
+    width: 300px;
     margin: 0 0 30px 30px;
     text-align: center;
     padding: 20px;
 }
 
 .landing_overview_car img {
-    width: 250px;
-    height: 150px;
-    margin: 0 0 10px;
+    width: 300px;
+    height: 190x;
+    margin: 0 0 10px; 
 }
 
 .landing_overview_car h4,
@@ -358,11 +330,11 @@ nav a:hover {
     display: inline-block;
     vertical-align: middle;
     border: 1px solid #999;
-    width: 262px;
-    margin: 0 0 0 10px;
+    width: 308px; /* was 262px */
+    margin: 0 0 0 1px;		/* was 0 0 0 10px */
     text-align: center;  
-    padding: 20px; 
-    height: 150px;
+	padding: 20px 0 20px 0;
+    height: 200px;	/* was 150px*/
     
 }
 
@@ -385,7 +357,7 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: center;  
     padding: 20px; 
-    height: 150px;
+    height: 200px;	/* was 150px */
 }
 
 .landing_overview_adspace {
@@ -396,7 +368,7 @@ nav a:hover {
     margin: 0 0 0 10px;
     text-align: left;  
 	padding: 5px 20px 35px 20px;
-	height: 150px;
+	height: 200px;	/* was 150 px */
 	font-size: 12px;
 	font-style: italic;
 }
@@ -409,8 +381,8 @@ nav a:hover {
 
 .landing_overview_adspace img {
 	position: relative;
-	right: -200px;
-	top: -110px; 
+	right: -175px; /* was -200px */
+	top: -95px; 	/* was -110px */
 }
 
 .landing_overview ol {
@@ -530,6 +502,15 @@ Quote form
     cursor: pointer;
 }
 
+/* added for car image */
+.quote_column #mmt_img_1 {
+    display: block;
+	margin: 0px -20px 0px -15px;
+    padding: 0;
+    cursor: pointer;
+    max-width: 300px;
+}
+
 .quote_column select,
 .quote_column input[type="text"],
 .quote_column input[type="tel"],
@@ -560,36 +541,11 @@ Quote form
 /*    width: 300px; */ /*172px;*/
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 20px;
 }
 
 .quote_column input[type="submit"] {
-/*
-    height: 44px;
-    width: 270px;
-	margin-left: auto;
-	margin-right: auto;
-
-    background: url('../images/btn-lg.png') no-repeat;
-    display: block;
-    cursor: pointer;
-
-    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 21px;
-    font-weight: bold;
-	color: #fff;
-*/
-	
 }
-/*
-.quote_column input[type="submit"]:hover {
-    background-position: 0 -45px;
-}
-.quote_column input[type="submit"]:active {
-    background-position: 0 -91px;
-}
-sjg Bootstrap Hack
-
-*/
 
 .quote_column #back {
     background: url('../images/btn-getNewMakeModel.png') no-repeat;
@@ -705,14 +661,14 @@ Confirmation
 }
 
 .confirm_message {
-    width: 600px;
+    width: 560px; /* was 600px */
     margin: 0 20px 40px 0;
 }
 
 .confirm_vehicle {
     border: 1px solid #999;
     padding: 20px;
-    width: 260px;
+    width: 300px;	/* was 260px */
     text-align: center;
     margin-bottom: 10px;
 }
@@ -741,16 +697,6 @@ Confirmation
 }
 
 .confirm_anotherQuote input[type="submit"] {
-    background: url('../images/btn-ex-lg.png') no-repeat;
-    width: 242px;
-    height: 44px;
-    border: 0;
-
-    cursor: pointer;
-    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-size: 22px;
-    font-weight: bold;
-	color: #fff;
 }
 
 .confirm_anotherQuote button:hover {
