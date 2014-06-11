@@ -19,6 +19,7 @@ return array(
 	'Save' => 'Salvar',
     'Close' =>  'Fechar',
     'Cancel' => 'Cancelar',
+    'OK' => 'OK',
     
     // Modal Dialogs
 	'Postal Code Help'  => 'Achar CEP',
@@ -68,7 +69,7 @@ return array(
 	
 	// below the fold copy
 	
-	'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!' => 'Na Carro, oferecemos uma vasta seleção de carros novos, pick-ups, mini-vans, híbridos e muito mais para sua escolha.  Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo. Elas competem pelo seu negócio, então, aproveite agora nosso processo de cotação sem ter que pechinchar!',
+	'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!' => 'Na AchaCarro, oferecemos uma vasta seleção de carros novos, pick-ups, mini-vans, híbridos e muito mais para sua escolha.  Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo. Elas competem pelo seu negócio, então, aproveite agora nosso processo de cotação sem ter que pechinchar!',
 	
 	// quote page
 	
