@@ -5,8 +5,8 @@ class SiteController extends Controller
 	// it's in the app's image directory to keep deployment easy
 	
 	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.jpg';	// picture not found path (keep leading slash)
-	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (url) to real images (not no_pic.jpg)
-	const DEFAULT_URL_LOGO_PATH = '/images/logos/';				// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_URL_IMAGE_PATH = '/images/cars-300x/';		// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_URL_LOGO_PATH = '/images/logos/';				// default path (url) to  images
 	const DEFAULT_NOT_FOUND_LOGO_PIC =  '/images/1x1.gif';		// picture not found path (keep leading slash)
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
@@ -275,7 +275,7 @@ class SiteController extends Controller
 
 					$image_suffix = array('_45.JPG', '_135.JPG', '_0.JPG', '.JPG', '-4_45.JPG', '-4_135.JPG', '-4_0.JPG', '-4.JPG');
 					$image_ydb = $p_year . '/' . $rec['aus_doors'] . $rec['aus_body_id'];
-					
+
 					// if here we have valid records so we can get trim, make, model from them
 					
 					foreach($image_suffix as $suffix)
@@ -1218,6 +1218,14 @@ class SiteController extends Controller
 				$post_params = $_POST['LeadGen'];			// grab post params and add postal code to form state
 //				$post_params['int_plz'] = $model->int_plz;	// stuff into the saved state the postal code
 
+				if(isset($_POST['LeadGen']['int_plz']) && !empty($_POST['LeadGen']['int_plz']))
+				{
+					$cs_rec = $this->GetCityState($_POST['LeadGen']['int_plz']);
+				
+					$post_params['int_stadt'] = $cs_rec['city'];
+					$post_params['int_staat'] = $cs_rec['state'];
+				}
+
 				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
 
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
@@ -1260,7 +1268,7 @@ class SiteController extends Controller
 					$model = new LeadGen('quote');
 
 // only gets, does not save to the next page if getPageState is used here hack for passing data to confirm page
-//					$model->attributes = $this->getPageState('page', array());	// also has postal int_plz!
+//					$model->attributes = $this->getPageState('page', array());	
 //					$model->attributes = $_POST['LeadGen'];
 
 					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
@@ -1377,18 +1385,27 @@ class SiteController extends Controller
 					{
 
 						$model = new LeadGen('quote');
-				
+						$save_model = new LeadGen('quote');
+						
+						$save_model = $model; // save a copy for later
+						
 						// $model->attributes = $_POST['LeadGen'];
 
-						$this->checkPageState($model, array());	// also has postal int_plz!
+						$this->checkPageState($model, array());
 
 						$view = 'confirmation';		// jump to the confirmation page
 						
 						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
 						
-						$model->int_fabrikat = -1;
-						$model->int_modell = -1;
-						$model->int_ausstattung = -1;
+						// GET THE CONQUESTED VEHICLE INFO HERE
+						
+						$save_fabrikat = $model->int_fabrikat;
+						$save_modell  = $model->int_modell;
+						$save_ausstattung = $model->int_ausstattung;
+						
+						$model->int_fabrikat = -2;
+						$model->int_modell = -2;
+						$model->int_ausstattung = -2;
 						$model->int_text = 'ADDED BY CONQUEST';
 
 						if($model->validate())	
@@ -1405,10 +1422,12 @@ class SiteController extends Controller
 								if(!$model->save())				// also updates active record with current record id, how nice!
 									Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_WARNING);
 							}
+							
+						$this->checkPageState($save_model, array());
+							
 						}
 						else
 							Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_WARNING);
-						
 					}
 					else
 					{
@@ -1416,7 +1435,12 @@ class SiteController extends Controller
 						
 						$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
 						
+						
 						$model = new LeadGen('landing');
+
+						// wipe out make model trim, leave the rest
+						
+						$this->checkPageState($model, array('int_fabrikat' => '', 'int_modell' => '', 'int_ausstattung' => ''));
 
 						// stuff the models fields (which will update when the form is displayed)
 						
@@ -1442,7 +1466,6 @@ class SiteController extends Controller
 						}
 						else
 							$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');	// default
-
 
 						$view = 'landing';
 						$model->scenario = 'landing';	// set validation scenario to landing page 
