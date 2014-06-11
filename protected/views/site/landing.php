@@ -93,10 +93,9 @@
 										'ajax' => array(
 												'type' => 'POST',
 												'url' => CController::createUrl('cities'),
-												'update' =>   '#city_helper', //selector to update - '#LeadGen_int_stadt_help'
+												'update' =>   '#city_helper', //selector to update
 												),
 												'onchange' => 'stateHelperChanged();'
-
 											)
 										) .  
 									  CHtml::dropDownList('city_helper','', array(
@@ -170,7 +169,6 @@ $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 	'function updateImages(data)
 	 {
-
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
 			$("#mm_img_3").attr("src", data[2].image_path); 
