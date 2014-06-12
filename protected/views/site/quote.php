@@ -88,10 +88,12 @@
                     
                     <!-- START COLUMN 2 -->
                     <div class="quote_column">
+						<?php						
+							if(($logo_url = $this->GetMakeLogo($model->int_fabrikat)) !== false)
+							{
+								echo '<img src=' . $logo_url . '>';
+							}	
 
-                        <!-- get premium dealers first -->
-                        
-						<?php 
 							$special_dealer_display_count = 5; // 0 = No display of Special Dealers div
 							$dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, $special_dealer_display_count);
 							$dealer_select_list = array_keys($dealer_list);
@@ -134,7 +136,8 @@
                     
                     <!-- START COLUMN 3 -->
                     <div class="quote_column">
-					<?php	echo $form->labelEx($model,'int_vname');
+					<?php	
+							echo $form->labelEx($model,'int_vname');
 							echo $form->textField($model,'int_vname');
 							echo $form->error($model,'int_vname');
 
@@ -153,7 +156,6 @@
 							echo $form->labelEx($model,'int_str');
 							echo $form->textField($model,'int_str');
 							echo $form->error($model,'int_str'); 
-					
 
 							echo '<p class="quote_city">' . $model->int_stadt . ', ' . $model->int_staat . ' ' . $model->int_plz . '</p>';
 
@@ -164,8 +166,6 @@
 							echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl'));
 							
 							echo '<div class="submit_button">' . TbHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('id'=>'quote_submit', 'name'=>'submit', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE));
-
-
 							$this->widget('bootstrap.widgets.TbModal', array(
 								'id' => 'ModalTrust',
 								'header' => Yii::t('LeadGen', 'Privacy Information'),
@@ -173,8 +173,8 @@
 								'content' => '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
 								'footer' => array(TbHtml::button(Yii::t('LeadGen','Close'), array('data-dismiss' => 'modal', 'color'=> 'custom'))),
 							));
-
-							echo '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png"></div>'; 
+							echo '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">'; 
+							echo '</div>';
 						?>
                     </div>
 				<?php $this->endWidget(); ?>

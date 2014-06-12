@@ -18,6 +18,20 @@
 		 
 		  if($model->skipConquest === false)
 		  {
+			  
+				// var_dump($this->getConquests(7,1));
+			  // see if we are going to conquest this vehicle, if not skip
+			  // if so - 
+			  // Get vehicle image by 
+/////////////////////////////////////// 
+////////////////////////////////////// Working here to see if we have a valid conquest, and then get the image
+/////////////////////////////////////  and stuff with the conquest data into the pop up... 			  
+			  $image_info = $this->GetModelImage(114);
+			  
+			  echo $image_info['image_path'];
+			  
+			  
+			  
 		  $this->widget('bootstrap.widgets.TbModal', array(
 			'id' => 'myModal',
 			'header' => 'Conquest Header',

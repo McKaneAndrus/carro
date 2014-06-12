@@ -228,7 +228,7 @@ class SiteController extends Controller
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_URL_IMAGE_PATH;		// MUST NOT BE RELATIVE PATH
 		$p_filename = false;
 
-		if(is_numeric($p_id))	// test for existance and a number
+		if(is_numeric($p_id))
 		{
 
 			$sql = Yii::app()->db->createCommand();
@@ -239,7 +239,7 @@ class SiteController extends Controller
 						
 			if($rec)
 			{
-				// -- Get model name
+				// -- Get model text
 		   
 				$sql1 = Yii::app()->db->createCommand();
 				$sql1->select('mod_id, mod_path, mod_text, mod_fabrikat');	// vehicle/trim_id
@@ -604,6 +604,60 @@ class SiteController extends Controller
 	}
 
 	/*
+	* Given a Model Id will return a URL for the image. Note that this
+	* will return the first image associated with the models trims since
+	* images are associated with a trim and give just a model you have no 
+	* way of knowing what the trim is. 
+	*
+	* Uses mod_status to determine if the record is visible in the display
+	*
+	* Returns array with 'image_path' and 'image_desc' 
+	*/
+/////////////////////////////	
+	public function GetModelImage($model_id)
+	{
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('aus_id');										// vehicle/trim_id
+		$sql->from('{{ausstattung}}');								// will prepend country
+		$sql->where('aus_modell=:vehicle_model', array(':vehicle_model' => $model_id));
+		$sql->limit(5);		// get more then we think so empty images can be skipped
+		$make_trims = $sql->queryAll();
+		
+		$cnt = count($make_trims);
+		$image_data = array();
+		
+		// scan the list for at least 1 valid as that is all we are displaying
+		
+		if($cnt)
+		{
+			$valid_images = 0;
+			foreach ($make_trims as $id) 
+			{
+				// get the image file names if valid, save to array (push on end)
+			
+				if(($pic = $this->GetPic($id['aus_id'])) !== false)
+				{ 
+					$image_data = $pic; 	// same as array_push()
+					break;
+				}
+			}
+		}
+		
+		// backfill empty images if we can't come up with any, fix up text to be valid info
+
+		if(count($image_data) < 1)
+		{
+			$text = $this->GetModelText($model_id);	// always returns valid string or default unknown
+			$image_data = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
+		}
+		
+		return $image_data;	// has 'image_path' and 'image_desc' elements (see get_pic())
+	}
+
+
+
+
+	/*
 	* Get a list of the states from the postal code table. This combined
 	* with the city should map to a postal code. 
 	* 
@@ -764,6 +818,28 @@ class SiteController extends Controller
 	
 		return CHtml::listData($opts, 'value', 'display');	// fields from the model table, use unique extended trim
 	}
+	
+	public function getConquests($src_model_id, $max_results)
+	{
+		// set up query, make easy to read and change
+/////////////////////////////////////////
+///////////////////////////////////////// Working Here		
+		/* 
+SELECT
+  csrc_id, csrc_conquest, ccar_model, cq_text, cq_from_date, cq_to_date 
+FROM br_conquest_campaigns, br_conquest_cars, br_conquest_source 
+where 
+  cq_id = csrc_campaign and ccar_id = csrc_conquest and cq_status = 0 and csrc_status = 0 and ccar_status = 0 and csrc_model = 7 
+  */
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('csrc_id, csrc_conquest, ccar_model, cq_text');
+		$sql->from('{{conquest_campaigns}},{{conquest_cars}}, {{conquest_source}} ');		// will prepend country
+		$sql->where('cq_id = csrc_campaign and ccar_id = csrc_conquest and cq_status = 0 and csrc_status = 0 and ccar_status = 0 and csrc_model = 7');					// specific cobrand id needed if other then 0 for the app
+		$sql->order('csrc_id');
+		$opts = $sql->queryall();
+			
+		return $opts;
+	}
 
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
@@ -830,18 +906,15 @@ class SiteController extends Controller
 	* that are passed back to the select. This is called directly by component to populate a dependent
 	* dropdown.
 	*/
-///////////////////////////////////////// hack testing
+
 	public function actionCities() 
 	{
-//		if(!isset($_POST['LeadGen']['int_staat_help']))	// state
-//			throw new CHttpException(400, 'Invalid Request');
 
 		if(!isset($_POST['state_helper']))	// state
 			throw new CHttpException(400, 'Invalid Request');
 
 		// The post parameters come from the form name, in this case it's LeadGen, with the field value as state
 			
-//		$return = $this->GetCities($_POST['LeadGen']['int_staat_help']);
 		$return = $this->GetCities($_POST['state_helper']);
 
 		// if we have results gen the html, always create the default option
@@ -1089,6 +1162,8 @@ class SiteController extends Controller
 		
 		if(!is_numeric($model_id))
 			throw new CHttpException(400, 'Invalid Request');
+
+/////////// Get Make image
 
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');										// vehicle/trim_id

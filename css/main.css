@@ -505,10 +505,10 @@ Quote form
 /* added for car image */
 .quote_column #mmt_img_1 {
     display: block;
-	margin: 0px -20px 0px -15px;
+	margin: 0px -13px 0px -15px;
     padding: 0;
-    cursor: pointer;
     max-width: 300px;
+    cursor: default;
 }
 
 .quote_column select,
