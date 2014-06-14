@@ -749,6 +749,7 @@ Confirmation
 .conquest_modal div.modal-body {
 	font-size:18px;
 	line-height:20px;
+	list-style-position: inside;	/* keeps list number inside element space */
 }
 
 .conquest_modal h1 {
@@ -758,11 +759,16 @@ Confirmation
     background-color:#EC1D25;
     color: #fff;
     text-align: center;
+    text-indent: 0;
     line-height:50px; /* causes fake center of text */
 }
 
+.conquest_modal ol {
+	padding-top:20px;
+}
 .conquest_modal img {
 	padding: 10px;
+	float:left;
 }
 
 /*---------

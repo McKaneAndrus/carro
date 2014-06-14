@@ -654,9 +654,6 @@ class SiteController extends Controller
 		return $image_data;	// has 'image_path' and 'image_desc' elements (see get_pic())
 	}
 
-
-
-
 	/*
 	* Get a list of the states from the postal code table. This combined
 	* with the city should map to a postal code. 
@@ -832,12 +829,14 @@ class SiteController extends Controller
 		}
 			
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('cq_id, cm_campaign, cm_dest_model, cm_text');
+		$sql->select('cq_id, cm_campaign, cm_dest_make, cm_dest_model, cm_text');
 		$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
 		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_model = :src_model', array('src_model'=>(int) $src_model_id));					// specific cobrand id needed if other then 0 for the app
 		$sql->order('cm_id');
 		$sql->limit($max_results);
 		$cars = $sql->queryall();
+		
+		// possibly decouple names and such into non-db field names
 			
 		if(count($cars) < 1)
 				return false; // not a conquest

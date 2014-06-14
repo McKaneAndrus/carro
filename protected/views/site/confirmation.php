@@ -33,9 +33,9 @@
 		
 			  if($conquest_cars !== false)
 			  {
-					  $image_src_info = $this->GetModelImage($model->int_modell);
+				  $image_src_info = $this->GetModelImage($model->int_modell);
 				  $image_dest_info = $this->GetModelImage($conquest_cars[0]['cm_dest_model']);
-				  $image_logo = $this->GetMakeLogo($model->int_fabrikat);
+				  $image_logo = $this->GetMakeLogo($conquest_cars[0]['cm_dest_make']);
 
 				  
 				  $search_img_tags = array('{{src_image}}', 
