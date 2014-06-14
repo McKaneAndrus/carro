@@ -14,7 +14,6 @@ input[type="email"], input[type="url"], input[type="search"], input[type="tel"],
     color: #000;	/* change all input colors was too light */
 }
 
-
 .btn-custom { 
 	background-color: hsl(360, 100%, 44%) !important; 
 	background-repeat: repeat-x; 
@@ -69,6 +68,7 @@ div.error
 	color: #C00;
     font-size: 26px;
     font-weight: bold;
+    line-height: 28px;
 }
 
 div.error h1
@@ -96,7 +96,16 @@ strong
 .modal-header {
   border-bottom: 1px solid #eee;	/* line under header, 0 remove */
   
-  background-color: #fff;	/* messes with rounded corners */
+    font-size: 24px;
+    font-weight: bold;
+    background-image:none;
+    background-color:#EC1D25;
+    color: #fff;
+    text-align: center;
+/*    line-height:50px; *//* causes fake center of text */
+  
+  
+/*  background-color: #fff;	*//* messes with rounded corners */
 
   -webkit- border-top-left-radius: 6px;		/* only needed if changing the header background color */
   -webkit-border-top-right-radius: 6px;
@@ -323,7 +332,7 @@ nav a:hover {
  h4 {
     font-weight: bold;
     font-size: 16px;
-    color: #d60008;
+    color: #EC1D25;
 }
 
 .landing_overview_makeCar {
@@ -499,7 +508,6 @@ Quote form
     display: block;
     margin: 0 auto 20px;
     padding: 20px;
-    cursor: pointer;
 }
 
 /* added for car image */
@@ -508,7 +516,10 @@ Quote form
 	margin: 0px -13px 0px -15px;
     padding: 0;
     max-width: 300px;
-    cursor: default;
+}
+
+.quote_column #privacy_img_1 {
+	cursor:pointer;
 }
 
 .quote_column select,
@@ -545,21 +556,6 @@ Quote form
 }
 
 .quote_column input[type="submit"] {
-}
-
-.quote_column #back {
-    background: url('../images/btn-getNewMakeModel.png') no-repeat;
-    height: 44px;
-    width: 270px;
-    display: block;
-    cursor: pointer;
-}
-
-.quote_column #back:hover {
-    background-position: 0 -45px;
-}
-.quote_column #back:active {
-    background-position: 0 -91px;
 }
 
 
@@ -744,6 +740,29 @@ Confirmation
 
 .confirm_affiliates span div:first-child {
     border: 0;
+}
+
+/*----------------
+ Conquest Modal
+----------------*/
+
+.conquest_modal div.modal-body {
+	font-size:18px;
+	line-height:20px;
+}
+
+.conquest_modal h1 {
+    font-size: 24px;
+    font-weight: bold;
+    background-image:none;
+    background-color:#EC1D25;
+    color: #fff;
+    text-align: center;
+    line-height:50px; /* causes fake center of text */
+}
+
+.conquest_modal img {
+	padding: 10px;
 }
 
 /*---------

@@ -824,21 +824,24 @@ class SiteController extends Controller
 		// set up query, make easy to read and change
 /////////////////////////////////////////
 ///////////////////////////////////////// Working Here		
-		/* 
-SELECT
-  csrc_id, csrc_conquest, ccar_model, cq_text, cq_from_date, cq_to_date 
-FROM br_conquest_campaigns, br_conquest_cars, br_conquest_source 
-where 
-  cq_id = csrc_campaign and ccar_id = csrc_conquest and cq_status = 0 and csrc_status = 0 and ccar_status = 0 and csrc_model = 7 
-  */
-		$sql = Yii::app()->db->createCommand();
-		$sql->select('csrc_id, csrc_conquest, ccar_model, cq_text');
-		$sql->from('{{conquest_campaigns}},{{conquest_cars}}, {{conquest_source}} ');		// will prepend country
-		$sql->where('cq_id = csrc_campaign and ccar_id = csrc_conquest and cq_status = 0 and csrc_status = 0 and ccar_status = 0 and csrc_model = 7');					// specific cobrand id needed if other then 0 for the app
-		$sql->order('csrc_id');
-		$opts = $sql->queryall();
+
+		if(!is_numeric($max_results))
+		{
+			Yii::log("getConquest has an invalid max_result parameter, it's not numeric",  CLogger::LEVEL_ERROR);
+			return array();
+		}
 			
-		return $opts;
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('cq_id, cm_campaign, cm_dest_model, cm_text');
+		$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
+		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_model = :src_model', array('src_model'=>(int) $src_model_id));					// specific cobrand id needed if other then 0 for the app
+		$sql->order('cm_id');
+		$sql->limit($max_results);
+		$cars = $sql->queryall();
+			
+		if(count($cars) < 1)
+				return false; // not a conquest
+		return $cars;
 	}
 
 	/*

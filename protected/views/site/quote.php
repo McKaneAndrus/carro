@@ -170,10 +170,10 @@
 								'id' => 'ModalTrust',
 								'header' => Yii::t('LeadGen', 'Privacy Information'),
 								'show'=> false,
-								'content' => '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
+								'content' => '<img  src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
 								'footer' => array(TbHtml::button(Yii::t('LeadGen','Close'), array('data-dismiss' => 'modal', 'color'=> 'custom'))),
 							));
-							echo '<img data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">'; 
+							echo '<img id="privacy_img_1" data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">'; 
 							echo '</div>';
 						?>
                     </div>

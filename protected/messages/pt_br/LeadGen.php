@@ -26,6 +26,7 @@ return array(
 	'Privacy Information' => 'Política de Privacidade',
 	'Please Select Nearest City and State' => 'Por favor, selecione o Estado e a Cidade mais próxima',
 	'We do not sell or release your information to anyone but the dealers.' => 'O AchaCarro não comercializa ou cede sua informação a terceiros, exceto para as concessionárias selecionadas.',
+	'Comparible Vehicle' => 'Veículo Compatível',
 	
 	// view translates
 	

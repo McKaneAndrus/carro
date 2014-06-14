@@ -18,33 +18,53 @@
 		 
 		  if($model->skipConquest === false)
 		  {
+			 
+			 echo '<style type="text/css"> .modal-body {max-height: 512px; }</style>';
 			  
-				// var_dump($this->getConquests(7,1));
+			// var_dump($this->getConquests(7,1));
 			  // see if we are going to conquest this vehicle, if not skip
 			  // if so - 
 			  // Get vehicle image by 
 /////////////////////////////////////// 
 ////////////////////////////////////// Working here to see if we have a valid conquest, and then get the image
 /////////////////////////////////////  and stuff with the conquest data into the pop up... 			  
-			  $image_info = $this->GetModelImage(114);
-			  
-			  echo $image_info['image_path'];
-			  
-			  
-			  
-		  $this->widget('bootstrap.widgets.TbModal', array(
-			'id' => 'myModal',
-			'header' => 'Conquest Header',
-			'show'=> true,
-			'content' => '<img id="mmt_img_conq" src="' . Yii::app()->request->baseUrl . '/images/no_pic.jpg" alt="" />
-<p>Interested in the comparable JAC J3? It\'s as easy as 1-2-3 just click OK and we will do the rest!</p>' 
-			. 'Model Id ' . $model->int_modell
-			. '<br>Make  Id ' . $model->int_fabrikat,
-			'footer' => array(
-				TbHtml::submitButton(Yii::t('LeadGen', 'OK'), array('name'=>'conquest', 'color' => 'custom')),
-				TbHtml::button(Yii::t('LeadGen', 'Close'), array('data-dismiss' => 'modal')),
-					),	
-				)); 
+	  
+			  $conquest_cars = $this->getConquests($model->int_modell,1);
+		
+			  if($conquest_cars !== false)
+			  {
+					  $image_src_info = $this->GetModelImage($model->int_modell);
+				  $image_dest_info = $this->GetModelImage($conquest_cars[0]['cm_dest_model']);
+				  $image_logo = $this->GetMakeLogo($model->int_fabrikat);
+
+				  
+				  $search_img_tags = array('{{src_image}}', 
+										   '{{dest_image}}',
+										   '{{logo_image}}',
+										  );
+				$replace_img_html = array('<img src=' . $image_src_info['image_path'] . '>', 
+										  '<img src=' . $image_dest_info['image_path'] . '>',
+										  '<img src=' . $image_logo . '>',
+										  );
+				  
+
+				  $conquest_content = str_replace($search_img_tags, $replace_img_html, $conquest_cars[0]['cm_text']);
+				  
+				echo '<div class="conquest_modal">';
+				  
+			  $this->widget('bootstrap.widgets.TbModal', array(
+				'id' => 'myModal',
+				'header' =>  Yii::t('LeadGen', 'Comparible Vehicle'),
+				'show'=> true,
+				'content' => $conquest_content,
+				'footer' => array(
+					TbHtml::submitButton(Yii::t('LeadGen', 'OK'), array('name'=>'conquest', 'color' => 'custom')),
+					TbHtml::button(Yii::t('LeadGen', 'Close'), array('data-dismiss' => 'modal')),
+						),	
+					)); 
+			echo '</div>';
+
+				}
 			}
 		?>
 				
