@@ -1495,8 +1495,9 @@ class SiteController extends Controller
 							$model->int_fabrikat = $_POST['cmake'];
 							$model->int_modell = $_POST['cmodel'];
 							$model->int_source = $_POST['csrc'];
-							$model->int_ausstattung = -1;
-							$model->int_text = 'ADDED BY CONQUEST';
+							$model->int_ausstattung = -1;	// no trim or color on conquest
+							$model->int_farbe = -1;
+							$model->int_text = 'ADDED BY CONQUEST'; // translate
 
 							if($model->validate())	
 							{
