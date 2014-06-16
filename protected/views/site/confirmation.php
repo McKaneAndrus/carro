@@ -5,68 +5,65 @@
 ?>
         <div class="wrapper">
             <div class="confirm_wrapper">
+				<?php 
+				$form=$this->beginWidget('CActiveForm', array('id'=>'leadgen-form',	'enableAjaxValidation'=>false, 'stateful'=>true)); 
+				if($model->skipConquest === false)
+				{
+					echo '<style type="text/css"> .modal-body {max-height: 512px; }</style>';
+					$conquest_cars = $this->getConquests($model->int_modell,1);
+					// we only look at the first conquest even though more can exist...
+					if($conquest_cars !== false)
+					{
+						$conquest_make = $conquest_cars[0]['make'];
+						$conquest_model = $conquest_cars[0]['model'];
+						$campaign_id = $conquest_cars[0]['campaign_id'];
 
-				
-				<?php $form=$this->beginWidget('CActiveForm', array(
-						'id'=>'leadgen-form',
-						'enableAjaxValidation'=>false,
-					  'stateful'=>true,
-					)); ?>
+						$image_src_info = $this->GetModelImage($model->int_modell);
+						$image_dest_info = $this->GetModelImage($conquest_model);
+						$src_logo_image = $this->GetMakeLogo($model->int_fabrikat);
+						$dest_logo_image = $this->GetMakeLogo($conquest_make);
 
-		
-		 <?php
-		 
-		  if($model->skipConquest === false)
-		  {
-			 
-			 echo '<style type="text/css"> .modal-body {max-height: 512px; }</style>';
-			  
-			// var_dump($this->getConquests(7,1));
-			  // see if we are going to conquest this vehicle, if not skip
-			  // if so - 
-			  // Get vehicle image by 
-/////////////////////////////////////// 
-////////////////////////////////////// Working here to see if we have a valid conquest, and then get the image
-/////////////////////////////////////  and stuff with the conquest data into the pop up... 			  
-	  
-			  $conquest_cars = $this->getConquests($model->int_modell,1);
-		
-			  if($conquest_cars !== false)
-			  {
-				  $image_src_info = $this->GetModelImage($model->int_modell);
-				  $image_dest_info = $this->GetModelImage($conquest_cars[0]['cm_dest_model']);
-				  $image_logo = $this->GetMakeLogo($conquest_cars[0]['cm_dest_make']);
-
-				  
-				  $search_img_tags = array('{{src_image}}', 
-										   '{{dest_image}}',
-										   '{{logo_image}}',
-										  );
-				$replace_img_html = array('<img src=' . $image_src_info['image_path'] . '>', 
-										  '<img src=' . $image_dest_info['image_path'] . '>',
-										  '<img src=' . $image_logo . '>',
-										  );
-				  
-
-				  $conquest_content = str_replace($search_img_tags, $replace_img_html, $conquest_cars[0]['cm_text']);
-				  
-				echo '<div class="conquest_modal">';
-				  
-			  $this->widget('bootstrap.widgets.TbModal', array(
-				'id' => 'myModal',
-				'header' =>  Yii::t('LeadGen', 'Comparible Vehicle'),
-				'show'=> true,
-				'content' => $conquest_content,
-				'footer' => array(
-					TbHtml::submitButton(Yii::t('LeadGen', 'OK'), array('name'=>'conquest', 'color' => 'custom')),
-					TbHtml::button(Yii::t('LeadGen', 'Close'), array('data-dismiss' => 'modal')),
-						),	
-					)); 
-			echo '</div>';
-
+						$model->conquest_modell = $conquest_model;
+						$model->conquest_make = $conquest_make;
+						
+						$search_img_tags = array(
+											'{{src_image}}', 
+											'{{dest_image}}',
+											'{{src_logo_image}}',
+											'{{dest_logo_image}}',
+											);
+						
+						$replace_img_html = array(
+											'<img src=' . $image_src_info['image_path'] . '>', 
+											'<img src=' . $image_dest_info['image_path'] . '>',
+											'<img src=' . $src_logo_image . '>',
+											'<img src=' . $dest_logo_image . '>',
+											);
+						
+						// DumbyTemplate system
+					  
+						$conquest_content = str_replace($search_img_tags, $replace_img_html, $conquest_cars[0]['html']);
+					  
+						echo '<div class="conquest_modal">';
+					  
+						$this->widget('bootstrap.widgets.TbModal', array(
+						'id' => 'myModal',
+						'header' =>  Yii::t('LeadGen', 'Comparible Vehicle'),
+						'show'=> true,
+						'content' => $conquest_content,
+						'footer' => array(
+								TbHtml::submitButton(Yii::t('LeadGen', 'OK'), array('name'=>'conquest', 'color' => 'custom')),
+								TbHtml::button(Yii::t('LeadGen', 'Close'), array('data-dismiss' => 'modal')),
+								),	
+						)); 
+						echo CHtml::hiddenField('cmake', $conquest_make);
+						echo CHtml::hiddenField('cmodel', $conquest_model);
+						echo CHtml::hiddenField('csrc', $campaign_id);
+						
+						echo '</div>';
+					}
 				}
-			}
-		?>
+				?>
 				
                 <h1><?php echo Yii::t('LeadGen', 'Thank you for your request'); ?></h1>
                 

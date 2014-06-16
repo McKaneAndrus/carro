@@ -834,12 +834,25 @@ class SiteController extends Controller
 		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_model = :src_model', array('src_model'=>(int) $src_model_id));					// specific cobrand id needed if other then 0 for the app
 		$sql->order('cm_id');
 		$sql->limit($max_results);
-		$cars = $sql->queryall();
+		$results = $sql->queryall();
+
+		if(count($results) < 1)
+			return false; // not a conquest, not match
 		
 		// possibly decouple names and such into non-db field names
 			
-		if(count($cars) < 1)
-				return false; // not a conquest
+		$cars[0] = array();
+		$i=0;
+		foreach($results as $car)
+		{
+			$cars[$i++] = array(
+						'campaign_id' => $car['cm_campaign'],
+						'make' => $car['cm_dest_make'], 
+						'model' => $car['cm_dest_model'],
+						'html' => $car['cm_text']
+					); // append each record to array
+		}
+		
 		return $cars;
 	}
 
@@ -1344,10 +1357,6 @@ class SiteController extends Controller
 				{
 					$model = new LeadGen('quote');
 
-// only gets, does not save to the next page if getPageState is used here hack for passing data to confirm page
-//					$model->attributes = $this->getPageState('page', array());	
-//					$model->attributes = $_POST['LeadGen'];
-
 					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
 
 					$view = 'confirmation';		// jump to the confirmation page
@@ -1371,6 +1380,8 @@ class SiteController extends Controller
 										$tmp .= $opt . ' ';
 									}
 								}
+								
+								$model->int_source = 0; // force always from here, source is non-conquest
 								
 								// set the source of prospect here, should be something to indicate it's a prospect
 
@@ -1460,13 +1471,12 @@ class SiteController extends Controller
 				else // New user landing here, didn't come from quote page send to the landing page (landing.php)
 					if(isset($_POST['conquest']))
 					{
+						// conquest does not mess with sessions, will not save it or update it
 
 						$model = new LeadGen('quote');
 						$save_model = new LeadGen('quote');
 						
-						$save_model = $model; // save a copy for later
-						
-						// $model->attributes = $_POST['LeadGen'];
+						$save_model = $model; // save a copy for later so we can mess with anything in the current model
 
 						$this->checkPageState($model, array());
 
@@ -1475,43 +1485,44 @@ class SiteController extends Controller
 						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
 						
 						// GET THE CONQUESTED VEHICLE INFO HERE
-						
-						$save_fabrikat = $model->int_fabrikat;
-						$save_modell  = $model->int_modell;
-						$save_ausstattung = $model->int_ausstattung;
-						
-						$model->int_fabrikat = -2;
-						$model->int_modell = -2;
-						$model->int_ausstattung = -2;
-						$model->int_text = 'ADDED BY CONQUEST';
 
-						if($model->validate())	
+						if(!isset($_POST['cmake']) || !isset($_POST['cmodel']) || !isset($_POST['csrc']))
 						{
-							// also dupe check the conquest
-							
-							if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
-							{	
-
-								$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
-
-								// set the source of prospect here, should be something to indicate it's a conquest
-								
-								if(!$model->save())				// also updates active record with current record id, how nice!
-									Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_WARNING);
-							}
-							
-						$this->checkPageState($save_model, array());
-							
+							Yii::log("Can't Save conquest record to database",  CLogger::LEVEL_ERROR);
 						}
 						else
-							Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_WARNING);
+						{
+							$model->int_fabrikat = $_POST['cmake'];
+							$model->int_modell = $_POST['cmodel'];
+							$model->int_source = $_POST['csrc'];
+							$model->int_ausstattung = -1;
+							$model->int_text = 'ADDED BY CONQUEST';
+
+							if($model->validate())	
+							{
+								// also dupe check the conquest
+								
+								if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
+								{	
+
+									$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
+
+									// set the source of prospect here, should be something to indicate it's a conquest
+									
+									if(!$model->save())				// also updates active record with current record id, how nice!
+										Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_ERROR);
+								}
+								$this->checkPageState($save_model, array());
+							}
+							else
+								Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_WARNING);
+						}
 					}
 					else
 					{
 						// yii will start a new session from here 
 						
 						$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
-						
 						
 						$model = new LeadGen('landing');
 
