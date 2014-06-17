@@ -84,7 +84,8 @@ class LeadGen extends CActiveRecord
 {
 	public $skipConquest = false;
 	public $conquest_make = -999;
-	public $conquest_modell = -999;
+	public $conquest_model = -999;
+	public $conquest_trim = -999;
 	
 	/**
 	 * @return string the associated database table name

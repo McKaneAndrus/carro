@@ -816,40 +816,82 @@ class SiteController extends Controller
 		return CHtml::listData($opts, 'value', 'display');	// fields from the model table, use unique extended trim
 	}
 	
-	public function getConquests($src_model_id, $max_results)
+	/*
+	* getConquest returns a list of cars that match the give src values. You can specify
+	* a maximum number of results to return. Currently this should be set to 1 until this 
+	* has more logic to process a list of possibly conquest results ranked by something.
+	* This also does NOT take into consideration any ordering due to multiple campaigns 
+	* that may be conquesting the same car.
+	*
+	* src_make, src_model, src_trim - The make, model and trim of a car we want to conquest.
+	* 
+	* Note - This does some magical stuff, so far here are the rules...
+	*
+	* If a src_make, src_model and src_trim match the mapped record is returned. Easy Case. 
+	* This includes the case where src_trim = -1 where the user may select ANY TRIM all 3 fields are always used
+	* for making a match. Note it's perfectly OK to have a src_make, src_mode set to some value with src_trim=-1 mapped to a 
+	* specific dest_make, dest_model, and dest_trim where trim != -1 this means it's possible to match JUST the 'any trim' option
+	* to a specific mapped destination. This is confusing and should be avoided. IF a mapped record has
+	* src_trim = -1, good idea to have dest_trim = -1
+	*
+	* If no exact match is found, the query is opened up to try to match JUST the src_make and
+	* src_model (ignoring the the src_trim). The special match all record must exist with the dest_trim = -1 (match all).
+	* 
+	* The special record is a catch all if desired, and that should exist in the form of 
+	* src_make=a, src_model=b, src_trim= -1, dest_make=x, dest_model=y, dest_trim = -1.
+	* the part to note is that both src_trim and dest_trim are -1 
+	*/
+	
+	public function getConquests($src_make_id, $src_model_id, $src_trim_id, $max_results)
 	{
-		// set up query, make easy to read and change
-/////////////////////////////////////////
-///////////////////////////////////////// Working Here		
-
-		if(!is_numeric($max_results))
+		if(!is_numeric($src_make_id) || !is_numeric($src_model_id) || !is_numeric($src_trim_id) || !is_numeric($max_results))
 		{
-			Yii::log("getConquest has an invalid max_result parameter, it's not numeric",  CLogger::LEVEL_ERROR);
-			return array();
+			Yii::log("Invalid parameters, non-numeric",  CLogger::LEVEL_ERROR);
+			return false;
 		}
 			
+		// Search for exact match make, model, trim
+		// This case will find exact match INCLUDING src trim == -1 (any trim) if that record exists
+			
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('cq_id, cm_campaign, cm_dest_make, cm_dest_model, cm_text');
+		$sql->select('cq_id, cq_text, cm_campaign, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
 		$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
-		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_model = :src_model', array('src_model'=>(int) $src_model_id));					// specific cobrand id needed if other then 0 for the app
+		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = :src_trim', array('src_make'=>(int) $src_make_id, 'src_model'=>(int) $src_model_id, 'src_trim'=>(int) $src_trim_id));
 		$sql->order('cm_id');
 		$sql->limit($max_results);
-		$results = $sql->queryall();
+		$results = $sql->queryall();	// could just do a queryrow...
+
+		// Search for make, model match where the 'any trim' (-1) on dest is set
+		// this case will check for a specified src trim that does NOT exist but we need to check for
+		// existance of the dest_trim = any (-1) this will NOT match other records with a specified dest trim
 
 		if(count($results) < 1)
-			return false; // not a conquest, not match
-		
-		// possibly decouple names and such into non-db field names
+		{
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('cq_id, cq_text, cm_campaign, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
+			$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
+			$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = -1 and cm_dest_trim = -1', array('src_make'=>(int) $src_make_id, 'src_model'=>(int) $src_model_id));
+			$sql->order('cm_id');
+			$sql->limit($max_results);
+			$results = $sql->queryall();	// could just do a queryrow...
+		}
+
+		if(count($results) < 1)
+			return false; // nothing to conquest
+				
+		// decouple db column names into non-db field names
 			
 		$cars[0] = array();
 		$i=0;
 		foreach($results as $car)
 		{
 			$cars[$i++] = array(
+						'campaign_html' => $car['cq_text'],
 						'campaign_id' => $car['cm_campaign'],
 						'make' => $car['cm_dest_make'], 
 						'model' => $car['cm_dest_model'],
-						'html' => $car['cm_text']
+						'trim' => $car['cm_dest_trim'],
+						'map_html' => $car['cm_text']
 					); // append each record to array
 		}
 		
@@ -1178,7 +1220,7 @@ class SiteController extends Controller
 		if(!is_numeric($model_id))
 			throw new CHttpException(400, 'Invalid Request');
 
-/////////// Get Make image
+/////////// Call Get Make image
 
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('aus_id');										// vehicle/trim_id
@@ -1298,15 +1340,7 @@ class SiteController extends Controller
 				// validate city and state (stadt and staat) must have been set (it's ugly I know...)
 				// agains assumes a city and state get a unique postal code from the db
 	
-// rework to remove the need to stuff the zipcode. Not sure if city, state will be stuff here on on completion of
-// quote form...
-//				
-//				if(isset($_POST['LeadGen']['int_staat']) && isset($_POST['LeadGen']['int_stadt']) 
-//					&& !empty($_POST['LeadGen']['int_staat']) && !empty($_POST['LeadGen']['int_stadt']))
-//						$model->int_plz = $this->GetPostalCode($_POST['LeadGen']['int_stadt'], $_POST['LeadGen']['int_staat']);
-					
 				$post_params = $_POST['LeadGen'];			// grab post params and add postal code to form state
-//				$post_params['int_plz'] = $model->int_plz;	// stuff into the saved state the postal code
 
 				if(isset($_POST['LeadGen']['int_plz']) && !empty($_POST['LeadGen']['int_plz']))
 				{
@@ -1475,18 +1509,14 @@ class SiteController extends Controller
 
 						$model = new LeadGen('quote');
 						$save_model = new LeadGen('quote');
-						
 						$save_model = $model; // save a copy for later so we can mess with anything in the current model
-
 						$this->checkPageState($model, array());
-
 						$view = 'confirmation';		// jump to the confirmation page
-						
 						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
 						
 						// GET THE CONQUESTED VEHICLE INFO HERE
 
-						if(!isset($_POST['cmake']) || !isset($_POST['cmodel']) || !isset($_POST['csrc']))
+						if(!isset($_POST['cmake']) || !isset($_POST['cmodel']) || !isset($_POST['ctrim']) || !isset($_POST['csrc']))
 						{
 							Yii::log("Can't Save conquest record to database",  CLogger::LEVEL_ERROR);
 						}
@@ -1494,10 +1524,10 @@ class SiteController extends Controller
 						{
 							$model->int_fabrikat = $_POST['cmake'];
 							$model->int_modell = $_POST['cmodel'];
+							$model->int_ausstattung = $_POST['ctrim'];
 							$model->int_source = $_POST['csrc'];
-							$model->int_ausstattung = -1;	// no trim or color on conquest
 							$model->int_farbe = -1;
-							$model->int_text = 'ADDED BY CONQUEST'; // translate
+							$model->int_text = Yii::t('LeadGen','ADDED BY CONQUEST');
 
 							if($model->validate())	
 							{
@@ -1505,7 +1535,6 @@ class SiteController extends Controller
 								
 								if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
 								{	
-
 									$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
 
 									// set the source of prospect here, should be something to indicate it's a conquest
@@ -1524,7 +1553,6 @@ class SiteController extends Controller
 						// yii will start a new session from here 
 						
 						$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
-						
 						$model = new LeadGen('landing');
 
 						// wipe out make model trim, leave the rest

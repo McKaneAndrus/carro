@@ -10,12 +10,13 @@
 				if($model->skipConquest === false)
 				{
 					echo '<style type="text/css"> .modal-body {max-height: 512px; }</style>';
-					$conquest_cars = $this->getConquests($model->int_modell,1);
+					$conquest_cars = $this->getConquests($model->int_fabrikat, $model->int_modell, $model->int_ausstattung, 1);
 					// we only look at the first conquest even though more can exist...
 					if($conquest_cars !== false)
 					{
 						$conquest_make = $conquest_cars[0]['make'];
 						$conquest_model = $conquest_cars[0]['model'];
+						$conquest_trim = $conquest_cars[0]['trim'];
 						$campaign_id = $conquest_cars[0]['campaign_id'];
 
 						$image_src_info = $this->GetModelImage($model->int_modell);
@@ -23,8 +24,9 @@
 						$src_logo_image = $this->GetMakeLogo($model->int_fabrikat);
 						$dest_logo_image = $this->GetMakeLogo($conquest_make);
 
-						$model->conquest_modell = $conquest_model;
+						$model->conquest_model = $conquest_model;	// may not be needed...
 						$model->conquest_make = $conquest_make;
+						$model->conquest_trim = $conquest_trim;
 						
 						$search_img_tags = array(
 											'{{src_image}}', 
@@ -42,7 +44,7 @@
 						
 						// DumbyTemplate system
 					  
-						$conquest_content = str_replace($search_img_tags, $replace_img_html, $conquest_cars[0]['html']);
+						$conquest_content = str_replace($search_img_tags, $replace_img_html, $conquest_cars[0]['map_html']);
 					  
 						echo '<div class="conquest_modal">';
 					  
@@ -58,6 +60,7 @@
 						)); 
 						echo CHtml::hiddenField('cmake', $conquest_make);
 						echo CHtml::hiddenField('cmodel', $conquest_model);
+						echo CHtml::hiddenField('ctrim', $conquest_trim);
 						echo CHtml::hiddenField('csrc', $campaign_id);
 						
 						echo '</div>';

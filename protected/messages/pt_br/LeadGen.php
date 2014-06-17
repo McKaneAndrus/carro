@@ -13,6 +13,7 @@ return array(
 	'Distance' => 'Distância',
 	'Free price quotes on new cars' => 'Cotações grátis para carros novos',
 	'Get the best prices on' =>  'Obter os melhores preços para',
+	'ADDED BY CONQUEST' => 'ACRESCENTADO PELA CONQUISTA',
 
 	// Common buttons
 	
@@ -22,6 +23,7 @@ return array(
     'OK' => 'OK',
     
     // Modal Dialogs
+    
 	'Postal Code Help'  => 'Achar CEP',
 	'Privacy Information' => 'Política de Privacidade',
 	'Please Select Nearest City and State' => 'Por favor, selecione o Estado e a Cidade mais próxima',
