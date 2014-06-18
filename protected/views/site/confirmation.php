@@ -19,8 +19,18 @@
 						$conquest_trim = $conquest_cars[0]['trim'];
 						$campaign_id = $conquest_cars[0]['campaign_id'];
 
-						$image_src_info = $this->GetModelImage($model->int_modell);
-						$image_dest_info = $this->GetModelImage($conquest_model);
+						// if valid trims specified then use trim images
+						
+						if($model->int_ausstattung == -1)
+							$image_src_info = $this->GetModelImage($model->int_modell);
+						else
+							$image_src_info = $this->GetTrimImage($model->int_ausstattung);
+
+						if($conquest_trim == -1)
+							$image_dest_info = $this->GetModelImage($conquest_model);
+						else
+							$image_dest_info = $this->GetTrimImage($conquest_trim);
+						
 						$src_logo_image = $this->GetMakeLogo($model->int_fabrikat);
 						$dest_logo_image = $this->GetMakeLogo($conquest_make);
 
