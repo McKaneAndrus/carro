@@ -604,16 +604,39 @@ class SiteController extends Controller
 	}
 
 	/*
+	* Given a Trim_Id will return a URL for the image. 
+	* Basically a wrapper around GetPic, but with same
+	* return format at GetModelImage(). No image default is return
+	* with no image description 
+	*
+	* Returns array with 'image_path' and 'image_desc' 
+	*/
+/////////////////////////////	
+
+	public function GetTrimImage($trim_id)
+	{
+			
+		if(($pic = $this->GetPic($trim_id)) !== false)
+		{ 
+			$image_data = $pic;
+		}
+		else  // backfill empty images if we can't come up with any, fix up text to be valid info
+		{
+			$image_data = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => '');
+		}
+		
+		return $image_data;	// has 'image_path' and 'image_desc' elements (see get_pic())
+	}
+
+	/*
 	* Given a Model Id will return a URL for the image. Note that this
 	* will return the first image associated with the models trims since
 	* images are associated with a trim and give just a model you have no 
 	* way of knowing what the trim is. 
 	*
-	* Uses mod_status to determine if the record is visible in the display
-	*
 	* Returns array with 'image_path' and 'image_desc' 
 	*/
-/////////////////////////////	
+
 	public function GetModelImage($model_id)
 	{
 		$sql = Yii::app()->db->createCommand();
