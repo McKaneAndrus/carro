@@ -5,7 +5,7 @@ class SiteController extends Controller
 	// it's in the app's image directory to keep deployment easy
 	
 	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.jpg';	// picture not found path (keep leading slash)
-	const DEFAULT_URL_IMAGE_PATH = '/images/cars-300x/';		// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';		// default path (url) to real images (not no_pic.jpg)
 	const DEFAULT_URL_LOGO_PATH = '/images/logos/';				// default path (url) to  images
 	const DEFAULT_NOT_FOUND_LOGO_PIC =  '/images/1x1.gif';		// picture not found path (keep leading slash)
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
