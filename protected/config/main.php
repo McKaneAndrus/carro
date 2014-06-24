@@ -92,8 +92,6 @@ return array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>', 
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-				
-				
 			),
 		),
 		
@@ -120,14 +118,11 @@ return array(
 				
 				// uncomment to show sql in log
 				/*
-				
 				array(
 					'class'=>'CFileLogRoute',
 					'categories'=>'system.db.*',				
 					'levels'=>'trace, info',
 				),
-				
-				
 				*/
 				
 				// uncomment the following to show log messages on web pages
@@ -150,6 +145,6 @@ return array(
 		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
 		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
 		'EmailDupeDays' => 7,						// Number of days to check back for dupes, 0 disables
-		'version'=>'1.04',
+		'version'=>'1.10',
 	),
 );
