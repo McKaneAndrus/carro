@@ -111,11 +111,6 @@ class LeadGen extends CActiveRecord
 
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
-
-/////////////////// need to validate on the submit, not landing anymore. Add to non-scenaro validations...
-
-//			array('int_stadt', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your City')),
-//			array('int_staat', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select Your State')),
 			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
 
 			
@@ -127,6 +122,8 @@ class LeadGen extends CActiveRecord
 			array('int_vname', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','First Name Required')),
 			array('int_tel', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Telephone Required')),
 			array('int_mail', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Email Required')),
+			array('int_stadt', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select Your City')),
+			array('int_staat', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select Your State')),
 
 			array('int_mail', 'email', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Email Address')),
 			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>Yii::t('LeadGen','Invalid Phone Number')),
