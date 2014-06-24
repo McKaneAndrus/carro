@@ -748,8 +748,9 @@ Confirmation
 
 .conquest_modal div.modal-body {
 	font-size:18px;
+	font-weight:bold;
 	line-height:20px;
-	list-style-position: inside;	/* keeps list number inside element space */
+	color:#696969;	/*gray text in modal */
 }
 
 .conquest_modal h1 {
@@ -765,10 +766,47 @@ Confirmation
 
 .conquest_modal ol {
 	padding-top:20px;
+	list-style-position: inside;	/* keeps list number inside element space */
 }
+
+.conquest_modal li {
+	color: #EC1D25;
+	font-size:30px;
+	font-weight:bold;
+}
+
 .conquest_modal img {
 	padding: 10px;
 	float:left;
+}
+
+.conquest_modal div.modal-center {
+	text-align: center;
+}
+
+.conquest_modal span.big-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.conquest_modal span.huge-text {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.conquest_modal .btn {
+	width:100px;
+}
+
+
+.modal-header {
+	background-color: #fff;
+	color:#696969;
+}
+
+
+.modal-footer {
+	background-color: #fff;
 }
 
 /*---------
