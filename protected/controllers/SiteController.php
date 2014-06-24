@@ -611,7 +611,6 @@ class SiteController extends Controller
 	*
 	* Returns array with 'image_path' and 'image_desc' 
 	*/
-/////////////////////////////	
 
 	public function GetTrimImage($trim_id)
 	{
@@ -879,7 +878,7 @@ class SiteController extends Controller
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('cq_id, cq_text, cm_campaign, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
 		$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
-		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = :src_trim', array('src_make'=>(int) $src_make_id, 'src_model'=>(int) $src_model_id, 'src_trim'=>(int) $src_trim_id));
+		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = :src_trim', array(':src_make'=>(int) $src_make_id, ':src_model'=>(int) $src_model_id, ':src_trim'=>(int) $src_trim_id));
 		$sql->order('cm_id');
 		$sql->limit($max_results);
 		$results = $sql->queryall();	// could just do a queryrow...
@@ -891,9 +890,9 @@ class SiteController extends Controller
 		if(count($results) < 1)
 		{
 			$sql = Yii::app()->db->createCommand();
-			$sql->select('cq_id, cq_text, cm_campaign, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
-			$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
-			$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = -1 and cm_dest_trim = -1', array('src_make'=>(int) $src_make_id, 'src_model'=>(int) $src_model_id));
+			$sql->select('cq_id, cq_text, cm_campaign, cm_conquest_car, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
+			$sql->from('{{conquest_campaigns}}, {{conquest_map}}');		// will prepend country
+			$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = -1 and cm_dest_trim = -1', array(':src_make'=>(int) $src_make_id, ':src_model'=>(int) $src_model_id));
 			$sql->order('cm_id');
 			$sql->limit($max_results);
 			$results = $sql->queryall();	// could just do a queryrow...
@@ -908,13 +907,31 @@ class SiteController extends Controller
 		$i=0;
 		foreach($results as $car)
 		{
+			/*
+			* If we have no text in the map record, go up the hierarchy to get the text field from the conquest_cars
+			*/
+			
+			if($car['cm_text'] == "")
+			{
+				$sql = Yii::app()->db->createCommand();
+				$sql->select('ccar_text');
+				$sql->from('{{conquest_cars}}');		// will prepend country
+				$sql->where('ccar_id = :cm_conquest_car and ccar_status=0', array(':cm_conquest_car'=>(int) $car['cm_conquest_car']));
+				$results = $sql->queryRow();	// could just do a queryrow...
+			
+				if($results !== false)
+					$text = $results['ccar_text'];
+			}
+			else
+				$text = $car['cm_text'];
+			
 			$cars[$i++] = array(
 						'campaign_html' => $car['cq_text'],
 						'campaign_id' => $car['cm_campaign'],
 						'make' => $car['cm_dest_make'], 
 						'model' => $car['cm_dest_model'],
 						'trim' => $car['cm_dest_trim'],
-						'map_html' => $car['cm_text']
+						'map_html' => $text,
 					); // append each record to array
 		}
 		
@@ -1243,43 +1260,8 @@ class SiteController extends Controller
 		if(!is_numeric($model_id))
 			throw new CHttpException(400, 'Invalid Request');
 
-/////////// Call Get Make image
+		$photo_url = $this->GetModelImage($model_id);
 
-		$sql = Yii::app()->db->createCommand();
-		$sql->select('aus_id');										// vehicle/trim_id
-		$sql->from('{{ausstattung}}');								// will prepend country
-		$sql->where('aus_modell=:vehicle_model', array(':vehicle_model' => $model_id));
-		$sql->limit(5);		// get more then we think so empty images can be skipped
-		$make_trims = $sql->queryAll();
-		
-		$cnt = count($make_trims);
-		$photo_url = array();
-		
-		// scan the list for at least 1 valid as that is all we are displaying
-		
-		if($cnt)
-		{
-			$valid_images = 0;
-			foreach ($make_trims as $id) 
-			{
-				// get the image file names if valid, save to array (push on end)
-			
-				if(($pic = $this->GetPic($id['aus_id'])) !== false)
-				{ 
-					$photo_url = $pic; 	// same as array_push()
-					break;
-				}
-			}
-		}
-		
-		// backfill empty images if we can't come up with any, fix up text to be valid info
-
-		if(count($photo_url) < 1)
-		{
-			$text = $this->GetModelText($model_id);	// always returns valid string or default unknown
-			$photo_url = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => $text);
-		}
-		
 		echo CJSON::encode($photo_url);
 	}
 	
