@@ -71,7 +71,7 @@
 						echo CHtml::hiddenField('cmake', $conquest_make);
 						echo CHtml::hiddenField('cmodel', $conquest_model);
 						echo CHtml::hiddenField('ctrim', $conquest_trim);
-						echo CHtml::hiddenField('csrc', $campaign_id);
+						echo CHtml::hiddenField('cqid', $campaign_id);
 						
 						echo '</div>';
 					}
