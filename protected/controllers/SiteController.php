@@ -1420,7 +1420,7 @@ class SiteController extends Controller
 									}
 								}
 								
-								$model->int_source = 0; // force always from here, source is non-conquest
+								$model->int_conquest_id = 0; // force always from here, source is non-conquest
 								
 								// set the source of prospect here, should be something to indicate it's a prospect
 
@@ -1521,16 +1521,17 @@ class SiteController extends Controller
 						
 						// GET THE CONQUESTED VEHICLE INFO HERE
 
-						if(!isset($_POST['cmake']) || !isset($_POST['cmodel']) || !isset($_POST['ctrim']) || !isset($_POST['csrc']))
+						if(!isset($_POST['cmake']) || !isset($_POST['cmodel']) || !isset($_POST['ctrim']) || !isset($_POST['cqid']) 
+							|| !is_numeric($_POST['cmake']) || !is_numeric($_POST['cmodel']) || !is_numeric($_POST['ctrim']) || !is_numeric($_POST['cqid']))
 						{
-							Yii::log("Can't Save conquest record to database",  CLogger::LEVEL_ERROR);
+							Yii::log("Can't Save conquest record to database, invalid post data - Possible hacking",  CLogger::LEVEL_ERROR);
 						}
 						else
 						{
 							$model->int_fabrikat = $_POST['cmake'];
 							$model->int_modell = $_POST['cmodel'];
 							$model->int_ausstattung = $_POST['ctrim'];
-							$model->int_source = $_POST['csrc'];
+							$model->int_conquest_id = $_POST['cqid'];
 							$model->int_farbe = -1;
 							$model->int_text = Yii::t('LeadGen','ADDED BY CONQUEST');
 
