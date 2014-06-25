@@ -39,45 +39,11 @@
  * @property integer $int_kvs_status
  * @property integer $int_mitarbeiter
  * @property integer $int_premium_id
+ * @property integer $int_leadstatus
+ * @property string  $int_leadcomment
+ * @property integer $int_conquest_id
+ * @property integer $int_delivery_status
  * @property integer $int_status
- *
- * German to English Translation
- * int_id prospect id int(8)
- * int_name name varchar(30)
- * int_vname forename/firstname varchar(30)
- * int_plz zip varchar(5)
- * int_ort location varchar(30)
- * int_str street address varchar(30)
- * int_stadt - City
- * int_staat - State
- * int_tel phone varchar(20)
- * int_mobil cell phone varchar(20)
- * int_mail Email varchar(64)
- * int_fabrikat make id int(8)
- * int_modell model id int(8)
- * int_bauart type int(5)
- * int_ausstattung trim id int(20)
- * int_farbe int(8)
- * int_kaufzeitpunkt purchase time smallint(2)
- * int_zahlungsart payment method smallint(2)
- * int_kontakt contact id smallint(2)
- * int_haendler dealer id int(8)
- * int_anlage creation timestamp
- * int_suchmaschine search engine id int(8)
- * int_suchwort keyword id int(8)
- * int_erreichbar reachable varchar(40)
- * int_kenntnis having regard terms smallint(1)
- * int_text report text
- * int_bericht_ma report user id (employee) int(8)
- * int_bericht_status report status smallint(1)
- * int_bericht_wv report reminder
- * int_alt_ausstattung alternate trim smallint(1)
- * int_grund reason for contact id (table x_.._entfernung) smallint(2)
- * int_entfernung distance to dealer id (table x_.._entfernung) smallint(2)
- * int_kvs_status smallint(1)
- * int_mitarbeiter ???? smallint(4)
- * int_premium_id ???? int(8)
- * int_status smallint(1)
  */
  
 class LeadGen extends CActiveRecord
@@ -161,6 +127,7 @@ class LeadGen extends CActiveRecord
 			array('int_kenntnis, int_suchwort, int_suchmaschine, int_kontakt', 'safe'),
 			array('int_zahlungsart, int_kaufzeitpunkt, int_bauart', 'safe'),
 			array('int_leadcomment, int_leadstatus', 'safe'),
+			array('int_conquest_id, int_delivery_status, int_score', 'safe'),
 			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -223,6 +190,9 @@ class LeadGen extends CActiveRecord
 			'int_kvs_status' => 'Int Kvs Status',
 			'int_mitarbeiter' => 'Int Mitarbeiter',
 			'int_premium_id' => 'Int Premium',
+			'int_conquest_id' => 'Int Conquest Id',
+			'int_delivery_status' => 'Int Delivery Status',
+			'int_score' => 'Int Score',
 			'int_status' => 'Int Status',
 		);
 	}
@@ -254,31 +224,16 @@ class LeadGen extends CActiveRecord
 		$criteria->compare('int_stadt',$this->int_stadt,true);
 		$criteria->compare('int_staat',$this->int_staat,true);		
 		$criteria->compare('int_tel',$this->int_tel,true);
-		$criteria->compare('int_mobil',$this->int_mobil,true);
 		$criteria->compare('int_mail',$this->int_mail,true);
 		$criteria->compare('int_fabrikat',$this->int_fabrikat);
 		$criteria->compare('int_modell',$this->int_modell);
 		$criteria->compare('int_bauart',$this->int_bauart);
 		$criteria->compare('int_ausstattung',$this->int_ausstattung);
 		$criteria->compare('int_farbe',$this->int_farbe);
-		$criteria->compare('int_kaufzeitpunkt',$this->int_kaufzeitpunkt);
-		$criteria->compare('int_zahlungsart',$this->int_zahlungsart);
 		$criteria->compare('int_kontakt',$this->int_kontakt);
 		$criteria->compare('int_haendler',$this->int_haendler);
 		$criteria->compare('int_anlage',$this->int_anlage,true);
-		$criteria->compare('int_suchmaschine',$this->int_suchmaschine);
-		$criteria->compare('int_suchwort',$this->int_suchwort);
-		$criteria->compare('int_erreichbar',$this->int_erreichbar,true);
-		$criteria->compare('int_kenntnis',$this->int_kenntnis);
 		$criteria->compare('int_text',$this->int_text,true);
-		$criteria->compare('int_bericht_ma',$this->int_bericht_ma);
-		$criteria->compare('int_bericht_status',$this->int_bericht_status);
-		$criteria->compare('int_bericht_wv',$this->int_bericht_wv,true);
-		$criteria->compare('int_alt_ausstattung',$this->int_alt_ausstattung);
-		$criteria->compare('int_grund',$this->int_grund);
-		$criteria->compare('int_entfernung',$this->int_entfernung);
-		$criteria->compare('int_kvs_status',$this->int_kvs_status);
-		$criteria->compare('int_mitarbeiter',$this->int_mitarbeiter);
 		$criteria->compare('int_premium_id',$this->int_premium_id);
 		$criteria->compare('int_status',$this->int_status);
 
