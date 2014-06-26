@@ -876,7 +876,7 @@ class SiteController extends Controller
 		// This case will find exact match INCLUDING src trim == -1 (any trim) if that record exists
 			
 		$sql = Yii::app()->db->createCommand();
-		$sql->select('cq_id, cq_text, cm_campaign, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
+		$sql->select('cq_id, cq_text, cm_campaign, cm_conquest_car, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
 		$sql->from('{{conquest_campaigns}},{{conquest_map}}');		// will prepend country
 		$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = :src_trim', array(':src_make'=>(int) $src_make_id, ':src_model'=>(int) $src_model_id, ':src_trim'=>(int) $src_trim_id));
 		$sql->order('cm_id');
@@ -910,14 +910,14 @@ class SiteController extends Controller
 			/*
 			* If we have no text in the map record, go up the hierarchy to get the text field from the conquest_cars
 			*/
-			
+
 			if($car['cm_text'] == "")
 			{
 				$sql = Yii::app()->db->createCommand();
 				$sql->select('ccar_text');
 				$sql->from('{{conquest_cars}}');		// will prepend country
 				$sql->where('ccar_id = :cm_conquest_car and ccar_status=0', array(':cm_conquest_car'=>(int) $car['cm_conquest_car']));
-				$results = $sql->queryRow();	// could just do a queryrow...
+				$results = $sql->queryRow();
 			
 				if($results !== false)
 					$text = $results['ccar_text'];
