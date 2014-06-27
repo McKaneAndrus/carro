@@ -21,7 +21,7 @@
 						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						<h4 id="mmt_txt_1"></h4>
 						<label for=""><?php echo $form->labelEx($model,'int_ausstattung'); ?></label>
-			
+
 					<?php 
 						// check out the trim field by looking at the LeadGen model to see if it was ever set
 						
@@ -180,9 +180,7 @@
 				<?php $this->endWidget(); ?>
             </div>
         </div>    
-      
-		
-<?php
+ <?php
 
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
@@ -195,22 +193,43 @@ $cs->registerScript(
 			}
 			else
 			{
-			' .	CHtml::ajax(
-				   array(
-						'url' => Yii::app()->createUrl('site/phototrim'), 
-						'type'=>'POST',           
-						'dataType'=>'json',
-						'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
-						'success'=>'js:function(data){
-							$("#mmt_img_1").attr("src", data.image_path);
-							$("#mmt_img_1").attr("alt", data.image_desc);
-							$("#mmt_txt_1").html(data.image_desc);
-						 }'
-				   )
-				) . 
-			'
+				if($("#LeadGen_int_ausstattung").val() == -1)
+				{ 
+				' .	CHtml::ajax(
+						array(
+							'url' => Yii::app()->createUrl('site/photomodel'), 
+							'type'=>'POST',           
+							'dataType'=>'json',
+							'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
+							'success'=>'js:function(data){
+								$("#mmt_img_1").attr("src", data.image_path);
+								$("#mmt_img_1").attr("alt", data.image_desc);
+								$("#mmt_txt_1").html(data.image_desc);
+							 }'
+						)
+					) .
+					'
+				}
+				else
+				{
+			
+				' .	CHtml::ajax(
+					   array(
+							'url' => Yii::app()->createUrl('site/phototrim'), 
+							'type'=>'POST',           
+							'dataType'=>'json',
+							'data'=>'js:{ "ajax":true, "trim_id":$("#LeadGen_int_ausstattung").val() }',
+							'success'=>'js:function(data){
+								$("#mmt_img_1").attr("src", data.image_path);
+								$("#mmt_img_1").attr("alt", data.image_desc);
+								$("#mmt_txt_1").html(data.image_desc);
+							 }'
+					   )
+					) . 
+				'
 				$("#LeadGen_int_farbe").prop("disabled", false);
 			}
+		}
 	}
 	
 	$(document).ready(function() 
