@@ -13,7 +13,9 @@ return array(
 	'Distance' => 'Distância',
 	'Free price quotes on new cars' => 'Cotações grátis para carros novos',
 	'Get the best prices on' =>  'Obter os melhores preços para',
+	'Sorry, No Image Available' => 'Desculpe, Nenhuma imagem disponível',
 	'ADDED BY CONQUEST' => 'ACRESCENTADO PELA CONQUISTA',
+	
 
 	// Common buttons
 	
