@@ -130,6 +130,10 @@ strong
   border-top: 1px solid #ddd;
 }
 
+.modal-footer .btn {
+	width: 100px; 	/* lets make it nicer looking */
+}
+
 /*
 * End mods
 */
@@ -792,10 +796,6 @@ Confirmation
 .conquest_modal span.huge-text {
     font-size: 36px;
     font-weight: bold;
-}
-
-.conquest_modal .btn {
-	width:100px;
 }
 
 .modal-footer {
