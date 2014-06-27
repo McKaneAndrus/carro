@@ -199,7 +199,7 @@ class SiteController extends Controller
 		return false;
 	}
 
-	public function GetPic($p_id)
+	public function GetPic($trim_id)
 	{
 		/*
 		* The $url_image_path is use for final generation of the web based URL of the image. 
@@ -209,7 +209,7 @@ class SiteController extends Controller
 		* 
 		* $_SERVER['DOCUMENT_ROOT'] is typically something like '/var/www/' or '/var/www/html/ ......'
 		*
-		* $p_id - trim_id
+		* $trim_id - trim_id
 		*
 		* $url_image_path - path prepended to image filename returned to caller
 		* $file_check_path - Absolute filesystem path to the file 
@@ -228,13 +228,13 @@ class SiteController extends Controller
 		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_URL_IMAGE_PATH;		// MUST NOT BE RELATIVE PATH
 		$p_filename = false;
 
-		if(is_numeric($p_id))
+		if(is_numeric($trim_id))
 		{
 
 			$sql = Yii::app()->db->createCommand();
 			$sql->select('aus_id, aus_modell, aus_body_id, aus_doors');		// vehicle/trim_id
 			$sql->from('{{ausstattung}}');									// will prepend country
-			$sql->where('aus_id=:trim_id', array(':trim_id' => $p_id));
+			$sql->where('aus_id=:trim_id', array(':trim_id' => $trim_id));
 			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 						
 			if($rec)
@@ -302,7 +302,7 @@ class SiteController extends Controller
 					} // foreach
 				} // year > 1990
 			} // found a modell record
-		} // $p_id was specified
+		} // $trim_id was specified
 		
 		return false;	// if here then not found
 	}
@@ -604,10 +604,9 @@ class SiteController extends Controller
 	}
 
 	/*
-	* Given a Trim_Id will return a URL for the image. 
-	* Basically a wrapper around GetPic, but with same
-	* return format at GetModelImage(). No image default is return
-	* with no image description 
+	* Given a Trim_Id will return a URL for the image. Basically a wrapper around GetPic 
+	* but will back fill with a MODEL image for any trims that do not exist. 
+	* If a model specific trim does not exist then the no_pic defualt image is returned
 	*
 	* Returns array with 'image_path' and 'image_desc' 
 	*/
@@ -621,7 +620,32 @@ class SiteController extends Controller
 		}
 		else  // backfill empty images if we can't come up with any, fix up text to be valid info
 		{
-			$image_data = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => '');
+			// Do a join on the trim to iself to find all trim ID's with same model EXCLUDING
+			// the current trim since we hav already check that, save multiple db calls
+			// SELECT t2.aus_id FROM br_ausstattung AS t1, br_ausstattung AS t2 WHERE t1.aus_id = 7003609 AND t1.aus_modell = t2.aus_modell AND t1.aus_id != t2.aus_id;
+			
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('t2.aus_id');
+			$sql->from('{{ausstattung}} as t1, {{ausstattung}} as t2');									// will prepend country
+			$sql->where('t1.aus_id=:trim_id AND t1.aus_modell = t2.aus_modell AND t1.aus_id != t2.aus_id;and aus_status=0', array(':trim_id'=>$trim_id));
+			$trims = $sql->queryall();
+
+			$image_data = array();
+
+			foreach($trims as $id)
+			{
+				if(($pic = $this->GetPic($id['aus_id'])) !== false)
+				{ 
+					$image_data = $pic; 	// same as array_push()
+					break;	// stop after we find ANY match, yes, it's totally arbitrary
+				}
+			}
+
+			// at this point if we have not found any images for any trims of the same model, 
+			// have to go with the default image image...
+			
+			if(empty($image_data))
+				$image_data = array('image_path' => Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC, 'image_desc' => Yii::t('LeadGen', 'Sorry, No Image Available'));
 		}
 		
 		return $image_data;	// has 'image_path' and 'image_desc' elements (see get_pic())
@@ -655,7 +679,7 @@ class SiteController extends Controller
 			$valid_images = 0;
 			foreach ($make_trims as $id) 
 			{
-				// get the image file names if valid, save to array (push on end)
+				// get the image file names if valid, save to array 
 			
 				if(($pic = $this->GetPic($id['aus_id'])) !== false)
 				{ 
@@ -739,6 +763,9 @@ class SiteController extends Controller
 		$sql->from('{{ausstattung}}');									// will prepend country
 		$sql->where('aus_modell=:id_trim_model and aus_status=0', array(':id_trim_model'=>$model_id));
 		$sql->order('aus_extended_trim');
+		
+		// might want to group on aus_extended_trim...
+		
 		$trims = $sql->queryall();
 	
 		return CHtml::listData($trims, 'aus_id', 'aus_extended_trim');	// fields from the model table, use unique extended trim
@@ -1270,7 +1297,9 @@ class SiteController extends Controller
 		// This should only be allowed to be called by an ajax request, set access rules...
 		// also picks up a few models for display and back fill. 
 		// Just fetches the image for a single specific make, if no images, returns the
-		// default. This returns a single element NOT an array like it's other counterparts
+		// default. This returns a single element NOT an array like it's other counterparts,
+		// BUT it still has 2 elements to the array! Note that GetTrimImage MAY backfill with
+		// a generic trim from a model if a trim specific image does not exist!!!!
 
 		if(!isset($_POST['ajax']))
 			throw new CHttpException(403, 'Not authorized');
@@ -1283,10 +1312,9 @@ class SiteController extends Controller
 		if(!is_numeric($trim_id))
 			throw new CHttpException(400, 'Invalid Request');
 
-		if(($photo_url = $this->GetPic($trim_id)) === false)	// BAD ERROR CASE, WRONG DATA TYPE RETURNED
-			$photo_url = Yii::app()->request->baseUrl . self::DEFAULT_NOT_FOUND_CAR_PIC;
+		$photo_data = $this->GetTrimImage($trim_id);
 
-		echo CJSON::encode($photo_url); // ships it as a nice jason element
+		echo CJSON::encode($photo_data); // ships it as a nice jason string with image_path, and image_desc as elements
 	}
 
 	public function actionMakeLogoImage()
