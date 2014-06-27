@@ -94,9 +94,20 @@
                 
                 <div class="confirm_vehicle">
                     <h2><?php echo Yii::t('LeadGen', 'Your selected vehicle'); ?></h2>
-						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
+						<?php 
+							if($model->int_ausstattung == -1)
+								$car_info =  $this->getModelImage($model->int_modell); 
+							else
+								$car_info =  $this->getTrimImage($model->int_ausstattung); 
+		
+							$car_pic_url = $car_info['image_path'];
+							$car_pic_desc = $car_info['image_desc'];
+							echo '<img id="mmt_img_1" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" />';
+
+						?>
+					
 						</br>
-						<h4 id="mmt_txt_1"></h4>
+						<h4 id="mmt_txt_1"><?php echo $car_pic_desc;?></h4>
                 </div>
                 <!-- end yii form here -->
 				<?php $this->endWidget(); ?>
@@ -125,9 +136,9 @@
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
-	'$(document).ready(function() {
+	'$(document).ready(function() { /*
 		if($("#htrm").val() == -1)
-		{
+		{ 
 		' .	CHtml::ajax(
 				array(
 					'url' => Yii::app()->createUrl('site/photomodel'), 
@@ -161,7 +172,7 @@ $cs->registerScript(
 		'
 		
 		}
-	}
+	*/}
 	);	
 	',
 	CClientScript::POS_END
