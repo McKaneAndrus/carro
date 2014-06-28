@@ -116,14 +116,15 @@
 						<p><h4><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p></h4>
 						<p><?php echo Yii::t('LeadGen', 'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.'); ?></p>
 					</div>
+					<div class="confirm_conquest_logo">
 					<?php echo '<img src=' . $this->GetMakeLogo(199) . '>'; ?>
+					</div>
 				</div>
 				<div class="confirm_anotherQuote">
 					<h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
 						<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
-				   
 				</div>
 
                 <!-- end yii form here -->
