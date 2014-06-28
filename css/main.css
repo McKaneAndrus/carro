@@ -253,11 +253,12 @@ nav a:hover {
     vertical-align: top;
 }
 
-.landing_main form #mm_selects { 
-    width: 250px;
+.landing_main .zip_modal select {
+	margin-right : 20px;
 }
 
-.landing_main select {
+.landing_main form #mm_selects { 
+    width: 250px;
 }
 
 .landing_main label {
@@ -654,26 +655,59 @@ Confirmation
     margin: 0 0 20px;
 }
 
-.confirm_message,
-.confirm_vehicle {
+.confirm_message {
     display: inline-block;
     vertical-align: top;
+
+    width: 560px; /* was 600px */
+    margin: 0 20px 40px 0;
+
 }
 
-.confirm_message {
-    width: 560px; /* was 600px */
+.confirm_conquest_message {
+    display: inline-block;
+    vertical-align: top;
+
+    width: 360px; /* 560px; */
     margin: 0 20px 40px 0;
 }
 
 .confirm_vehicle {
-    border: 1px solid #999;
+    display: inline-block;
+    vertical-align: top;
+ }
+
+.confirm_conquest {
+
+    display: inline-block;
+    vertical-align: top;
+
+	padding-top:20px;
+    border-top: 10px solid #EC1D25;
+    vertical-align: top;
+ }
+
+.confirm_vehicle_img {
     padding: 20px;
     width: 300px;	/* was 260px */
     text-align: center;
     margin-bottom: 10px;
 }
 
-.confirm_vehicle h2 {
+.confirm_vehicle_img h2 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.confirm_conquest_img {
+	float:left;
+    padding: 20px;
+    width: 300px;	/* was 260px */
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.confirm_conquest_img h2 {
     font-weight: bold;
     font-size: 16px;
 }
@@ -681,7 +715,8 @@ Confirmation
 .confirm_anotherQuote {
     padding: 20px 0 0;
     margin: 25px 0 0;
-    border-top: 1px solid #999;
+    border-top: 10px solid #EC1D25;
+    text-align:center;
 }
 
 .confirm_anotherQuote h2 {
