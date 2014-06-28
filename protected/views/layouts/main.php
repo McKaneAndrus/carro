@@ -27,11 +27,9 @@
 
 <div class="container" id="page">
 	<div id="header">
-        <header>
             <div class="header_wrapper">
                 <a href="http://www.achacarro.com"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/achacarro_logo.png" alt="Achacarro" class="header_logo"/></a>
             </div>
-	</header>
 	</div><!-- header -->
 
 	<?php echo $content; ?>
