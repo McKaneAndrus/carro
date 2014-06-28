@@ -81,34 +81,51 @@
                 <h1><?php echo Yii::t('LeadGen', 'Thank you for your request'); ?></h1>
                 
                 <div class="confirm_message">
-                    <p><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p>
+                    <p><h4><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p></h4>
                     <p><?php echo Yii::t('LeadGen', 'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.'); ?></p>
-                    <div class="confirm_anotherQuote">
-                        <h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
-							<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
-							<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
-							<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
-	                   
-                    </div>
                 </div>
                 
                 <div class="confirm_vehicle">
-                    <h2><?php echo Yii::t('LeadGen', 'Your selected vehicle'); ?></h2>
-						<?php 
-							if($model->int_ausstattung == -1)
-								$car_info =  $this->getModelImage($model->int_modell); 
-							else
-								$car_info =  $this->getTrimImage($model->int_ausstattung); 
-		
-							$car_pic_url = $car_info['image_path'];
-							$car_pic_desc = $car_info['image_desc'];
-							echo '<img id="mmt_img_1" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" />';
-
-						?>
-					
-						</br>
-						<h4 id="mmt_txt_1"><?php echo $car_pic_desc;?></h4>
+					<div class="confirm_vehicle_img">
+							<?php 
+								if($model->int_ausstattung == -1)
+									$car_info =  $this->getModelImage($model->int_modell); 
+								else
+									$car_info =  $this->getTrimImage($model->int_ausstattung); 
+			
+								$car_pic_url = $car_info['image_path'];
+								$car_pic_desc = $car_info['image_desc'];
+								echo '<img id="mmt_img_1" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" /></br><h4 id="mmt_txt_1">' . $car_pic_desc . '</h4>';
+							?>
+					</div>
                 </div>
+				<div class="confirm_conquest">
+                	<div class="confirm_conquest_img">
+							<?php 
+								if($model->int_ausstattung == -1)
+									$car_info =  $this->getModelImage($model->int_modell); 
+								else
+									$car_info =  $this->getTrimImage($model->int_ausstattung); 
+			
+								$car_pic_url = $car_info['image_path'];
+								$car_pic_desc = $car_info['image_desc'];
+								echo '<img id="mmt_img_2" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" /></br><h4 id="mmt_txt_2">' . $car_pic_desc . '</h4> ';
+							?>
+					</div>
+					<div class="confirm_conquest_message">
+						<p><h4><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p></h4>
+						<p><?php echo Yii::t('LeadGen', 'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.'); ?></p>
+					</div>
+					<?php echo '<img src=' . $this->GetMakeLogo(199) . '>'; ?>
+				</div>
+				<div class="confirm_anotherQuote">
+					<h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
+						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
+						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
+						<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
+				   
+				</div>
+
                 <!-- end yii form here -->
 				<?php $this->endWidget(); ?>
 				
@@ -132,49 +149,3 @@
 		</div>
 		</noscript>        
         
-<?php
-$cs = Yii::app()->getClientScript();  
-$cs->registerScript(
-	'LeadGenJS',							// unique script ID
-	'$(document).ready(function() { /*
-		if($("#htrm").val() == -1)
-		{ 
-		' .	CHtml::ajax(
-				array(
-					'url' => Yii::app()->createUrl('site/photomodel'), 
-					'type'=>'POST',           
-					'dataType'=>'json',
-					'data'=>'js:{ "ajax":true, "model_id":$("#hmdl").val() }',
-					'success'=>'js:function(data){
-						$("#mmt_img_1").attr("src", data.image_path);
-						$("#mmt_txt_1").html(data.image_desc);
-						$("#mmt_img_conq").attr("src", data.image_path);
-					 }'
-				)
-			) .
-			'
-		}
-		else
-		{
-		' .	CHtml::ajax(
-			   array(
-					'url' => Yii::app()->createUrl('site/phototrim'), 
-					'type'=>'POST',           
-					'dataType'=>'json',
-					'data'=>'js:{ "ajax":true, "trim_id":$("#htrm").val() }',
-					'success'=>'js:function(data){
-						$("#mmt_img_1").attr("src", data.image_path);
-						$("#mmt_txt_1").html(data.image_desc);
-						$("#mmt_img_conq").attr("src", data.image_path);
-					 }'
-			   )
-			) .
-		'
-		
-		}
-	*/}
-	);	
-	',
-	CClientScript::POS_END
-);
-?>      
