@@ -68,7 +68,7 @@
 
 					<?php echo $form->labelEx($model,'int_plz'); ?>
 
-					 <div class="input-append">
+					<div class="input-append">
 					<?php echo $form->textField($model,'int_plz'); ?>
 					<?php echo TbHtml::button('x', array(
 								'color' => TbHtml::BUTTON_COLOR_DEFAULT,
@@ -82,6 +82,7 @@
 								)); ?>
 					</div>			
 					<?php echo $form->error($model,'int_plz'); ?>
+ 					<div class="zip_modal">
  					<?php					
 						$states = $this->getStates(); 	
 						$this->widget('bootstrap.widgets.TbModal', array(
@@ -109,6 +110,7 @@
 								),	
 							)); 
 					?>
+					</div> 
                     </fieldset>
 					<div id="submit_button">
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Start saving today'), array('id'=> 'landing_submit','name' => 'quote', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE)); ?>
