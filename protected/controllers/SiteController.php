@@ -964,6 +964,30 @@ class SiteController extends Controller
 		
 		return $cars;
 	}
+	
+	/*
+	* Gets the conquest messages for the confirm page. This comes
+	* from the cq_text field of the xx_conquest_campaign table. It displays
+	* text as contained in the field with no encoding
+	*
+	* returns : raw text from the table if valid campaign_id, else a default message
+	*/
+	
+	public function getConquestConfirmMsg($campaign_id)
+	{
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('cq_text');
+		$sql->from('{{conquest_campaigns}}');		// will prepend country
+		$sql->where('cq_id = :campaign_id and cq_status=0', array(':campaign_id'=>(int) $campaign_id));
+		$results = $sql->queryRow();
+	
+		if($results !== false)
+			$text = $results['cq_text'];
+		else	// default translated message 
+			$text = '<h4>' . Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.') . '</h4>'; 
+
+		return $text;
+	}
 
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
@@ -1562,7 +1586,15 @@ class SiteController extends Controller
 							$model->int_conquest_id = $_POST['cqid'];
 							$model->int_farbe = -1;
 							$model->int_text = Yii::t('LeadGen','ADDED BY CONQUEST');
-
+							
+							// save all needed conquest info for the landing page
+							
+							$model->conquest_campaign = $model->int_conquest_id;
+							$model->conquest_make = $model->int_fabrikat;
+							$model->conquest_model = $model->int_modell;
+							$model->conquest_trim = $model->int_ausstattung;
+							$model->conquest_confirm = true;
+							
 							if($model->validate())	
 							{
 								// also dupe check the conquest
