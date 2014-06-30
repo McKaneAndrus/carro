@@ -99,27 +99,32 @@
 							?>
 					</div>
                 </div>
-				<div class="confirm_conquest">
-                	<div class="confirm_conquest_img">
-							<?php 
-								if($model->int_ausstattung == -1)
-									$car_info =  $this->getModelImage($model->int_modell); 
-								else
-									$car_info =  $this->getTrimImage($model->int_ausstattung); 
-			
-								$car_pic_url = $car_info['image_path'];
-								$car_pic_desc = $car_info['image_desc'];
-								echo '<img id="mmt_img_2" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" /></br><h4 id="mmt_txt_2">' . $car_pic_desc . '</h4> ';
-							?>
-					</div>
-					<div class="confirm_conquest_message">
-						<p><h4><?php echo Yii::t('LeadGen', 'One of the dealers within your neighborhood should contact you within 48 hours to give you great pricing on a car you are looking for.'); ?></p></h4>
-						<p><?php echo Yii::t('LeadGen', 'Achacarro is a transaction facilitator between buyers and dealerships and as such cannot be deemed responsible in case the selected dealerships do not contact or send a proposal to a buyer.'); ?></p>
-					</div>
-					<div class="confirm_conquest_logo">
-					<?php echo '<img src=' . $this->GetMakeLogo(199) . '>'; ?>
-					</div>
-				</div>
+                <?php
+				if($model->conquest_confirm == true)
+				{
+					echo '<div class="confirm_conquest">';
+					echo '<div class="confirm_conquest_img">';
+
+					if($model->conquest_trim == -1)
+						$car_info =  $this->getModelImage($model->conquest_model); 
+					else
+						$car_info =  $this->getTrimImage($model->conquest_trim); 
+				
+					$car_pic_url = $car_info['image_path'];
+					$car_pic_desc = $car_info['image_desc'];
+					
+					echo '<img id="mmt_img_2" src="' . $car_pic_url . '" alt="'  . $car_pic_desc . '" /></br><h4 id="mmt_txt_2">' . $car_pic_desc . '</h4> ';
+					echo '</div>';
+					echo '<div class="confirm_conquest_message">';
+					echo $this->getConquestConfirmMsg($model->conquest_campaign);
+					echo '</div>';
+					echo '<div class="confirm_conquest_logo">';
+					echo '<img src=' . $this->GetMakeLogo($model->conquest_make) . '>';
+					echo '</div>';
+					echo '</div>';
+				}
+				?>
+				
 				<div class="confirm_anotherQuote">
 					<h2><?php echo Yii::t('LeadGen', 'Would you like to get another quote?'); ?></h2>
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
