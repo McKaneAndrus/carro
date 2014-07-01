@@ -791,34 +791,60 @@ class SiteController extends Controller
 		return CHtml::listData($colors, 'mf_farbe', 'color');	// fields color ID and name
 	}
 
-	public function GetDealers($make, $postal_code_str, $limit)
+	/*
+	* Proc returns number max number of results for a given distance of a user from a dealer
+	* 
+	* Params :
+	* 	make - dealers fabrikat field 
+	*   user_postal_code - users postal code (start point)
+	*   dist - max distince in Kilometers for the bounding square away from dealer
+	*   limit - the max number of results (default 10)
+	* 
+	* This normalized the postal code prior to calling the sp.
+	*/
+	
+	public function GetNearestDealer($make, $postal_code_str, $dist, $limit = 10)
 	{
 
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
 
-		/*
-		* Proc returns number max number of results for a given distance of a user from a dealer
-		* Indexes may help on some items
-		*
-		* The algo below basically can call the sp a few times. This proc is expensive so
-		* keep loop count low. The idea is to geometrically increase the size of the
-		* distance and requery until a suitable amount of dealers are found. If the number
-		* of tries is exceeded then you get what was found.
-		* 
-		* The distance used for the start ($dist) should be chosen accordingly
-		*/
-		
 		$q = 'CALL P_br_dealer_distance_ext_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
+		$cnt = 0;
+
+		$cmd->bindParam(':make_id', $make, PDO::PARAM_INT); // set the so we can look at dealers make!
+		$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
+		$cmd->bindParam(':distance_km', $dist, PDO::PARAM_INT);
+		$cmd->bindParam(':max_results', $limit, PDO::PARAM_INT);
+		$dealers = $cmd->queryAll();
+		
+		return $dealers;
+	}
+
+	/*
+	* Proc returns number max number of results for a given distance of a user from a dealer
+	* Indexes may help on some items
+	*
+	* The algo below basically can call the sp a few times. This proc is expensive so
+	* keep loop count low. The idea is to geometrically increase the size of the
+	* distance and requery until a suitable amount of dealers are found. If the number
+	* of tries is exceeded then you get what was found.
+	* 
+	* The distance used for the start ($dist) should be chosen accordingly, see GetNearestDealer() for
+	* Parameters
+	*
+	* This function returns data in a html list box format
+	*/
+	
+	public function GetDealers($make, $postal_code_str, $limit)
+	{
+	
 		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
+
 		do
 		{
-			$cmd->bindParam(':make_id', $make, PDO::PARAM_INT); // set the so we can look at dealers make!
-			$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
-			$cmd->bindParam(':distance_km', $dist, PDO::PARAM_INT);
-			$cmd->bindParam(':max_results', $limit, PDO::PARAM_INT);
-			$dealers = $cmd->queryAll();
+			$dealers = $this->GetNearestDealer($make, $postal_code_str, $dist, $limit);
 			
 			if(count($dealers) > $limit)	// we have found minimum # results
 				break;
@@ -1492,7 +1518,7 @@ class SiteController extends Controller
 								// at this point $model->int_id has the key for the inthae table inserts
 
 								$dlr_id_list = array();
-								
+								$rank = 0;
 								if(isset($_POST['Inthae']['special_dlrs']))
 								{
 									$sdl = $_POST['Inthae']['special_dlrs'];
@@ -1501,7 +1527,7 @@ class SiteController extends Controller
 										$prospect_sdlr = new Inthae;	
 										$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
 										$prospect_sdlr->ih_dealer_id = $dlr;
-										$prospect_sdlr->ih_status = 0;						// database value for special dealers = 0
+										$prospect_sdlr->ih_status = $rank++;				// database value for the order
 										
 										$dlr_id_list[] = $dlr; 								//	append to the list for later email
 										
@@ -1518,8 +1544,11 @@ class SiteController extends Controller
 								
 								if(($pic = $this->GetPic($model->int_ausstattung)) !== false)
 									$img_name .= urldecode($pic['image_path']); 	// get the images path MUST NOT BE ENCODED as GetPic encodes!!!
-								else 
-									$img_name = false;
+								else
+								{
+									$pic = $this->getModelImage($model->int_modell);
+									$img_name .= urldecode($pic['image_path']);
+								}
 										
 								$this->SES_SendEmailAck($model->int_mail, 
 											Yii::t('mail', 'Achacarro Confirmation Email'), 
@@ -1607,11 +1636,28 @@ class SiteController extends Controller
 									
 									if(!$model->save())				// also updates active record with current record id, how nice!
 										Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_ERROR);
+										
+									// get the closest dealer and stuff into the list
+									
+									$dealer = $this->GetNearestDealer($model->int_fabrikat, $model->int_plz, 1000, 1);
+									
+									if(empty($dealer))
+										$dealer_id = 0;	// error no dealer to pic
+									else
+										$dealer_id = $dealer[0]['hd_id'];
+										
+									$prospect_conq = new Inthae;	
+									$prospect_conq->ih_prospect_id = $model->int_id; 	// current models updated id
+									$prospect_conq->ih_dealer_id = $dealer_id;
+									$prospect_conq->ih_status = 0;						// database value for the order
+										
+									if (!$prospect_conq->save()) 
+										Yii::log("Can't Save Conquest Dealer Data to database",  CLogger::LEVEL_ERROR);
 								}
 								$this->checkPageState($save_model, array());
 							}
 							else
-								Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_WARNING);
+								Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_ERROR);
 						}
 					}
 					else
