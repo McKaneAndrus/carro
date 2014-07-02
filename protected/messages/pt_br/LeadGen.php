@@ -63,9 +63,8 @@ return array(
 	'Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.' => 'Além de me conectar com uma concessionária super atenciosa na minha região, seu serviço gratuito também me ajudou a economizar muito na compra do meu carro novo. Eu já recomendei seu site para todos os meus amigos.',
 	'Maria Delgado' => 'Camila Pereira',
 	
-	'Start saving today' => 'Consiga o Melhor Preco',
+	'Start saving today' => 'Consiga o Melhor Preço',
 
-	
 	// 123 bullets
 	
 	'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.' => 'Selecione a marca e o modelo do seu interesse e colocaremos você em contato com concessionárias na sua região que possam lhe oferecer um ótimo negócio.',
