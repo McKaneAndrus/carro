@@ -1609,12 +1609,19 @@ class SiteController extends Controller
 						}
 						else
 						{
+
+							// save source make, model for the conquest record
+							
+							$make_name = $this->GetMakeName($model->int_fabrikat);
+							$model_name = $this->GetModelName($model->int_modell);
+
+							$model->int_text = $make_name . ',' . $model_name . ' - ' . Yii::t('LeadGen','ADDED BY CONQUEST');
+
 							$model->int_fabrikat = $_POST['cmake'];
 							$model->int_modell = $_POST['cmodel'];
 							$model->int_ausstattung = $_POST['ctrim'];
 							$model->int_conquest_id = $_POST['cqid'];
 							$model->int_farbe = -1;
-							$model->int_text = Yii::t('LeadGen','ADDED BY CONQUEST');
 							
 							// save all needed conquest info for the landing page
 							
