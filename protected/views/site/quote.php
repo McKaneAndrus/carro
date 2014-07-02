@@ -136,7 +136,17 @@
                     
                     <!-- START COLUMN 3 -->
                     <div class="quote_column">
+					
 					<?php	
+							$this->widget('bootstrap.widgets.TbModal', array(
+								'id' => 'ModalTrust',
+								'header' => Yii::t('LeadGen', 'Privacy Information'),
+								'show'=> false,
+								'content' => '<img  src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
+								'footer' => array(TbHtml::button(Yii::t('LeadGen','Close'), array('data-dismiss' => 'modal', 'color'=> 'custom'))),
+							));
+							echo '<img id="privacy_img_1" data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">'; 
+
 							echo $form->labelEx($model,'int_vname');
 							echo $form->textField($model,'int_vname');
 							echo $form->error($model,'int_vname');
@@ -166,14 +176,6 @@
 							echo CHtml::hiddenField('mdl' ,$model->int_modell , array('id' => 'hmdl'));
 							
 							echo '<div class="submit_button">' . TbHtml::submitButton(Yii::t('LeadGen', 'Get Your Price Now'), array('id'=>'quote_submit', 'name'=>'submit', 'color' => 'custom', 'size' => TbHtml::BUTTON_SIZE_LARGE));
-							$this->widget('bootstrap.widgets.TbModal', array(
-								'id' => 'ModalTrust',
-								'header' => Yii::t('LeadGen', 'Privacy Information'),
-								'show'=> false,
-								'content' => '<img  src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">' . Yii::t('LeadGen', 'We do not sell or release your information to anyone but the dealers.'),
-								'footer' => array(TbHtml::button(Yii::t('LeadGen','Close'), array('data-dismiss' => 'modal', 'color'=> 'custom'))),
-							));
-							echo '<img id="privacy_img_1" data-toggle="modal" data-target="#ModalTrust" src="'. Yii::app()->request->baseUrl . '/images/privacy_1.png">'; 
 							echo '</div>';
 						?>
                     </div>
