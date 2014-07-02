@@ -5,9 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-	<meta name="description" content="Achacarro Online" />
-	<meta name="keywords" content="carro, online, carros, achacarro" />
+	<meta name="keywords" content="carro novo, cotacao gratis, preco do carro novo, Achacarro" />
+  	<meta name="description" content="Procurando uma otima oferta no seu carro novo? Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo." />
 	<meta http-equiv="Content-Language" content="pt-BR" />
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" type="image/ico" />
