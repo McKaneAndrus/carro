@@ -529,6 +529,7 @@ Quote form
 
 .quote_column #privacy_img_1 {
 	cursor:pointer;
+	padding:0;
 }
 
 .quote_column select,
@@ -548,13 +549,8 @@ Quote form
 .quote_column label {
     display: block;
     font-weight: bold;
-    margin: 10px 0 3px;
+    margin: 5px 0 0 0;
 }
-
-.quote_column label:first-child {
-    margin: 0 0 3px;
-}
-
 
 .quote_column #quote_submit {	
     display: block;
