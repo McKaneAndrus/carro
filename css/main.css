@@ -54,6 +54,8 @@ span.required
     
     animation-timing-function: ease-out;
     animation: fade 4s infinite;
+    padding-top:3px;
+    padding-bottom:3px;
 }
 
 @keyframes fade {
