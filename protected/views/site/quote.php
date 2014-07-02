@@ -227,8 +227,8 @@ $cs->registerScript(
 					   )
 					) . 
 				'
-				$("#LeadGen_int_farbe").prop("disabled", false);
 			}
+			$("#LeadGen_int_farbe").prop("disabled", false);
 		}
 	}
 	
