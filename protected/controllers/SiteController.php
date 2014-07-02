@@ -1443,7 +1443,7 @@ class SiteController extends Controller
 				
 					// update these fields so they can be used even if user changes values
 					
-					$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell);
+					$this->pageTitle = $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell) . ' ' . Yii::t('LeadGen', 'GetGet Free New Car Quote') ;
 
 					/* 
 					*  Save a cookie of make, model info if desired (mm_hist) may be useful later
@@ -1466,7 +1466,7 @@ class SiteController extends Controller
 					// $this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track 
 
 					$view = 'landing';	// back to page one if the data on page one was invalid. 
-					$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');
+					$this->pageTitle = Yii::t('LeadGen', 'Get Free New Car Quote');
 				}
 			}
 			else // submit the complete set of data. 
@@ -1480,7 +1480,7 @@ class SiteController extends Controller
 
 					$make_name = $this->GetMakeName($model->int_fabrikat);
 					$model_name = $this->GetModelName($model->int_modell);
-					$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+					$this->pageTitle = $make_name . ' ' . $model_name . ' ' . Yii::t('LeadGen', 'Get Free New Car Quote');
   
 					if($model->validate())	
 					{
@@ -1691,10 +1691,10 @@ class SiteController extends Controller
 							if(isset($_GET['model_name'])) 
 								$model_name = $_GET['model_name'];
 								
-							$this->pageTitle = Yii::t('LeadGen', 'Get the best prices on') . ' ' . $make_name . ' ' . $model_name;
+							$this->pageTitle = $make_name . ' ' . $model_name . ' ' . Yii::t('LeadGen', 'Get Free New Car Quote');
 						}
 						else
-							$this->pageTitle = Yii::t('LeadGen', 'Free price quotes on new cars');	// default
+							$this->pageTitle = Yii::t('LeadGen', 'Get Free New Car Quote');	// default
 
 						$view = 'landing';
 						$model->scenario = 'landing';	// set validation scenario to landing page 
