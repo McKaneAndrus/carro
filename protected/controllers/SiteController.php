@@ -1614,8 +1614,9 @@ class SiteController extends Controller
 							
 							$make_name = $this->GetMakeName($model->int_fabrikat);
 							$model_name = $this->GetModelName($model->int_modell);
+							$trim_name = $this->GetTrimName($model->int_ausstattung);
 
-							$model->int_text = $make_name . ' ' . $model_name . ' - ' . Yii::t('LeadGen','ADDED BY CONQUEST');
+							$model->int_text = $make_name . ' ' . $model_name . ' ' . $trim_name . ' - ' . Yii::t('LeadGen','ADDED BY CONQUEST') . ' ' . $model->int_id;
 
 							$model->int_fabrikat = $_POST['cmake'];
 							$model->int_modell = $_POST['cmodel'];
