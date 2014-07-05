@@ -810,13 +810,13 @@ Confirmation
   font-weight: bold;
 }
 
-
 .conquest_modal ol {
 	padding:20px 0 50px 0;
 	list-style-position: inside;
 }
 
 .conquest_modal li {
+	line-height : 30px;
 	color: #EC1D25;
 	font-size:26px;
 	font-weight:bold;
