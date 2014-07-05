@@ -805,19 +805,25 @@ Confirmation
     line-height:50px;
 }
 
+.conquest_modal h3 {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+
 .conquest_modal ol {
-	padding-top:20px;
+	padding:20px 0 50px 0;
 	list-style-position: inside;
 }
 
 .conquest_modal li {
 	color: #EC1D25;
-	font-size:30px;
+	font-size:26px;
 	font-weight:bold;
 }
 
 .conquest_modal img {
-	padding: 10px;
+	padding: 10px 40px;
 	float:left;
 }
 
@@ -825,8 +831,12 @@ Confirmation
 	text-align: center;
 }
 
+.conquest_modal div.modal-right {
+	text-align: right;
+}
+
 .conquest_modal span.big-text {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
 }
 
