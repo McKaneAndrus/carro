@@ -80,6 +80,7 @@ return array(
 	'1. Select Trim and Color' => '1. Selecionar Versão e Cor',
 	'2. Select Dealers' => '2. Selecionar Revendedores',
 	'3. Enter Your Info' => '3. Forneça sua informação',
+	'Select Options' => 'Selecione Opções',
 	'Trim' => 'Versão',
 	'Color' => 'Cor',
 	
