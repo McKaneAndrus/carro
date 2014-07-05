@@ -94,7 +94,7 @@
 								echo '<img src=' . $logo_url . '>';
 							}	
 
-							$special_dealer_display_count = 5; // 0 = No display of Special Dealers div
+							$special_dealer_display_count = 3; // 0 = No display of Special Dealers div
 							$dealer_list = $this->GetDealers($model->int_fabrikat, $model->int_plz, $special_dealer_display_count);
 							$dealer_select_list = array_keys($dealer_list);
 
