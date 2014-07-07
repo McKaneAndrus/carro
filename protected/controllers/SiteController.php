@@ -936,6 +936,21 @@ class SiteController extends Controller
 		$sql->limit($max_results);
 		$results = $sql->queryall();	// could just do a queryrow...
 
+		// New-BROAD MATCH if the trim is not found then try to loosen it up to match any src trim to get a match
+		
+		if(count($results) < 1)
+		{
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('cq_id, cq_text, cm_campaign, cm_conquest_car, cm_dest_make, cm_dest_model, cm_dest_trim, cm_text');
+			$sql->from('{{conquest_campaigns}}, {{conquest_map}}');		// will prepend country
+			$sql->where('cq_id = cm_campaign and cq_status = 0 and cm_status = 0 and cm_src_make = :src_make and cm_src_model = :src_model and cm_src_trim = -1', array(':src_make'=>(int) $src_make_id, ':src_model'=>(int) $src_model_id));
+			$sql->order('cm_id');
+			$sql->limit($max_results);
+			$results = $sql->queryall();	// could just do a queryrow...
+		}
+
+
+/*
 		// Search for make, model match where the 'any trim' (-1) on dest is set
 		// this case will check for a specified src trim that does NOT exist but we need to check for
 		// existance of the dest_trim = any (-1) this will NOT match other records with a specified dest trim
@@ -950,6 +965,7 @@ class SiteController extends Controller
 			$sql->limit($max_results);
 			$results = $sql->queryall();	// could just do a queryrow...
 		}
+*/
 
 		if(count($results) < 1)
 			return false; // nothing to conquest
