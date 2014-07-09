@@ -145,6 +145,6 @@ return array(
 		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
 		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
 		'EmailDupeDays' => 7,						// Number of days to check back for dupes, 0 disables
-		'version'=>'2.00',
+		'version'=>'2.01',
 	),
 );
