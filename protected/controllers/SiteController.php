@@ -1449,7 +1449,12 @@ class SiteController extends Controller
 					$post_params['int_staat'] = $cs_rec['state'];
 				}
 
+				
+
+				$model->skipOEM = 'true';
 				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
+echo 'skipOEM : ' . $model->skipOEM;
+
 
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
 				{
@@ -1490,14 +1495,16 @@ class SiteController extends Controller
 				{
 					$model = new LeadGen('quote');
 
-					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
+					$model->skipOEM = 'true';
 
+					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
+			
 					$view = 'confirmation';		// jump to the confirmation page
 
 					$make_name = $this->GetMakeName($model->int_fabrikat);
 					$model_name = $this->GetModelName($model->int_modell);
 					$this->pageTitle = $make_name . ' ' . $model_name . ' ' . Yii::t('LeadGen', 'Get Free New Car Quote');
-  
+
 					if($model->validate())	
 					{
 						if(!$this->ProspectDupeCheck($model->int_mail, $model->int_fabrikat, $model->int_modell))
@@ -1604,17 +1611,21 @@ class SiteController extends Controller
 						$view = 'quote';	// fix up errors
 					}
 				}
-				else // New user landing here, didn't come from quote page send to the landing page (landing.php)
+				else 
 					if(isset($_POST['conquest']))
 					{
 						// conquest does not mess with sessions, will not save it or update it
 
 						$model = new LeadGen('quote');
 						$save_model = new LeadGen('quote');
+
+						$model->skipOEM = 'true';	// skip oem popup
+
 						$save_model = $model; // save a copy for later so we can mess with anything in the current model
 						$this->checkPageState($model, array());
 						$view = 'confirmation';		// jump to the confirmation page
 						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
+
 						
 						// GET THE CONQUESTED VEHICLE INFO HERE
 
@@ -1625,7 +1636,6 @@ class SiteController extends Controller
 						}
 						else
 						{
-
 							// save source make, model for the conquest record
 							
 							$make_name = $this->GetMakeName($model->int_fabrikat);
@@ -1684,15 +1694,18 @@ class SiteController extends Controller
 								Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_ERROR);
 						}
 					}
-					else
+					else // New user landing here, didn't come from quote page send to the landing page (landing.php)
 					{
 						// yii will start a new session from here 
 						
 						$this->updateSessionInfo(self::LANDING_PAGE_ID); 	// track incoming
 						$model = new LeadGen('landing');
 
-						// wipe out make model trim, leave the rest
+						// wipe out make model trim, leave the res, save state of the OEM popup
 						
+						if(isset($_POST['oem']))
+							$model->skipOEM = $_POST['oem'];
+
 						$this->checkPageState($model, array('int_fabrikat' => '', 'int_modell' => '', 'int_ausstattung' => ''));
 
 						// stuff the models fields (which will update when the form is displayed)
