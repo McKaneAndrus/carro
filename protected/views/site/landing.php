@@ -384,8 +384,6 @@ $cs->registerScript(
 			   )
 			) .
 		'				
-alert( $("#hoem").val());
-
 			if(save_make == 199 && $("#hoem").val() != "true")	// JAC
 			{
 				$("#ModalOEM").modal("toggle");		// pop test
