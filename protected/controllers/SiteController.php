@@ -1449,12 +1449,8 @@ class SiteController extends Controller
 					$post_params['int_staat'] = $cs_rec['state'];
 				}
 
-				
-
 				$model->skipOEM = 'true';
 				$this->checkPageState($model, $post_params);	// get all the post params (form vars) and save to the current state
-echo 'skipOEM : ' . $model->skipOEM;
-
 
 				if($model->validate())			// validate the prior page now, if OK set up current, if not get ready for the bounce back to the landing page
 				{
