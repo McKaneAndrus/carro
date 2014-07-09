@@ -4,11 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-<style type="text/css">
-.modal {
-		width: 512px;
-		margin-left: -256px;
-}
 </style>
         <div class="wrapper">
             <div class="landing_main">
@@ -163,6 +158,32 @@
 					<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
 				</div>
             </div>
+				<!-- Special OEM PopUp -->
+				<div>
+						
+
+					<?php
+						echo '<div class="oem_modal">';
+						echo CHtml::hiddenField('oem', $model->skipOEM, array('id' => 'hoem')); 
+						$this->widget('bootstrap.widgets.TbModal', array(
+						'id' => 'ModalOEM',
+						'header' => Yii::t('LeadGen', 'Special Offer'),
+						'show'=> false,
+						'content' => 'Você está qualificado(a) a receber uma cotação especial de internet para o seu novo JAC com:' .
+									 '<img src="/images/logos/199.png" >'.  
+									 '<ol>' .
+									  '<li>Melhor oferta das concessionárias</li>' .
+									  '<li>Taxa de 0,99% a.m.</li>' .
+									  '<li>6 anos de garantia</li>' .
+									  '<li>Mais equipamentos de série</li>' .
+									  '</ol>' . 'Para receber sua cotação especial sem compromisso, continue informando o seu CEP',
+						'footer' => array(
+							TbHtml::button(Yii::t('LeadGen', 'Continue'), array('data-dismiss' => 'modal', 'color' => 'custom')),
+								),	
+							)); 
+						echo '</div>';
+					?>
+				</div>
         </div>
 <?php
 
@@ -346,9 +367,9 @@ $cs->registerScript(
 	}
 
 	$(window).load(function() {
-
 		save_model = $("#LeadGen_int_modell").val();
-
+		save_make = $("#LeadGen_int_fabrikat").val();
+		
 		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
 		{
 		' .	CHtml::ajax(
@@ -363,6 +384,13 @@ $cs->registerScript(
 			   )
 			) .
 		'				
+alert( $("#hoem").val());
+
+			if(save_make == 199 && $("#hoem").val() != "true")	// JAC
+			{
+				$("#ModalOEM").modal("toggle");		// pop test
+				$("#hoem").val("true");
+			}
 		}
 		makeChanged();
 		modelChanged();	
