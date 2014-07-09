@@ -97,52 +97,6 @@ strong
 }
 
 /*
-* Modal dialog overrides (bootstrap)
-*/
-
-.modal {
-		width: 800px;
-		margin-left: -400px;
-		/*background-color: #ec1d25;*/
-}
-
-.modal-header {
-	border-bottom: 1px solid #eee;
-    font-size: 24px;
-    font-weight: bold;
-    background-image:none;
-    background-color:#EC1D25;
-    color: #fff;
-    text-align: center;
-
-  -webkit- border-top-left-radius: 6px;		/* only needed if changing the header background color */
-  -webkit-border-top-right-radius: 6px;
-  -moz-border-radius-topleft: 6px;
-  -moz-border-radius-topright: 6px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.modal-header h3 {
-  margin: 0;
-  line-height: 30px;
-  font-weight: bold;
-}
-
-.modal-body {
-  max-height: 400px;	/* height before scroll */
-}
-
-.modal-footer {
-  background-color: #f5f5f5;
-  border-top: 1px solid #ddd;
-}
-
-.modal-footer .btn {
-	width: 100px; 	/* lets make it nicer looking */
-}
-
-/*
 * End mods
 */
 
@@ -783,6 +737,71 @@ Confirmation
     border: 0;
 }
 
+/*----------------------------------------------
+General Modal Defaults (bootstrap overrides)
+------------------------------------------------*/
+
+.modal {
+		width: 800px;
+		margin-left: -400px;
+}
+
+.modal-header {
+	border-bottom: 1px solid #eee;
+    font-size: 24px;
+    font-weight: bold;
+    background-image:none;
+    background-color:#EC1D25;
+    color: #fff;
+    text-align: center;
+
+  -webkit- border-top-left-radius: 6px;		/* only needed if changing the header background color */
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  line-height: 30px;
+  font-weight: bold;
+}
+
+.modal-body {
+  max-height: 400px;	/* height before scroll */
+}
+
+.modal-footer {
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+}
+
+.modal-footer .btn {
+	width: 100px; 	/* lets make it nicer looking */
+}
+
+/*----------------
+ ZipHelper Modal
+----------------*/
+
+/* make window smaller for JUST the ziphelper */
+
+#ModalZipHelper.modal {
+	width: 512px;
+	margin-left: -256px;
+}
+
+#ModalZipHelper.modal-body {
+	font-size:18px;
+	font-weight:bold;
+	line-height:24px;
+	color:#696969;
+	max-height: 512px;
+}
+
+
 /*----------------
  Conquest Modal
 ----------------*/
@@ -792,6 +811,7 @@ Confirmation
 	font-weight:bold;
 	line-height:24px;
 	color:#696969;
+	max-height: 512px;
 }
 
 .conquest_modal h1 {
@@ -848,6 +868,74 @@ Confirmation
 .modal-footer {
 	background-color: #fff;
 }
+
+/*----------------
+ OEM Modal
+----------------*/
+
+.oem_modal div.modal-body {
+	font-size:17px;
+	font-weight:bold;
+	line-height:24px;
+	color:#696969;
+	max-height: 512px;
+}
+
+.oem_modal h1 {
+    font-size: 24px;
+    font-weight: bold;
+    background-image:none;
+    background-color:#EC1D25;
+    color: #fff;
+    text-align: center;
+    text-indent: 0;
+    line-height:50px;
+}
+
+.oem_modal h3 {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.oem_modal ol {
+	padding:15px 0 10px 0;
+	list-style-position: inside;
+}
+
+.oem_modal li {
+	line-height : 20px;
+	color: #EC1D25;
+	font-size:16px;
+	font-weight:bold;
+}
+
+.oem_modal img {
+	padding: 10px 20px 0 0;
+	float:left;
+}
+
+.oem_modal div.modal-center {
+	text-align: center;
+}
+
+.oem_modal div.modal-right {
+	text-align: right;
+}
+
+.oem_modal span.big-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.oem_modal span.huge-text {
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.oem_modal .modal-footer {
+	background-color: #fff;
+}
+
 
 /*---------
 Footer
