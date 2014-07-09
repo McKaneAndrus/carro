@@ -22,6 +22,8 @@ return array(
 	'Save' => 'Salvar',
     'Close' =>  'Fechar',
     'Cancel' => 'Cancelar',
+    'Continue' => 'Continue',
+    
     'OK' => 'OK',
     
     // Modal Dialogs
@@ -31,6 +33,7 @@ return array(
 	'Please Select Nearest City and State' => 'Por favor, selecione o Estado e a Cidade mais próxima',
 	'We do not sell or release your information to anyone but the dealers.' => '<strong>Como funciona o nosso processo de pedido de cotação</strong><p>Quando você preenche o nosso formulário de solicitação de cotação, nós identificamos as concessionários da marca localizadas em sua região. Em seguida, transferimos o seu nome, número de telefone, endereço, endereço de e-mail e quaisquer informações adicionais que você nos fornecer a estas concessionárias. Se não for possível encontrar um revendedor na sua área, você receberá um e-mail informando que não há cobertura para aquela marca em sua região.</p> <p>Quando houver cobertura, um representante da concessionária deve contatá-lo por telefone ou e-mail para atender seu pedido de cotação. Após o contato inicial ou durante qualquer outro contato posterior, você poderá informar ao revendedor que você não deseja mais ser contatado por ele ou ela. É responsabilidade exclusiva da concessionária atender ao seu pedido.</p>',
 	'Comparible Vehicle' => 'Mais Carro Por Menos',
+	'Special Offer' => 'Parabéns!',
 	
 	// view translates
 	
