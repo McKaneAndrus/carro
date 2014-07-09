@@ -9,7 +9,6 @@
 				$form=$this->beginWidget('CActiveForm', array('id'=>'leadgen-form',	'enableAjaxValidation'=>false, 'stateful'=>true)); 
 				if($model->skipConquest === false)
 				{
-					echo '<style type="text/css"> .modal-body {max-height: 512px; }</style>';
 					$conquest_cars = $this->getConquests($model->int_fabrikat, $model->int_modell, $model->int_ausstattung, 1);
 					// we only look at the first conquest even though more can exist...
 					if($conquest_cars !== false)
@@ -130,6 +129,10 @@
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
 						<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
+						<?php 
+							$model->skipOEM = 'true'; // pass this to landing screen
+							echo CHtml::hiddenField('oem', $model->skipOEM, array('id' => 'hoem')); 
+						?>
 				</div>
 
                 <!-- end yii form here -->
