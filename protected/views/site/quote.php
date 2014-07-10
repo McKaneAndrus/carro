@@ -20,7 +20,7 @@
                     <div class="quote_column">
 						<img id="mmt_img_1" src="<?php echo Yii::app()->request->baseUrl;?>/images/no_pic.jpg" alt="" />
 						<h4 id="mmt_txt_1"></h4>
-						<label for=""><?php echo $form->labelEx($model,'int_ausstattung'); ?></label>
+						<label for=""><?php echo $form->label($model,'int_ausstattung'); ?></label>
 
 					<?php 
 						// check out the trim field by looking at the LeadGen model to see if it was ever set
@@ -44,7 +44,7 @@
 						
                         <?php echo $form->error($model,'int_ausstattung'); ?>
 
-						<label for=""><?php echo $form->labelEx($model,'int_farbe'); ?></label>
+						<label for=""><?php echo $form->label($model,'int_farbe'); ?></label>
 						
 						<?php						
 							$color_list = array(SiteController::DEFAULT_ANY_VALUE => Yii::t('LeadGen','Any Color'));
@@ -67,7 +67,7 @@
 						
 						<?php echo $form->dropDownList($model, 'int_farbe', $color_list, array(
 								'disabled' =>$disable, 'prompt' => Yii::t('LeadGen','Select a Color')));?>
-                        <?php echo $form->error($model,'int_farbe'); ?>
+                        <!-- <?php echo $form->error($model,'int_farbe'); ?> -->
 
 						<?php
 						
