@@ -1492,9 +1492,30 @@ class SiteController extends Controller
 					$model = new LeadGen('quote');
 
 					$model->skipOEM = 'true';
+	
+					// if trim selection not defined or empty, set to the default -1 (hack)
 
+					if(isset($_POST['LeadGen']['int_ausstattung']))
+					{
+						if($_POST['LeadGen']['int_ausstattung'] == "")
+							$_POST['LeadGen']['int_ausstattung'] = '-1';
+					}
+					else
+						$_POST['LeadGen']['int_ausstattung'] = '-1';
+						
+					// if color selection not defined or empty, set to the default -1 (hack)
+
+					if(isset($_POST['LeadGen']['int_farbe']))
+					{
+						if($_POST['LeadGen']['int_farbe'] == "")
+							$_POST['LeadGen']['int_farbe'] = '-1';
+					}
+					else
+						$_POST['LeadGen']['int_farbe'] = '-1';
+
+					
 					$this->checkPageState($model, $_POST['LeadGen']); // gets the page state and saves again
-			
+
 					$view = 'confirmation';		// jump to the confirmation page
 
 					$make_name = $this->GetMakeName($model->int_fabrikat);
