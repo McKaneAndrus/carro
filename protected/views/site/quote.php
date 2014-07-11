@@ -156,7 +156,13 @@
 							echo $form->error($model,'int_name');
 
 							echo $form->labelEx($model,'int_tel');
-							echo $form->textField($model,'int_tel');
+							//echo $form->textField($model,'int_tel');
+							$this->widget('CMaskedTextField', array(
+								'model' => $model,
+								'attribute' => 'int_tel',
+								'mask' => '(99)? 9xxxxxxxxxxxxxx',
+								'charMap' => array('x'=>'[0-9x\-\s]', '9' =>'[0-9]'),
+							));
 							echo $form->error($model,'int_tel');
 
 							echo $form->labelEx($model,'int_mail');
