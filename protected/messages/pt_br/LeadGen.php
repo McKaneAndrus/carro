@@ -129,7 +129,7 @@ return array(
 	'Please Select Your State' => 'Selecione uma Estado',
 	'Please Select Your City' => 'Selecione uma Cidade',
 	'Please Enter a Postal Code' => 'Forneça seu CEP',
-	'Invalid Format, use 00000-000' => 'Formato inválido, usar 00000-000',
+	'Invalid Format, use 00000-000' => 'Inválido, usar 00000-000',
 	'Please Select a Trim'=>'Selecione uma Versão',
 	'Please Select a Color' => 'Selecione uma Cor',
 	'Last Name Required' => 'Apelido Obrigatório',
