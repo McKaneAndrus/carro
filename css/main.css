@@ -1005,6 +1005,7 @@ Footer
     display: block;
     padding: 0 0 20px;
     margin: 0 0 20px;
+    text-align: center;
 }
 
 .footer_carro a {

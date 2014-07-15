@@ -38,7 +38,11 @@
                 <div>
                     <span class="footer_carro">
 						<a href="<?php echo Yii::app()->request->baseUrl; ?>"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/achacarro_logo_sm.png" alt="Achacarro" class="footer_logo"/></a>
-						<a href="<?php echo Yii::app()->request->baseUrl; ?>">Home</a> <a href="<?php echo Yii::app()->request->baseUrl; ?>/about">About</a> <a href="<?php echo Yii::app()->request->baseUrl; ?>/privacy">Privacy</a> Copyright &copy; 2014 Revmaker
+						
+						<?php echo '<a href="' . Yii::app()->request->baseUrl . '">' . Yii::t('LeadGen', 'Home') . '</a>'?>
+						<?php echo '<a href="' . Yii::app()->request->baseUrl . '/about">' . Yii::t('LeadGen', 'About') . '</a>'?>
+						<?php echo '<a href="' . Yii::app()->request->baseUrl . '/privacy">' . Yii::t('LeadGen', 'Privacy') . '</a>'?>
+						<?php echo Yii::t('LeadGen', 'Copyright'); ?> 
                     </span>
                 </div>
             </div> <!-- footer_wrapper -->
