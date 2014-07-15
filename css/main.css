@@ -632,7 +632,7 @@ Confirmation
     vertical-align: top;
 
 	padding-top:10px;
-    border-top: 10px solid #EC1D25;
+    border-top: 4px solid #EC1D25;
     vertical-align: top;
     width: 940px;
  }
@@ -671,7 +671,7 @@ Confirmation
 
 .confirm_anotherQuote {
     padding: 10px 0 0;
-    border-top: 10px solid #EC1D25;
+    border-top: 4px solid #EC1D25;
     text-align:center;
 }
 
@@ -936,20 +936,30 @@ General Modal Defaults (bootstrap overrides)
 	background-color: #fff;
 }
 
+/*
+* Static pages
+*/
+
+.static_body {
+    width: 940px;
+    margin: 0px auto;
+    padding: 5px 0px 20px;
+}
 
 /*---------
 Footer
 ---------*/
 
-footer {
+/*footer {
     background: #474747 url('../images/footer-bg.png') repeat-x;
     color: #fff;
-}
+}*/
 
 .footer_wrapper {
     width: 940px;
     margin: 0 auto;
     display: table;
+	border-top: 10px solid #EC1D25;
 }
 
 .footer_wrapper h5 {
@@ -959,7 +969,7 @@ footer {
 }
 
 .footer_wrapper a {
-    color: #fff;
+    color: #EC1D25;
     text-decoration: none;
 }
 
@@ -978,7 +988,8 @@ footer {
     border: 0;
     width: 320px;
     font-size: 12px;
-    color: #ccc;
+    /* color: #ccc; */
+    padding: 10px; /*sjg*/
 }
 
 .footer_wrapper div:first-child p {
@@ -1018,26 +1029,3 @@ footer {
     height: 20px;
 }
 
-.footer_rss,
-.footer_facebook,
-.footer_twitter,
-.footer_youtube,
-.footer_instagram {
-    background: url('../images/sprite-redes-sociais-peq.png') no-repeat;
-}
-
-.footer_facebook {
-    background-position: right top;
-}
-
-.footer_twitter {
-    background-position: left -20px;
-}
-
-.footer_youtube {
-    background-position: right -20px;
-}
-
-.footer_instagram {
-    background-position: left bottom;
-}
