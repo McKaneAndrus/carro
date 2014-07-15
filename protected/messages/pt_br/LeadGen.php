@@ -23,8 +23,15 @@ return array(
     'Close' =>  'Fechar',
     'Cancel' => 'Cancelar',
     'Continue' => 'Continue',
-    
     'OK' => 'OK',
+    
+    // Menu 
+    'Home' => 'Home',
+	'About' => 'Quem Somos',
+	'Privacy' => 'Política de Privacidade',
+	'Copyright' => 'Copyright &copy; 2014 Revmaker',
+
+
     
     // Modal Dialogs
     
@@ -109,7 +116,6 @@ return array(
 	'Affiliate' => 'Afiliado',
 	'Get Deal' => 'Aproveite a Oferta',
 
-	
 	// field names
 	
 	'First Name' => 'Nome',
