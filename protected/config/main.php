@@ -89,9 +89,7 @@ return array(
 					'class' => 'application.components.CarUrlRule',
 				),
 
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>', 
-				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'<action:\w+>'=>'site/<action>',	// simple map rule that will send .../about to the about page...
 			),
 		),
 		
@@ -145,6 +143,6 @@ return array(
 		'AckEmailAdr' => 'suporte@achacarro.com', 	// Thank You Email FROM address
 		'AckEmailName' => 'Suporte ao Cliente',		// Thank You Email Human Name
 		'EmailDupeDays' => 7,						// Number of days to check back for dupes, 0 disables
-		'version'=>'2.01',
+		'version'=>'2.03',
 	),
 );
