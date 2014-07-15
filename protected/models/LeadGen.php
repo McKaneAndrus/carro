@@ -54,6 +54,7 @@ class LeadGen extends CActiveRecord
 	public $conquest_model = -999;
 	public $conquest_trim = -999;
 	public $conquest_confirm = false;
+	public $conquest_primary_lead = -999;
 	public $skipOEM = 'false';
 	
 	/**
@@ -129,8 +130,10 @@ class LeadGen extends CActiveRecord
 			array('int_alt_ausstattung, int_bericht_wv, int_bericht_status, int_bericht_ma', 'safe'),
 			array('int_kenntnis, int_suchwort, int_suchmaschine, int_kontakt', 'safe'),
 			array('int_zahlungsart, int_kaufzeitpunkt, int_bauart', 'safe'),
-			array('int_leadcomment, int_leadstatus', 'safe'),
+			array('int_leadcomment, int_leadstatus, int_premium', 'safe'),
 			array('int_conquest_id, int_delivery_status, int_score', 'safe'),
+			
+			array('conquest_primary_lead', 'safe'),	// must be safe or won't assign in page state!
 			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
