@@ -1518,6 +1518,8 @@ class SiteController extends Controller
 
 					$view = 'confirmation';		// jump to the confirmation page
 
+					// set page title to make and model
+					
 					$make_name = $this->GetMakeName($model->int_fabrikat);
 					$model_name = $this->GetModelName($model->int_modell);
 					$this->pageTitle = $make_name . ' ' . $model_name . ' ' . Yii::t('LeadGen', 'Get Free New Car Quote');
@@ -1550,6 +1552,8 @@ class SiteController extends Controller
 
 								if(!$model->save())				// also updates active record with current record id, how nice!
 									Yii::log("Can't Save Prospect Record to database",  CLogger::LEVEL_WARNING);
+
+								$model->conquest_primary_lead = $model->int_id;			// save the lead id for later use if a conquest, confirm form can access to pass back
 
 								$this->updateSessionInfo(self::CONFIRM_PAGE_ID, 
 									array('lead_id'=>$model->int_id, 'make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell, 
@@ -1636,13 +1640,15 @@ class SiteController extends Controller
 						$model = new LeadGen('quote');
 						$save_model = new LeadGen('quote');
 
-						$model->skipOEM = 'true';	// skip oem popup
+						$model->skipOEM = 'true';		// skip oem popup
+						$save_model = $model; 			// save a copy for later so we can mess with anything in the current model
 
-						$save_model = $model; // save a copy for later so we can mess with anything in the current model
 						$this->checkPageState($model, array());
-						$view = 'confirmation';		// jump to the confirmation page
+						$view = 'confirmation';			// jump to the confirmation page
+
 						$model->skipConquest = true;	// we are just conquesting, so let confirmation page know not to do it again...
 
+						$model->int_premium_id = $model->conquest_primary_lead;
 						
 						// GET THE CONQUESTED VEHICLE INFO HERE
 
@@ -1665,9 +1671,12 @@ class SiteController extends Controller
 							$model->int_modell = $_POST['cmodel'];
 							$model->int_ausstattung = $_POST['ctrim'];
 							$model->int_conquest_id = $_POST['cqid'];
-							$model->int_farbe = -1;
+							$model->conquest_primary_lead = $_POST['cpl'];
+							$model->int_premium_id = $_POST['cpl'];			// get the original leads id to save to the conquest
 							
-							// save all needed conquest info for the landing page
+							$model->int_farbe = -1;							// color never selected so default to ANY
+							
+							// save all needed conquest info for the confirm page
 							
 							$model->conquest_campaign = $model->int_conquest_id;
 							$model->conquest_make = $model->int_fabrikat;
@@ -1766,6 +1775,16 @@ class SiteController extends Controller
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
     
 		$this->render($view, array('model'=>$model));	// render correct view with current model state
+	}
+
+	public function actionAbout() 
+	{
+		$this->render('pages/about');
+	}
+
+	public function actionPrivacy() 
+	{
+		$this->render('pages/privacy');
 	}
 
 	/**
@@ -1899,7 +1918,8 @@ class SiteController extends Controller
 			array('allow',  // allow all to look at the pages and lookups
 				'actions'=>array('landing', 'quote', 'confirmation', 
 				'models', 'colors', 'dealers', 'cities', 'error', 'postalcode', 
-				'photomakes', 'photomodel', 'phototrim', 'homepagephotos', 'makelogoimage'),  // added create to all users no login needed 
+				'photomakes', 'photomodel', 'phototrim', 'homepagephotos', 'makelogoimage',
+				'about', 'privacy'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
@@ -1932,7 +1952,9 @@ class SiteController extends Controller
 	private function checkPageState(&$model, $data)
 	{
 		$model->attributes = $this->getPageState('page', array());
+		
 		$model->attributes = $data;
+		
 		$this->setPageState('page', $model->attributes);
 	}
 
