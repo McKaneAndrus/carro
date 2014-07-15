@@ -129,6 +129,7 @@
 						<?php echo TbHtml::submitButton(Yii::t('LeadGen', 'Get Another Quote'), array('name'=>'restart', 'color'=>'custom', 'size'=>TbHtml::BUTTON_SIZE_LARGE)); ?>
 						<?php echo CHtml::hiddenField('mdl' ,$model->int_modell, array('id' => 'hmdl')); ?>
 						<?php echo CHtml::hiddenField('trm' ,$model->int_ausstattung, array('id' => 'htrm')); ?>
+						<?php echo CHtml::hiddenField('cpl', $model->conquest_primary_lead); ?>
 						<?php 
 							$model->skipOEM = 'true'; // pass this to landing screen
 							echo CHtml::hiddenField('oem', $model->skipOEM, array('id' => 'hoem')); 
