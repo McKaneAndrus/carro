@@ -3,8 +3,6 @@
 /* @var $model LeadGen */
 /* @var $form CActiveForm */
 ?>
-
-</style>
         <div class="wrapper">
             <div class="landing_main">
                 <h1><?php echo Yii::t('LeadGen', 'Looking for a Great Deal On a New Car?'); ?></h1>
