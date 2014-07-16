@@ -54,7 +54,7 @@ class LeadGen extends CActiveRecord
 	public $conquest_model = -999;
 	public $conquest_trim = -999;
 	public $conquest_confirm = false;
-	public $conquest_primary_lead = -999;
+	public $conquest_primary_lead = -1;	// indicates no primary lead for a conquest
 	public $skipOEM = 'false';
 	
 	/**
@@ -69,12 +69,15 @@ class LeadGen extends CActiveRecord
 	/*
 	* make names pretty, force lower then upcase first.
 	* does not mess with accented char so they will stay as is.
+	* Also sets the insert date on int_anlage to override the trigger which
+	* may not have the same time basis as the rest of the system (AMAZON RDS issue)
 	*/
 	
 	protected function beforeSave() 
 	{
 		$this->int_vname = ucfirst(strtolower($this->int_vname));
 		$this->int_name = ucfirst(strtolower($this->int_name));
+		$this->int_anlage = date("Y-m-d H:i:s"); // get current date hack to default it for the db
 				
 		return parent::beforeSave();
 	}
