@@ -66,6 +66,19 @@ class LeadGen extends CActiveRecord
 		return '{{interessenten}}';
 	}
 
+	/*
+	* make names pretty, force lower then upcase first.
+	* does not mess with accented char so they will stay as is.
+	*/
+	
+	protected function beforeSave() 
+	{
+		$this->int_vname = ucfirst(strtolower($this->int_vname));
+		$this->int_name = ucfirst(strtolower($this->int_name));
+				
+		return parent::beforeSave();
+	}
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
