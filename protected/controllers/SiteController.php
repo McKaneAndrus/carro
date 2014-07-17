@@ -5,7 +5,9 @@ class SiteController extends Controller
 	// it's in the app's image directory to keep deployment easy
 	
 	const DEFAULT_NOT_FOUND_CAR_PIC =  '/images/no_pic.jpg';	// picture not found path (keep leading slash)
-	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';		// default path (url) to real images (not no_pic.jpg)
+	const DEFAULT_URL_IMAGE_PATH = '/images/cars/';				// default path (URL) to real images (not no_pic.jpg)
+	const DEFAULT_FILE_IMAGE_PATH = '/images/cars/';			// default path (FILE) to real images (not no_pic.jpg)
+
 	const DEFAULT_URL_LOGO_PATH = '/images/logos/';				// default path (url) to  images
 	const DEFAULT_NOT_FOUND_LOGO_PIC =  '/images/1x1.gif';		// picture not found path (keep leading slash)
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
@@ -225,7 +227,7 @@ class SiteController extends Controller
 		*/
 
 		$url_image_path = self::DEFAULT_URL_IMAGE_PATH; 					// can be different then file path
-		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_URL_IMAGE_PATH;		// MUST NOT BE RELATIVE PATH
+		$file_check_path = $_SERVER['DOCUMENT_ROOT'] . self::DEFAULT_FILE_IMAGE_PATH;		// MUST NOT BE RELATIVE PATH
 		$p_filename = false;
 
 		if(is_numeric($trim_id))
