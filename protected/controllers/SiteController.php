@@ -1540,17 +1540,18 @@ class SiteController extends Controller
 									{
 										$tmp .= $opt . ' ';
 									}
+
+									// set the source of prospect here, should be something to indicate it's a prospect
+
+									$tmp = $tmp . ' : ' . $model->int_text;
+
+									if(strlen($tmp) > 255) // get max length from the model if exists
+										$tmp = substr($tmp,0,255); 
+									$model->int_text = $tmp; 
 								}
 								
 								$model->int_conquest_id = 0; // force always from here, source is non-conquest
 								
-								// set the source of prospect here, should be something to indicate it's a prospect
-
-								$tmp = $tmp . ' : ' . $model->int_text;
-
-								if(strlen($tmp) > 255) // get max length from the model if exists
-									$tmp = substr($tmp,0,255); 
-								$model->int_text = $tmp; 
 
 								if(!$model->save())				// also updates active record with current record id, how nice!
 									Yii::log("Can't Save Prospect Record to database",  CLogger::LEVEL_WARNING);
