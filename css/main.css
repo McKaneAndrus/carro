@@ -304,7 +304,7 @@ nav a:hover {
     display: inline-block;
     vertical-align: middle;
     border: 1px solid #999;
-    width: 308px;
+    width: 307px;
     margin: 0 0 0 1px;
     text-align: center;  
 	padding: 20px 0 20px 0;
@@ -313,7 +313,7 @@ nav a:hover {
 }
 
 .landing_overview_makeCar:first-child {
-    margin: 0;
+	margin-left: 1px;
 }
 
 /* next few added sjg */ 
