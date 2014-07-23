@@ -14,8 +14,12 @@
 		{
 			echo '<img style="border : 0" src="' . $image . '" />';
 		}
-		Yii::t('mail', 'Below is a list of your selected dealers');
-		echo '<ul>';
+		echo '<br><p>';
+		if(count($dlr_list) == 1)
+			echo Yii::t('mail', 'Below is your selected dealer');
+		else
+			echo Yii::t('mail', 'Below is a list of your selected dealers');
+		echo '</p><ul>';
 		foreach($dlr_list as $dlr_id)
 		{
 			$rec = $this->GetDealerInfo($dlr_id);
