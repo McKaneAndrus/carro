@@ -17,6 +17,7 @@ class SiteController extends Controller
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
 	const QUOTE_PAGE_ID	= 1001;
 	const CONFIRM_PAGE_ID = 1002;
+	const CONQUEST_PAGE_ID = 1003;
 		
 	/*
 	* Default layout for the views. Defaults to '//layouts/column2', meaning
@@ -1699,6 +1700,12 @@ class SiteController extends Controller
 									
 									if(!$model->save())				// also updates active record with current record id, how nice!
 										Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_ERROR);
+									
+									// This should be a new session at this point since the primary lead has been submitted, session is closed then.
+
+									$this->updateSessionInfo(self::CONQUEST_PAGE_ID, 
+										array('lead_id'=>$model->int_id, 'make_id'=>$model->int_fabrikat, 'model_id'=>$model->int_modell, 
+											'trim_id'=>$model->int_ausstattung, 'color_id'=>$model->int_farbe)); 	// track 
 										
 									// get the closest dealer and stuff into the list
 									
@@ -1718,6 +1725,19 @@ class SiteController extends Controller
 										Yii::log("Can't Save Conquest Dealer Data to database",  CLogger::LEVEL_ERROR);
 								}
 								$this->checkPageState($save_model, array());
+
+								/*
+								* Since the admin needs a session for this lead we must check to see if one exist
+								* then regnerate the id. This will give the conquest lead it's very own session
+								*/
+								
+								if(Yii::app()->session->isStarted) 
+								{
+									Yii::app()->session->regenerateID();	// need a new session as we have one, but need a different one for the restart of the flow
+									Yii::app()->session->clear();
+									Yii::app()->session->destroy();
+									Yii::app()->request->cookies->clear();
+								}
 							}
 							else
 								Yii::log("Invalid Conquest Record, Can't save it to the database",  CLogger::LEVEL_ERROR);
@@ -1780,6 +1800,10 @@ class SiteController extends Controller
 		$this->render($view, array('model'=>$model));	// render correct view with current model state
 	}
 
+	/*
+	* A few of static pages for the site are here
+	*/
+	
 	public function actionAbout() 
 	{
 		$this->render('pages/about');
@@ -1885,7 +1909,7 @@ class SiteController extends Controller
 		* which the admin uses as a complete
 		*/
 		
-		if($page_id == self::CONFIRM_PAGE_ID)
+		if(($page_id == self::CONFIRM_PAGE_ID) || ($page_id == self::CONQUEST_PAGE_ID))
 			$sess->sess_step4 = 1;
 		
 		if(!$sess->save()) 
