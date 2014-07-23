@@ -15,7 +15,6 @@ return array(
 	'Get Free New Car Quote' =>  'Carro Novo Receba Cotacao Gratis | AchaCarro.com',
 	'Sorry, No Image Available' => 'Desculpe, Nenhuma imagem disponível',
 	'ADDED BY CONQUEST' => 'ACRESCENTADO PELA CONQUISTA',
-	
 
 	// Common buttons
 	
@@ -30,8 +29,6 @@ return array(
 	'About' => 'Quem Somos',
 	'Privacy' => 'Política de Privacidade',
 	'Copyright' => 'Copyright &copy; 2014 Revmaker',
-
-
     
     // Modal Dialogs
     
