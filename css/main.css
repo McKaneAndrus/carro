@@ -78,10 +78,10 @@ select.error
 
 div.error
 {
-	color: #C00;
-    font-size: 26px;
+	color: #000;
+    font-size: 20px;
     font-weight: bold;
-    line-height: 28px;
+    line-height: 24px;
 }
 
 div.error h1
@@ -96,9 +96,12 @@ strong
 	font-weight: bold;
 }
 
-/*
-* End mods
-*/
+.error_main {
+    position: relative;
+    padding: 20px;
+    margin: 0 auto;
+    width: 900px;
+}
 
 body {
     font-family: Arial, Helvetica, Verdana;
