@@ -145,12 +145,23 @@
 						<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-3.png"  alt="testimonial"/>
 					</div>
                 </div>
-                <div class="easy123">
-				<ol>
-					<li><?php echo Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.'); ?></li>
-					<li><?php echo Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.'); ?></li>
-					<li><?php echo Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.'); ?></li>
-				</ol>
+                <div class="cms_content">
+					<?php 
+						echo 'MAKE >> ' . $model->int_fabrikat .  '  MODEL >> ' .  $model->int_modell . '<br>';
+						if(empty($model->int_fabrikat))
+							echo 'Make is empty <br>';
+						
+						if(($cms_content = $this->getCMSContent(array('site' => 0, 'page' => 0, 'element' => 0, 'make' => $model->int_fabrikat, 'model' => $model->int_modell))) !== false)
+							echo $cms_content;
+						else
+						{
+							echo '<div class="easy123"><ol>';
+							echo '<li>' . Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.') . '</li>';
+							echo '<li>' . Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.') . '</li>';
+							echo '<li>' . Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.') . ' </li>';
+							echo '</ol></div>';
+						}
+					?>
 				</div>
 				<div class="landing_overview_below">
 					<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
@@ -158,8 +169,6 @@
             </div>
 				<!-- Special OEM PopUp -->
 				<div>
-						
-
 					<?php
 						echo '<div class="oem_modal">';
 						echo CHtml::hiddenField('oem', $model->skipOEM, array('id' => 'hoem')); 

@@ -1035,6 +1035,127 @@ class SiteController extends Controller
 	}
 
 	/*
+	* Get the landing page content for the simple CMS div.
+	* returns the content exacly of what's in the database after
+	* matching on selected keys. If a key value is not provided it is not used in the query
+	*
+	* Array values include any or all of these. If these keys are seen then 
+	* they will be used as part of the query qualification. The site, page, and element are
+	* always part of the query qualifiers, make, model and str_key are only added to the
+	* query IF they are included in $match_array. Make, model and str_key are optional. 
+	* 
+	* Key Values supported in query KEYS ARE CASE SENSITIVE AND SHOULD BE ALL lower CASE!!!!
+	* All are integer except for str_key
+	* 
+	* site       - Cobrand Id, 0 is default site (REQUIRED) 
+	* page       - Site Page Id, 0 is landing, other TBD (REQUIRED)
+	* element    - Element Id on the page (REQUIRED)
+	* make       - The make Id (Optional)
+	* model      - The model Id (Optional)
+	* str_key    - Generic string key (Optional)
+	*
+	* if the optional parameter model_back_fill is set to true (default) an additional
+	* query will be performed by removing the model as part of the query. This allows
+	* Model information to be backfilled with make information if it does not exist.
+	* This behavior can be turned off by setting the parameter to false.
+	*
+	* If content is not found will return FALSE otherwise the text from the `content` field in the db.
+	*/
+	
+	public function getCMSContent($match_array, $model_back_fill = true)
+	{
+		if(!is_array($match_array))
+		{
+			Yii::log("Array expected as function parameter in getCMSContent()",  CLogger::LEVEL_ERROR);
+			return false;	
+		}
+		
+		// Get required params and bomb if not found
+		 
+		if(!isset($match_array['site']))
+		{
+			Yii::log("Array key 'site' expected as function parameter in getCMSContent()",  CLogger::LEVEL_ERROR);
+			return false;
+		}
+		else
+			$site = $match_array['site'];
+
+		if(!isset($match_array['page']))
+		{
+			Yii::log("Array key 'page' expected as function parameter in getCMSContent()",  CLogger::LEVEL_ERROR);
+			return false;
+		}
+		else
+			$site = $match_array['page'];
+			
+		if(!isset($match_array['element']))
+		{
+			Yii::log("Array key 'element' expected as function parameter in getCMSContent()",  CLogger::LEVEL_ERROR);
+			return false;
+		}
+		else
+			$element = $match_array['element'];
+		
+		/*
+		* Now build the where clause, basically and-ing all found
+		* parameters as part of the query qualifier
+		*/
+		
+		$where = 'status = 0  AND site = ' . $match_array['site'] . ' AND page = ' . $match_array['page'] . ' AND element = ' . $match_array['element'] . ' ' ;
+		$where_no_model = $where;
+		$model_set = false;
+		
+		if(!empty($match_array['make']))
+		{
+			$where .= 'AND make = ' . $match_array['make'] . ' ';
+			$where_no_model = $where;
+		}
+			
+		if(!empty($match_array['model']))
+		{
+			$where .= 'AND model = ' . $match_array['model'] . ' ';
+			$model_set = true;
+		}
+			
+		if(!empty($match_array['str_key']))
+		{
+			$where .= 'AND str_key = ' . $match_array['str_key'];
+			$where_no_model = $where;
+		}
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('content');
+		$sql->from('{{site_content}}');
+		$sql->where($where);
+		$results = $sql->queryRow();
+	
+		if($results === false)
+		{
+			// No results... IF we have set a model check and backfill flag set, do another query
+			
+			if($model_set && $model_back_fill)
+			{
+				$sql = Yii::app()->db->createCommand();
+				$sql->select('content');
+				$sql->from('{{site_content}}');
+				$sql->where($where_no_model);
+				$results = $sql->queryRow();
+
+				if($results === false)
+					return false;
+			}
+			else
+				return false;
+				
+		}
+
+		// can modify content here if needed (ie, dumby template, etc)
+		
+		return $results['content'];
+	}
+	
+
+	/*
 	* ==================== ALL ACTIONS BELOW ====================
 	*/
 
