@@ -1054,7 +1054,7 @@ class SiteController extends Controller
 	* model      - The model Id (Optional)
 	* str_key    - Generic string key (Optional)
 	*
-	* if the optional parameter model_back_fill is set to true (default) an additional
+	* if the optional parameter model_backfill is set to true (default) an additional
 	* query will be performed by removing the model as part of the query. This allows
 	* Model information to be backfilled with make information if it does not exist.
 	* This behavior can be turned off by setting the parameter to false.
@@ -1062,7 +1062,7 @@ class SiteController extends Controller
 	* If content is not found will return FALSE otherwise the text from the `content` field in the db.
 	*/
 	
-	public function getCMSContent($match_array, $model_back_fill = true)
+	public function getCMSContent($match_array, $model_backfill = true)
 	{
 		if(!is_array($match_array))
 		{
@@ -1086,7 +1086,7 @@ class SiteController extends Controller
 			return false;
 		}
 		else
-			$site = $match_array['page'];
+			$page = $match_array['page'];
 			
 		if(!isset($match_array['element']))
 		{
@@ -1100,53 +1100,68 @@ class SiteController extends Controller
 		* Now build the where clause, basically and-ing all found
 		* parameters as part of the query qualifier
 		*/
+
+		// if not provided they get the default value for the field -
+		// 0 for numerics, '' (empty string) for strings
+
+		if(empty($match_array['make']))
+			$make = 0;
+		else
+			$make = $match_array['make'];
+			
+		// if model actually specified then we want to know this
+		// incase we want to try to find content without it
 		
-		$where = 'status = 0  AND site = ' . $match_array['site'] . ' AND page = ' . $match_array['page'] . ' AND element = ' . $match_array['element'] . ' ' ;
-		$where_no_model = $where;
-		$model_set = false;
-		
-		if(!empty($match_array['make']))
+		if(empty($match_array['model']))
 		{
-			$where .= 'AND make = ' . $match_array['make'] . ' ';
-			$where_no_model = $where;
+			$model = 0;
+			$model_used = false;
+		}
+		else
+		{
+			$model = $match_array['model'];
+			$model_used = true;
 		}
 			
-		if(!empty($match_array['model']))
-		{
-			$where .= 'AND model = ' . $match_array['model'] . ' ';
-			$model_set = true;
-		}
-			
-		if(!empty($match_array['str_key']))
-		{
-			$where .= 'AND str_key = ' . $match_array['str_key'];
-			$where_no_model = $where;
-		}
-		
+		if(empty($match_array['str_key']))
+			$str_key = ''; 	// empty is not null but an empty string
+		else
+			$str_key = $match_array['str_key']; 
+
+		$fld_array = array(
+				':site' => (int) $site,
+				':page' => (int) $page,
+				':element' => (int) $element,
+				':make' => (int) $make,
+				':model' => (int) $model,
+				':str_key' => $str_key
+				);
+		$where = 'status = 0 AND site=:site AND page=:page AND element=:element AND make=:make AND model=:model AND str_key=:str_key';
+				
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('content');
 		$sql->from('{{site_content}}');
-		$sql->where($where);
+		$sql->where($where, $fld_array);
 		$results = $sql->queryRow();
 	
+		// can't find anytning try a second time without model if users wants to backfill 
+		
 		if($results === false)
 		{
-			// No results... IF we have set a model check and backfill flag set, do another query
-			
-			if($model_set && $model_back_fill)
+			if($model_used && $model_backfill)
 			{
+				$fld_array['model'] = 0; 	// set for default value of 0
 				$sql = Yii::app()->db->createCommand();
 				$sql->select('content');
 				$sql->from('{{site_content}}');
-				$sql->where($where_no_model);
+				$sql->where($where, $fld_array);
 				$results = $sql->queryRow();
-
+				
 				if($results === false)
-					return false;
+					return false;	// retry failed too
 			}
 			else
-				return false;
-				
+				return false;	// not going to try to back fill fail
 		}
 
 		// can modify content here if needed (ie, dumby template, etc)
@@ -1154,12 +1169,87 @@ class SiteController extends Controller
 		return $results['content'];
 	}
 	
-
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
 	*/
 
+	/*
+	* Post Parameter info
+	* site_id = Site identifier, integer REQUIRED
+	* page_id = Page Identifier, integer REQUIRED
+	* element_id = Element Identifier, integer REQUIRED
+	* make_id = Make, integer
+	* model_id = Model, integer
+	* str_key = String of general key value
+	* 
+	* Return - HTML
+	*/
 
+	public function actionCMSContent()
+	{
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['site_id']))
+			throw new CHttpException(400, 'Invalid Request');
+		
+		if(!isset($_POST['page_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!isset($_POST['element_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		$site = $_POST['site_id'];
+		$page = $_POST['page_id'];
+		$element = $_POST['element_id'];
+		
+		if(!is_numeric($site))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($page))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($element))
+			throw new CHttpException(400, 'Invalid Request');
+			
+		// push elements onto parameter list, these are the REQUIRED ones
+		
+		$CMS_Params['site'] = $site;
+		$CMS_Params['page'] = $page;
+		$CMS_Params['element'] = $element;
+
+		// from here we are good with the REQUIRED parameters site, page, and element
+		// the make, model, str_key are optional and will get default values if not supplied
+
+		if(isset($_POST['make_id']))
+		{
+			if(is_numeric($_POST['make_id']))
+				$CMS_Params['make'] = $_POST['make_id'];
+			else
+				throw new CHttpException(400, 'Invalid Request');
+		}
+			
+		if(isset($_POST['model_id']))
+		{
+			if(is_numeric($_POST['model_id']))
+				$CMS_Params['model'] = $_POST['model_id'];
+			else
+				throw new CHttpException(400, 'Invalid Request');
+		}
+
+		// magic number of 255 max for this param
+		
+		if(isset($_POST['str_key']) && strlen($_POST['str_key'] < 256))
+			$CMS_Params['str_key'] = $_POST['str_key'];
+		else
+			throw new CHttpException(400, 'Invalid Request');
+			
+		if(($cms_content = $this->getCMSContent($CMS_Params)) !== false)
+			echo $cms_content;
+		else
+			echo ''; 	// nothing!
+	}
+	
 	/*
 	* Returns full postal code given state and city in post params
 	* called based on the select's ajax call. 

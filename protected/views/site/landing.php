@@ -147,11 +147,21 @@
                 </div>
                 <div class="cms_content">
 					<?php 
-						echo 'MAKE >> ' . $model->int_fabrikat .  '  MODEL >> ' .  $model->int_modell . '<br>';
+					
+						/*
+						// DEBUG DEBUG DEBUG 
+						
+						echo 'MAKE >> ' . $model->int_fabrikat .  '  ';
 						if(empty($model->int_fabrikat))
 							echo 'Make is empty <br>';
+
+						echo 'MODEL >> ' .  $model->int_modell . '  ';
+						if(empty($model->int_modell))
+							echo 'Model is empty <br>';
+					
+						*/
 						
-						if(($cms_content = $this->getCMSContent(array('site' => 0, 'page' => 0, 'element' => 0, 'make' => $model->int_fabrikat, 'model' => $model->int_modell))) !== false)
+						if(($cms_content = $this->getCMSContent(array('site' => 0, 'page' => 0, 'element' => 0, 'make' => $model->int_fabrikat, 'model' => $model->int_modell), true)) !== false)
 							echo $cms_content;
 						else
 						{
