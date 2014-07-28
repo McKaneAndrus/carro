@@ -1070,6 +1070,7 @@ class SiteController extends Controller
 			return false;	
 		}
 		
+		
 		// Get required params and bomb if not found
 		 
 		if(!isset($match_array['site']))
@@ -1137,7 +1138,8 @@ class SiteController extends Controller
 				':str_key' => $str_key
 				);
 		$where = 'status = 0 AND site=:site AND page=:page AND element=:element AND make=:make AND model=:model AND str_key=:str_key';
-				
+
+			
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('content');
 		$sql->from('{{site_content}}');
@@ -1220,29 +1222,24 @@ class SiteController extends Controller
 
 		// from here we are good with the REQUIRED parameters site, page, and element
 		// the make, model, str_key are optional and will get default values if not supplied
+		// in the getCMSContent() so don't need to set the vars here if not in the post.
 
 		if(isset($_POST['make_id']))
 		{
 			if(is_numeric($_POST['make_id']))
 				$CMS_Params['make'] = $_POST['make_id'];
-			else
-				throw new CHttpException(400, 'Invalid Request');
 		}
 			
 		if(isset($_POST['model_id']))
 		{
 			if(is_numeric($_POST['model_id']))
 				$CMS_Params['model'] = $_POST['model_id'];
-			else
-				throw new CHttpException(400, 'Invalid Request');
 		}
 
 		// magic number of 255 max for this param
 		
 		if(isset($_POST['str_key']) && strlen($_POST['str_key'] < 256))
 			$CMS_Params['str_key'] = $_POST['str_key'];
-		else
-			throw new CHttpException(400, 'Invalid Request');
 			
 		if(($cms_content = $this->getCMSContent($CMS_Params)) !== false)
 			echo $cms_content;
@@ -2157,7 +2154,7 @@ class SiteController extends Controller
 				'actions'=>array('landing', 'quote', 'confirmation', 
 				'models', 'colors', 'dealers', 'cities', 'error', 'postalcode', 
 				'photomakes', 'photomodel', 'phototrim', 'homepagephotos', 'makelogoimage',
-				'about', 'privacy'),  // added create to all users no login needed 
+				'cmscontent', 'about', 'privacy'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
