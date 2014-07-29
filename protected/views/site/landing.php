@@ -178,19 +178,6 @@
 		</div>
 				<!-- test for accordian / collapsable content -->
 
-<style>
-
- div.accordion-heading a {
-    color:#000;
-    text-decoration:none;
-}
-
-div.accordion-heading a:hover, a:focus {
-    color:#EC1D25;
-}
-
-
-</style>		
                  <?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
                                 'toggle'      => true, // show all bars
                                 'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))

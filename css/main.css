@@ -407,6 +407,18 @@ nav a:hover {
     line-height: 15px;
 }
 
+/* landing page */
+
+div.accordion-heading a {
+    color:#000;
+    text-decoration:none;
+}
+
+div.accordion-heading a:hover, a:focus {
+    color:#EC1D25;
+}
+
+
 /*-----------
 Quote form 
 ------------*/
