@@ -94,7 +94,7 @@
 								) .  
 							  CHtml::dropDownList('city_helper','', array(
 									'prompt' => Yii::t('LeadGen', 'Select Your City')),
-									 array('onchange' => 'cityHelperChanged();')) . '<BR />' .
+									 array('onchange' => 'cityHelperChanged();')) . '<br />' .
 									 Yii::t('LeadGen','Please Select Nearest City and State'),
 				
 				'footer' => array(
