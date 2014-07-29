@@ -397,7 +397,7 @@ div.accordion-heading a:hover, a:focus {
 				'header' => Yii::t('LeadGen', 'Special Offer'),
 				'show'=> false,
 				'content' => 'Você está qualificado(a) a receber uma cotação especial de internet para o seu novo JAC com:' .
-							 '<img src="/images/logos/199.png" >'.  
+							 '<img src="/images/logos/199.png" alt="JAC"/>'.  
 							 '<ol>' .
 							  '<li>Melhor oferta das concessionárias</li>' .
 							  '<li>Taxa de 0,99% a.m.</li>' .
