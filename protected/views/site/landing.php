@@ -359,8 +359,6 @@ div.accordion-heading a:hover, a:focus {
           </tr>
         </tbody>
       </table>
-</body>
-</div>
 				<?php
 				echo '</div>';
 				echo '</div>';
@@ -413,7 +411,7 @@ div.accordion-heading a:hover, a:focus {
 				echo '</div>';
 			?>
 		</div>
-</div>
+</div> 
 <?php
 
 $cs = Yii::app()->getClientScript();  
