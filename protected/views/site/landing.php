@@ -135,7 +135,7 @@
 		</div>
 		<div id="show_models" >
 			<div class="landing_overview_modelCar">
-				<img id="selected_model_img" src="" alt="" />
+				<img id="selected_model_img" src="<?php echo Yii::app()->request->baseUrl;?>/images/1X1.gif" alt="" />
 				<h4 id="selected_model_txt"> </h4>
 			</div>
 			<div class="landing_overview_adspace">
