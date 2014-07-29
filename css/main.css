@@ -398,6 +398,15 @@ nav a:hover {
 	margin-right: 10px;
     border: 1px solid #ccc;
 } 
+
+.landing_overview .car-details h3 {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: left;
+    color: #D60008;
+    line-height: 15px;
+}
+
 /*-----------
 Quote form 
 ------------*/

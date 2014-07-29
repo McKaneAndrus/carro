@@ -94,7 +94,7 @@
 								) .  
 							  CHtml::dropDownList('city_helper','', array(
 									'prompt' => Yii::t('LeadGen', 'Select Your City')),
-									 array('onchange' => 'cityHelperChanged();')) . '<BR>' .
+									 array('onchange' => 'cityHelperChanged();')) . '<BR />' .
 									 Yii::t('LeadGen','Please Select Nearest City and State'),
 				
 				'footer' => array(
@@ -140,7 +140,7 @@
 			</div>
 			<div class="landing_overview_adspace">
 				<div class="testimonial">
-					<div> <?php echo Yii::t('LeadGen','Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.');?><br><p></p><b><?php echo Yii::t('LeadGen','Maria Delgado'); ?></b></div>
+					<div> <?php echo Yii::t('LeadGen','Your free service not only connected me to a friendly dealer in my neighborhood but it also helped me save a lot of money on my new car purchase. I will recommend you to all my friends.');?><br /><p></p><b><?php echo Yii::t('LeadGen','Maria Delgado'); ?></b></div>
 				</div>
 				<img src="<?php echo Yii::app()->request->baseUrl;?>/images/testimonial-photo-3.png"  alt="testimonial"/>
 			</div>
@@ -179,28 +179,203 @@
 				<!-- test for accordian / collapsable content -->
 
 <style>
- div.accordion-heading a:hover, a:focus {
+
+ div.accordion-heading a {
+    color:#000;
+    text-decoration:none;
+}
+
+div.accordion-heading a:hover, a:focus {
     color:#EC1D25;
 }
+
+
 </style>		
                  <?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
                                 'toggle'      => true, // show all bars
                                 'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
 							);
 
-                for($i=0; $i < 3; $i++) 
+					echo '<div class="accordion-group">';
+					echo '<div class="accordion-heading">';
+					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
+					echo '<h2>JAC J2 </h4>';
+					echo '</a>';
+					echo '</div>';
+					echo '<div id="collapse-0" class="accordion-body collapse in">';	// 'collapse in' is expanded 'collapse' is that
+					echo '<div class="accordion-inner">';
+?>
+		<div class="car-details">
+		<div class="well">
+			  <h3>Pontos Positivos</h3>O motor 1.3 de 108 cv é eficiente na tarefa de impulsionar seus 915 kg. Temar-condicionado, sistema de som, airbag, ABS e seis anos de garantia.
+		</div>
+		<div class="well">
+			  <h3>Pontos Negativos</h3>O acabamento é bastante simples, o espaço traseiro é muito limitado e o por-malas de pouco mais de 100 litros é praticamente figurativo.
+		</div>
+		<div class="well">
+			  <h3>Conforto</h3><p>As suspensões de curso limitado e o repasse excessivo das irregularidades da pista aos ocupantes comprometem um pouco o conforto. O espaço é bastante limitado no banco traseiro e o acesso também não é dos melhores. Os itens de conforto acima da média ajudam para melhorar a habitabilidade.</p>
+		</div>
+
+		<div class="well">
+			  <h3>Performance</h3><p>O motor é suficiente para impulsionar os 900 kg do modelo. Mas como seus torque e potência aparecem em rotações altas, o motorista precisa recorrer muito a trocas de marcha, o que é cansativo, principalmente porque os engates não são precisos. A suspensão macia causa desconforto em curvas.</p>
+		</div>
+
+		<div class="well">
+			  <h3>Bolso</h3><p>Para quem quer um carro urbano, sem pretensões de desempenho, o J2 é uma opção interessante. Seu visual é moderninho e, pelo que custa, há muito poucas opções com tantos equipamentos e tanto tempo de garantia no mercado. Ausência do sistema flex pode pesar no bolso em algumas regiões.</p>
+		</div>
+
+        <table class="table table-hover table-striped">
+        <thead class="gray-gradient ">
+          <tr>
+            <th colspan="2"><strong>Especificações Técnicas</strong></th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          <tr>
+            <td>Motor</td>
+            <td>Dianteiro, transversal</td>
+          </tr>
+
+          <tr>
+            <td>Número de cilindros</td>
+            <td>4 cilindros</td>
+          </tr>
+
+          <tr>
+            <td>Número de válvulas</td>
+            <td>16 válvulas</td>
+          </tr>
+
+          <tr>
+            <td>Combustível</td>
+            <td>Gasolina</td>
+          </tr>
+
+          <tr>
+            <td>Cilindrada (cm³)</td>
+            <td>1 332 cm³</td>
+          </tr>
+
+          <tr>
+            <td>Potência (cv)</td>
+			<td>108 cv a 6 000 rpm</td>
+          </tr>
+
+          <tr>
+            <td>Torque (mkgf)</td>
+            <td>14,0 mkgf a 4 500 rpm</td>
+          </tr>
+
+          <tr>
+            <td>Câmbio</td>
+            <td>Manual, 5 marchas</td>
+          </tr>
+
+          <tr>
+            <td>Tração</td>
+            <td>Dianteira</td>
+          </tr>
+
+          <tr>
+            <td>Suspensão dianteira</td>
+            <td>Independente, McPherson</td>
+          </tr>
+
+          <tr>
+            <td>Suspensão traseira</td>
+            <td>Eixo de torção</td>
+          </tr>
+
+          <tr>
+            <td>Direção</td>
+            <td>Elétrica</td>
+          </tr>
+
+          <tr>
+            <td>Rodas</td>
+            <td>Liga leve, 14</td>
+          </tr>
+
+          <tr>
+            <td>Pneus</td>
+            <td>175/60 R14</td>
+          </tr>
+
+          <tr>
+            <td>Comprimento (m)</td>
+            <td>3,53 m</td>
+          </tr>
+
+          <tr>
+            <td>Largura (m)</td>
+            <td>1,64 m</td>
+          </tr>
+
+          <tr>
+            <td>Altura (m)</td>
+            <td>1,47 m</td>
+          </tr>
+
+          <tr>
+            <td>Entre-eixos</td>
+            <td>2,39 m</td>
+          </tr>
+
+          <tr>
+            <td>Porta-malas / Caçamba (l)</td>
+            <td>121 l</td>
+          </tr>
+
+          <tr>
+            <td>Tanque (l)</td>
+            <td>35 l</td>
+          </tr>
+
+          <tr>
+            <td>Peso em ordem de marcha (kg)</td>
+            <td>915 kg</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="table table-hover table-striped">
+        <thead class="gray-gradient">
+          <tr>
+            <th colspan="2"><strong>Manutenção</strong></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Garantia</td>
+            <td>6 anos</td>
+          </tr>
+
+          <tr>
+            <td>Rede de concessionárias</td>
+            <td>50 concessionárias</td>
+          </tr>
+        </tbody>
+      </table>
+</body>
+</div>
+				<?php
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+
+                for($i=1; $i < 3; $i++) 
                 {
 
 					echo '<div class="accordion-group">';
 					echo '<div class="accordion-heading">';
 					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-' . $i . '">';
-					echo '<h4>Ford Fiesta ' . $i . '</h4>';
+					echo '<h2>Ford Fiesta ' . $i . '</h2>';
 					echo '</a>';
 					echo '</div>';
-					if($i==0)
-						echo '<div id="collapse-' . $i . '" class="accordion-body collapse in">';	// 'collapse in' is expanded 'collapse' is that
-					else
-						echo '<div id="collapse-' . $i . '" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
+					echo '<div id="collapse-' . $i . '" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
 
 					echo '<div class="accordion-inner">';
 					echo 'This is the data in the collapsable element';

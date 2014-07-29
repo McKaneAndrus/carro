@@ -868,11 +868,11 @@ class SiteController extends Controller
 
 		return CHtml::listData($dealers, 'hd_id', function($dealers) {
 			return CHtml::encode($dealers['hd_name']) . 
-			'<br>' . CHtml::encode($dealers['hd_str']) . 
-			'<br>' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_state']) .
-			'<br>' . CHtml::encode($dealers['hd_plz']) . 
-			'<br>' . CHtml::encode($dealers['hd_tel']).
-			'<br>' . CHtml::encode(Yii::t('LeadGen','Distance') . ' : ' . (($dealers['distance'] > 5.0)? $dealers['distance'] . ' km' : Yii::t('LeadGen','Local')));
+			'<br />' . CHtml::encode($dealers['hd_str']) . 
+			'<br />' . CHtml::encode($dealers['hd_ort'] . ', ' .  $dealers['hd_state']) .
+			'<br />' . CHtml::encode($dealers['hd_plz']) . 
+			'<br />' . CHtml::encode($dealers['hd_tel']).
+			'<br />' . CHtml::encode(Yii::t('LeadGen','Distance') . ' : ' . (($dealers['distance'] > 5.0)? $dealers['distance'] . ' km' : Yii::t('LeadGen','Local')));
 		});
 	}
 
