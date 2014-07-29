@@ -199,7 +199,7 @@ div.accordion-heading a:hover, a:focus {
 					echo '<div class="accordion-group">';
 					echo '<div class="accordion-heading">';
 					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
-					echo '<h2>JAC J2 </h4>';
+					echo '<h2>JAC J2 </h2>';
 					echo '</a>';
 					echo '</div>';
 					echo '<div id="collapse-0" class="accordion-body collapse in">';	// 'collapse in' is expanded 'collapse' is that
