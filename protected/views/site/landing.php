@@ -361,6 +361,7 @@
 				?>
 
 	</div>
+	</div>
 		<!-- Special OEM PopUp -->
 		<div>
 			<?php
@@ -384,7 +385,6 @@
 					)); 
 				echo '</div>';
 			?>
-		</div>
 </div> 
 <?php
 

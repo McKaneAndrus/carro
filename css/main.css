@@ -362,7 +362,7 @@ nav a:hover {
 	top: -95px;
 }
 
-/*
+
 .landing_overview ol {
 	padding : 10px;
 	font-weight: bold;
@@ -377,7 +377,7 @@ nav a:hover {
 	padding : 5px;
 }
 
-*/
+
 
 .landing_overview_modelCar:first-child {
     margin: 0;
@@ -412,14 +412,84 @@ nav a:hover {
 
 /* landing page */
 
-div.accordion-heading a {
+.landing_overview div.accordion-heading a {
     color:#000;
     text-decoration:none;
 }
 
-div.accordion-heading a:hover, a:focus {
+.landing_overview div.accordion-heading a:hover, a:focus {
     color:#EC1D25;
 }
+
+
+/*----------------
+ OEM Modal
+----------------*/
+
+.oem_modal div.modal-body {
+	font-size:17px;
+	font-weight:bold;
+	line-height:24px;
+	color:#696969;
+	max-height: 512px;
+}
+
+.oem_modal h1 {
+    font-size: 24px;
+    font-weight: bold;
+    background-image:none;
+    background-color:#EC1D25;
+    color: #fff;
+    text-align: center;
+    text-indent: 0;
+    line-height:50px;
+}
+
+.oem_modal h3 {
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.oem_modal ol {
+	padding:15px 0 10px 0;
+	list-style-position: inside;
+}
+
+.oem_modal li {
+	line-height : 20px;
+	color: #EC1D25;
+	font-size:16px;
+	font-weight:bold;
+}
+
+.oem_modal img {
+	padding: 10px 20px 0 0;
+	float:left;
+}
+
+.oem_modal div.modal-center {
+	text-align: center;
+}
+
+.oem_modal div.modal-right {
+	text-align: right;
+}
+
+.oem_modal span.big-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.oem_modal span.huge-text {
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.oem_modal .modal-footer {
+	background-color: #fff;
+}
+
 
 
 /*-----------
@@ -896,73 +966,6 @@ General Modal Defaults (bootstrap overrides)
 	background-color: #fff;
 }
 
-/*----------------
- OEM Modal
-----------------*/
-
-.oem_modal div.modal-body {
-	font-size:17px;
-	font-weight:bold;
-	line-height:24px;
-	color:#696969;
-	max-height: 512px;
-}
-
-.oem_modal h1 {
-    font-size: 24px;
-    font-weight: bold;
-    background-image:none;
-    background-color:#EC1D25;
-    color: #fff;
-    text-align: center;
-    text-indent: 0;
-    line-height:50px;
-}
-
-.oem_modal h3 {
-  font-size: 30px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.oem_modal ol {
-	padding:15px 0 10px 0;
-	list-style-position: inside;
-}
-
-.oem_modal li {
-	line-height : 20px;
-	color: #EC1D25;
-	font-size:16px;
-	font-weight:bold;
-}
-
-.oem_modal img {
-	padding: 10px 20px 0 0;
-	float:left;
-}
-
-.oem_modal div.modal-center {
-	text-align: center;
-}
-
-.oem_modal div.modal-right {
-	text-align: right;
-}
-
-.oem_modal span.big-text {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.oem_modal span.huge-text {
-    font-size: 34px;
-    font-weight: bold;
-}
-
-.oem_modal .modal-footer {
-	background-color: #fff;
-}
 
 /*
 * Static pages
