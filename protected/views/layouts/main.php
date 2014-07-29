@@ -47,6 +47,7 @@
                 </div>
             </div> <!-- footer_wrapper -->
         </footer>
+	</div>
 </div><!-- page -->
 
 <script>
