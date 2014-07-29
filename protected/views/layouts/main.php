@@ -9,7 +9,7 @@
 <meta name="description" content="Procurando uma otima oferta no seu carro novo? Nossa rede de concessionárias está interessada em lhe oferecer ótimas ofertas na compra do seu carro novo." />
 <meta http-equiv="Content-Language" content="pt-BR" />
 
-<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" type="image/ico" />
+<link rel="icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" type="image/ico" />
 <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
