@@ -148,19 +148,6 @@
 		<div class="cms_content" id="cms_content_1">
 			<?php 
 			
-				/*
-				// DEBUG DEBUG DEBUG 
-				
-				echo 'MAKE >> ' . $model->int_fabrikat .  '  ';
-				if(empty($model->int_fabrikat))
-					echo 'Make is empty <br>';
-
-				echo 'MODEL >> ' .  $model->int_modell . '  ';
-				if(empty($model->int_modell))
-					echo 'Model is empty <br>';
-			
-				*/
-				
 				if(($cms_content = $this->getCMSContent(array('site' => 0, 'page' => 0, 'element' => 0, 'make' => $model->int_fabrikat, 'model' => $model->int_modell), true)) !== false)
 					echo $cms_content;
 				else
@@ -178,20 +165,6 @@
 		</div>
 				<!-- test for accordian / collapsable content -->
 
-                 <?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
-                                'toggle'      => true, // show all bars
-                                'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
-							);
-
-					echo '<div class="accordion-group">';
-					echo '<div class="accordion-heading">';
-					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
-					echo '<h2>JAC J2 </h2>';
-					echo '</a>';
-					echo '</div>';
-					echo '<div id="collapse-0" class="accordion-body collapse in">';	// 'collapse in' is expanded 'collapse' is that
-					echo '<div class="accordion-inner">';
-?>
 		<div class="car-details">
 		<div class="well">
 			  <h3>Pontos Positivos</h3>O motor 1.3 de 108 cv é eficiente na tarefa de impulsionar seus 915 kg. Temar-condicionado, sistema de som, airbag, ABS e seis anos de garantia.
@@ -210,6 +183,20 @@
 		<div class="well">
 			  <h3>Bolso</h3><p>Para quem quer um carro urbano, sem pretensões de desempenho, o J2 é uma opção interessante. Seu visual é moderninho e, pelo que custa, há muito poucas opções com tantos equipamentos e tanto tempo de garantia no mercado. Ausência do sistema flex pode pesar no bolso em algumas regiões.</p>
 		</div>
+<?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
+                                'toggle'      => true, // show all bars
+                                'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
+							);
+
+					echo '<div class="accordion-group">';
+					echo '<div class="accordion-heading">';
+					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
+					echo '<h2>JAC J2 Technical Specs </h2>';
+					echo '</a>';
+					echo '</div>';
+					echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
+					echo '<div class="accordion-inner">';
+?>
 
         <table class="table table-hover table-striped">
         <thead class="gray-gradient ">
@@ -357,7 +344,7 @@
 					echo '<div class="accordion-group">';
 					echo '<div class="accordion-heading">';
 					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-' . $i . '">';
-					echo '<h2>Ford Fiesta ' . $i . '</h2>';
+					echo '<h2>JAC J2 ' . $i . ' Technical Specs</h2>';
 					echo '</a>';
 					echo '</div>';
 					echo '<div id="collapse-' . $i . '" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that

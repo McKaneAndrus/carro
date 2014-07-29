@@ -362,6 +362,7 @@ nav a:hover {
 	top: -95px;
 }
 
+/*
 .landing_overview ol {
 	padding : 10px;
 	font-weight: bold;
@@ -375,6 +376,8 @@ nav a:hover {
 .landing_overview li {
 	padding : 5px;
 }
+
+*/
 
 .landing_overview_modelCar:first-child {
     margin: 0;
@@ -919,6 +922,7 @@ General Modal Defaults (bootstrap overrides)
 .oem_modal h3 {
   font-size: 30px;
   font-weight: bold;
+  color: #fff;
 }
 
 .oem_modal ol {
