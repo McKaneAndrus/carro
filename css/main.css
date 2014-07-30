@@ -264,7 +264,7 @@ nav a:hover {
     font-size: 28px;
     font-weight: bold;
     text-align: center;
-    color: rgb(214, 0, 8);
+    color:#EC1D25;
     line-height: 15px;
 }
 
@@ -377,8 +377,6 @@ nav a:hover {
 	padding : 5px;
 }
 
-
-
 .landing_overview_modelCar:first-child {
     margin: 0;
 }
@@ -406,21 +404,29 @@ nav a:hover {
     font-size: 28px;
     font-weight: bold;
     text-align: left;
-    color: #D60008;
+    color: #EC1D25;
     line-height: 15px;
 }
 
-/* landing page */
 
-.landing_overview div.accordion-heading a {
+.landing_overview .car-details div.accordion-heading h3 {
+    color: inherit;
+}
+
+
+.landing_overview .accordion-heading a {
     color:#000;
     text-decoration:none;
 }
 
-.landing_overview div.accordion-heading a:hover, a:focus {
+.landing_overview .accordion-heading a:hover, a:focus {
     color:#EC1D25;
 }
 
+.landing_overview .accordion-heading i
+{
+    margin-top: 7px;	/*center glyph*/
+}
 
 /*----------------
  OEM Modal

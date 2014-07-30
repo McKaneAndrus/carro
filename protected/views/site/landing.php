@@ -63,6 +63,7 @@
 
 			<div class="input-append">
 			<?php echo $form->textField($model,'int_plz'); ?>
+
 			<?php echo TbHtml::button('x', array(
 						'color' => TbHtml::BUTTON_COLOR_DEFAULT,
 						'onclick'=> 'erasePostalCode();',
@@ -135,7 +136,7 @@
 		</div>
 		<div id="show_models" >
 			<div class="landing_overview_modelCar">
-				<img id="selected_model_img" src="<?php echo Yii::app()->request->baseUrl;?>/images/1X1.gif" alt="" />
+				<img id="selected_model_img" src="<?php echo Yii::app()->request->baseUrl;?>/images/1x1.gif" alt="" />
 				<h4 id="selected_model_txt"> </h4>
 			</div>
 			<div class="landing_overview_adspace">
@@ -165,7 +166,7 @@
 		</div>
 				<!-- test for accordian / collapsable content -->
 
-		<div class="car-details">
+		<div class="car-details" id="car-details">
 		<div class="well">
 			  <h3>Pontos Positivos</h3>O motor 1.3 de 108 cv é eficiente na tarefa de impulsionar seus 915 kg. Temar-condicionado, sistema de som, airbag, ABS e seis anos de garantia.
 		</div>
@@ -183,6 +184,7 @@
 		<div class="well">
 			  <h3>Bolso</h3><p>Para quem quer um carro urbano, sem pretensões de desempenho, o J2 é uma opção interessante. Seu visual é moderninho e, pelo que custa, há muito poucas opções com tantos equipamentos e tanto tempo de garantia no mercado. Ausência do sistema flex pode pesar no bolso em algumas regiões.</p>
 		</div>
+		
 <?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
                                 'toggle'      => true, // show all bars
                                 'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
@@ -191,7 +193,7 @@
 					echo '<div class="accordion-group">';
 					echo '<div class="accordion-heading">';
 					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
-					echo '<h2>JAC J2 Technical Specs </h2>';
+					echo '<h3><i class="icon icon-plus-sign"></i> JAC J2 Technical Specs </h3>';
 					echo '</a>';
 					echo '</div>';
 					echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
@@ -337,31 +339,11 @@
 				echo '</div>';
 				echo '</div>';
 				echo '</div>';
-
-                for($i=1; $i < 3; $i++) 
-                {
-
-					echo '<div class="accordion-group">';
-					echo '<div class="accordion-heading">';
-					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-' . $i . '">';
-					echo '<h2>JAC J2 ' . $i . ' Technical Specs</h2>';
-					echo '</a>';
-					echo '</div>';
-					echo '<div id="collapse-' . $i . '" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
-
-					echo '<div class="accordion-inner">';
-					echo 'This is the data in the collapsable element';
-					echo '</div>';
-					echo '</div>';
-					echo '</div>';
-                }
-
                 $this->endWidget();
-				
 				?>
 
-	</div>
-	</div>
+	</div> <!-- car details -->
+	</div><!-- landing overview -->
 		<!-- Special OEM PopUp -->
 		<div>
 			<?php
@@ -391,7 +373,13 @@
 $cs = Yii::app()->getClientScript();  
 $cs->registerScript(
 	'LeadGenJS',							// unique script ID
-	'function updateImages(data)
+
+	'
+	$("#car-details h3").click(function() {	// find glyph and toggle
+		$(this).find("i.icon").toggleClass("icon-minus-sign icon-plus-sign");
+	});
+
+	function updateImages(data)
 	 {
 			$("#mm_img_1").attr("src", data[0].image_path);
 			$("#mm_img_2").attr("src", data[1].image_path);
