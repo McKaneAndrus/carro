@@ -123,7 +123,8 @@ return array(
 	'Message' => 'Mensagem',
 	'Make'=> 'Fabricante',
 	'Model'=>'Modelo',
-	'Zip Code' => 'Código Postal',	// might be better in a leadgen context...
+	'SSN' =>'CPF',
+	'Zip Code' => 'Código Postal',
 	
 	// field error messages
 	
@@ -138,9 +139,11 @@ return array(
 	'Last Name Required' => 'Apelido Obrigatório',
 	'First Name Required' => 'Nome Obrigatório',
 	'Email Required' => 'Email Obrigatório',
+	'CPF Required' => 'CPF Obrigatório',
 	'Telephone Required' => 'Telefone Obrigatório',
 	'Invalid Email Address' => 'Endereço de Email inválido',
 	'Invalid Phone Number' => 'Número de telefone inválido',
+	'Invalid CPF Number' => 'Número de CPF inválido',
 	
 );
 ?>

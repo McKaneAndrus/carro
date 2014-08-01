@@ -167,180 +167,86 @@
 				<!-- test for accordian / collapsable content -->
 
 		<div class="car-details" id="car-details">
-		<div class="well">
-			  <h3>Pontos Positivos</h3>O motor 1.3 de 108 cv é eficiente na tarefa de impulsionar seus 915 kg. Temar-condicionado, sistema de som, airbag, ABS e seis anos de garantia.
-		</div>
-		<div class="well">
-			  <h3>Pontos Negativos</h3>O acabamento é bastante simples, o espaço traseiro é muito limitado e o por-malas de pouco mais de 100 litros é praticamente figurativo.
-		</div>
-		<div class="well">
-			  <h3>Conforto</h3><p>As suspensões de curso limitado e o repasse excessivo das irregularidades da pista aos ocupantes comprometem um pouco o conforto. O espaço é bastante limitado no banco traseiro e o acesso também não é dos melhores. Os itens de conforto acima da média ajudam para melhorar a habitabilidade.</p>
-		</div>
 
-		<div class="well">
-			  <h3>Performance</h3><p>O motor é suficiente para impulsionar os 900 kg do modelo. Mas como seus torque e potência aparecem em rotações altas, o motorista precisa recorrer muito a trocas de marcha, o que é cansativo, principalmente porque os engates não são precisos. A suspensão macia causa desconforto em curvas.</p>
-		</div>
+		<?php 
+	
+			$recs = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 1);
+			if($recs !== false)
+			{
+				foreach($recs as $rec)
+				{
+					echo "<div class=\"well\"><h3>{$rec['attr']}</h3>{$rec['value']}</div>";
+				}
+			}
+			else
+				echo '<div class="alert alert-danger" role="alert">No Review Data Available</div>';
 
-		<div class="well">
-			  <h3>Bolso</h3><p>Para quem quer um carro urbano, sem pretensões de desempenho, o J2 é uma opção interessante. Seu visual é moderninho e, pelo que custa, há muito poucas opções com tantos equipamentos e tanto tempo de garantia no mercado. Ausência do sistema flex pode pesar no bolso em algumas regiões.</p>
-		</div>
+		?>
 		
-<?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
+		<?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
                                 'toggle'      => true, // show all bars
                                 'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
 							);
 
-					echo '<div class="accordion-group">';
-					echo '<div class="accordion-heading">';
-					echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
-					echo '<h3><i class="icon icon-plus-sign"></i> JAC J2 Technical Specs </h3>';
-					echo '</a>';
-					echo '</div>';
-					echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
-					echo '<div class="accordion-inner">';
-?>
+			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 0);		// get header
+			if($rows !== false)
+			{
+				$accordion_title = $rows[1]['value'] . ' ' . $rows[2]['value'];
+			}
+			else
+				$accordion_title = "Technical Specs";
+			
+			echo '<div class="accordion-group">';
+			echo '<div class="accordion-heading">';
+			echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
+			echo '<h3><i class="icon icon-plus-sign"></i> '. $accordion_title . '</h3>';
+			echo '</a>';
+			echo '</div>';
+			echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
+			echo '<div class="accordion-inner">';
 
-        <table class="table table-hover table-striped">
-        <thead class="gray-gradient ">
-          <tr>
-            <th colspan="2"><strong>Especificações Técnicas</strong></th>
-          </tr>
-        </thead>
+			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 4);
+			
+			if($rows !== false)
+			{
+				echo '<table class="tech_attrs table table-hover table-striped">';
+				echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>Especificações Técnicas</strong></th></tr></thead>';
+				echo '<tbody>';
 
+				foreach($rows as $row)
+					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
 
-        <tbody>
-          <tr>
-            <td>Motor</td>
-            <td>Dianteiro, transversal</td>
-          </tr>
+				echo '</tbody>';
+				echo '</table>';
+			}
+			else
+				echo '<div class="alert alert-danger" role="alert">No Technical Data Available</div>';
 
-          <tr>
-            <td>Número de cilindros</td>
-            <td>4 cilindros</td>
-          </tr>
+			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 2);
+			
+			if($rows !== false)
+			{
 
-          <tr>
-            <td>Número de válvulas</td>
-            <td>16 válvulas</td>
-          </tr>
+				echo '<table class="manuf_attrs table table-hover table-striped">';
+				echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>Manutenção</strong></th></tr></thead>';
+				echo '<tbody>';
 
-          <tr>
-            <td>Combustível</td>
-            <td>Gasolina</td>
-          </tr>
+				foreach($rows as $row)
+					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
 
-          <tr>
-            <td>Cilindrada (cm³)</td>
-            <td>1 332 cm³</td>
-          </tr>
+				echo '</tbody>';
+				echo '</table>';
+			}
+			else
+				echo '<div class="alert alert-danger" role="alert">No Manufacturer Data Available</div>';
+		?>
 
-          <tr>
-            <td>Potência (cv)</td>
-			<td>108 cv a 6 000 rpm</td>
-          </tr>
-
-          <tr>
-            <td>Torque (mkgf)</td>
-            <td>14,0 mkgf a 4 500 rpm</td>
-          </tr>
-
-          <tr>
-            <td>Câmbio</td>
-            <td>Manual, 5 marchas</td>
-          </tr>
-
-          <tr>
-            <td>Tração</td>
-            <td>Dianteira</td>
-          </tr>
-
-          <tr>
-            <td>Suspensão dianteira</td>
-            <td>Independente, McPherson</td>
-          </tr>
-
-          <tr>
-            <td>Suspensão traseira</td>
-            <td>Eixo de torção</td>
-          </tr>
-
-          <tr>
-            <td>Direção</td>
-            <td>Elétrica</td>
-          </tr>
-
-          <tr>
-            <td>Rodas</td>
-            <td>Liga leve, 14</td>
-          </tr>
-
-          <tr>
-            <td>Pneus</td>
-            <td>175/60 R14</td>
-          </tr>
-
-          <tr>
-            <td>Comprimento (m)</td>
-            <td>3,53 m</td>
-          </tr>
-
-          <tr>
-            <td>Largura (m)</td>
-            <td>1,64 m</td>
-          </tr>
-
-          <tr>
-            <td>Altura (m)</td>
-            <td>1,47 m</td>
-          </tr>
-
-          <tr>
-            <td>Entre-eixos</td>
-            <td>2,39 m</td>
-          </tr>
-
-          <tr>
-            <td>Porta-malas / Caçamba (l)</td>
-            <td>121 l</td>
-          </tr>
-
-          <tr>
-            <td>Tanque (l)</td>
-            <td>35 l</td>
-          </tr>
-
-          <tr>
-            <td>Peso em ordem de marcha (kg)</td>
-            <td>915 kg</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="table table-hover table-striped">
-        <thead class="gray-gradient">
-          <tr>
-            <th colspan="2"><strong>Manutenção</strong></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>Garantia</td>
-            <td>6 anos</td>
-          </tr>
-
-          <tr>
-            <td>Rede de concessionárias</td>
-            <td>50 concessionárias</td>
-          </tr>
-        </tbody>
-      </table>
-				<?php
-				echo '</div>';
-				echo '</div>';
-				echo '</div>';
-                $this->endWidget();
-				?>
+		<?php
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+            $this->endWidget();
+		?>
 
 	</div> <!-- car details -->
 	</div><!-- landing overview -->
@@ -368,6 +274,16 @@
 				echo '</div>';
 			?>
 </div> 
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51074389-1', 'achacarro.com');
+  ga('send', 'pageview' , {'page':'/Landing', 'title':'Landing Page'});
+</script>
+
 <?php
 
 $cs = Yii::app()->getClientScript();  

@@ -3,47 +3,6 @@
 /**
  * This is the model class for table "{{interessenten}}".
  *
- * The followings are the available columns in table '{{interessenten}}':
- * @property integer $int_id
- * @property string $int_name
- * @property string $int_vname
- * @property string $int_plz
- * @property string $int_ort
- * @property string $int_str
- * @property string $int_stadt
- * @property string $int_staat
- * @property string $int_tel
- * @property string $int_mobil
- * @property string $int_mail
- * @property integer $int_fabrikat
- * @property integer $int_modell
- * @property integer $int_bauart
- * @property integer $int_ausstattung
- * @property integer $int_farbe
- * @property integer $int_kaufzeitpunkt
- * @property integer $int_zahlungsart
- * @property integer $int_kontakt
- * @property integer $int_haendler
- * @property string $int_anlage
- * @property integer $int_suchmaschine
- * @property integer $int_suchwort
- * @property string $int_erreichbar
- * @property integer $int_kenntnis
- * @property string $int_text
- * @property integer $int_bericht_ma
- * @property integer $int_bericht_status
- * @property string $int_bericht_wv
- * @property integer $int_alt_ausstattung
- * @property integer $int_grund
- * @property integer $int_entfernung
- * @property integer $int_kvs_status
- * @property integer $int_mitarbeiter
- * @property integer $int_premium_id
- * @property integer $int_leadstatus
- * @property string  $int_leadcomment
- * @property integer $int_conquest_id
- * @property integer $int_delivery_status
- * @property integer $int_status
  */
  
 class LeadGen extends CActiveRecord
@@ -56,6 +15,7 @@ class LeadGen extends CActiveRecord
 	public $conquest_confirm = false;
 	public $conquest_primary_lead = -1;	// indicates no primary lead for a conquest
 	public $skipOEM = 'false';
+	public $CPF_Required = false;		// never need it unless the view wants tells us it got it
 	
 	/**
 	 * @return string the associated database table name
@@ -81,14 +41,13 @@ class LeadGen extends CActiveRecord
 				
 		return parent::beforeSave();
 	}
-
+	
 	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
+		// NOTE: you should only define rules for those attributes that will receive user inputs.
 
 		return array(
 
@@ -98,7 +57,6 @@ class LeadGen extends CActiveRecord
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
 			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
-
 			
 			// Quote Page - Trim, Color, Email
 			
@@ -107,6 +65,10 @@ class LeadGen extends CActiveRecord
 			array('int_name', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Last Name Required')),
 			array('int_vname', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','First Name Required')),
 			array('int_tel', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Telephone Required')),
+
+			array('int_cpf', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','CPF Required')),
+			array('int_cpf',  'ext.validators.cpf', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid CPF Number')),	
+
 			array('int_mail', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Email Required')),
 			array('int_stadt', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select Your City')),
 			array('int_staat', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select Your State')),
@@ -120,7 +82,7 @@ class LeadGen extends CActiveRecord
 
 			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>Yii::t('LeadGen','Invalid Format, use 00000-000')),
 			array('int_plz', 'length', 'max'=>9),
-
+			
 			// Make Id, Model Id, Trim Id, Color Id, Dealer Id, etc
 
 			array('int_fabrikat, int_modell, int_ausstattung, int_farbe, int_haendler', 'numerical', 'integerOnly'=>true),
@@ -131,6 +93,7 @@ class LeadGen extends CActiveRecord
 
 			// String Data types get length limits
 			
+			array('int_cpf', 'length', 'max'=>14),
 			array('int_text', 'length', 'max'=>255),			
 			array('int_name, int_vname, int_str', 'length', 'max'=>30),
 			array('int_plz', 'length', 'max'=>20),
@@ -216,6 +179,7 @@ class LeadGen extends CActiveRecord
 			'int_delivery_status' => 'Int Delivery Status',
 			'int_score' => 'Int Score',
 			'int_status' => 'Int Status',
+			'int_cpf'  => Yii::t('LeadGen', 'SSN'),
 		);
 	}
 

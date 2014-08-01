@@ -423,10 +423,18 @@ nav a:hover {
     color:#EC1D25;
 }
 
-.landing_overview .accordion-heading i
-{
+.landing_overview .accordion-heading i {
     margin-top: 7px;	/*center glyph*/
 }
+
+.landing_overview .tech_attrs td {
+	width:50%;
+}
+
+.landing_overview .manuf_attrs td {
+	width:50%;
+}
+
 
 /*----------------
  OEM Modal

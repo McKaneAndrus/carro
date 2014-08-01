@@ -154,6 +154,7 @@
 							echo $form->textField($model,'int_name');
 							echo $form->error($model,'int_name');
 
+
 							echo $form->labelEx($model,'int_tel');
 							$this->widget('CMaskedTextField', array(
 								'model' => $model,
@@ -162,6 +163,25 @@
 								'charMap' => array('x'=>'[0-9x\-\s]', '9' =>'[0-9]'),
 							));
 							echo $form->error($model,'int_tel');
+
+							if(true)
+							{
+								echo $form->labelEx($model,'int_cpf');
+
+								$this->widget('CMaskedTextField', array(
+									'model' => $model,
+									'attribute' => 'int_cpf',
+									'mask' => '999.999.999-99',
+									'charMap' => array('9' =>'[0-9]'),
+								));
+								echo $form->error($model,'int_cpf');
+								$model->CPF_Required = true;
+							}
+							else
+							{
+								$model->CPF_Required = false;								
+							}
+
 
 							echo $form->labelEx($model,'int_mail');
 							echo $form->textField($model,'int_mail');
@@ -186,6 +206,16 @@
 				<?php $this->endWidget(); ?>
             </div>
         </div>    
+        
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51074389-1', 'achacarro.com');
+  ga('send', 'pageview' , {'page':'/Quote', 'title':'Quote Page'});
+</script>
+        
  <?php
 
 $cs = Yii::app()->getClientScript();  

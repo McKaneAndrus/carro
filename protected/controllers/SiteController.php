@@ -1170,6 +1170,101 @@ class SiteController extends Controller
 		
 		return $results['content'];
 	}
+
+	/*
+	* returns the review data
+	*
+	* returns array of records as follows
+	*			array('attr' => 'Review Title/Heading', 'value' => 'Review text'),
+	* 	If NO results returns false
+	*/
+	
+	public function getReviewData($year, $make, $model, $trim, $group)
+	{
+		// ignoring year for now
+		// group == 0 is header, returns 2 special records, one with make,  one  with model, the other with the attributes Id
+
+		// group == 1 is the review data
+
+		if(!is_numeric($year))
+			return false;
+
+		if(!is_numeric($make))
+			return false;
+
+		if(!is_numeric($model))
+			return false;
+			
+		if(!is_numeric($trim))
+			return false;
+		
+		if(!is_numeric($group))
+			return false;
+
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('content_id, make_name, model_name, trim_name');
+		$sql->from('{{carro_content_master}}');
+		$sql->where('make_id=:make_id AND model_id=:model_id AND trim_id=:trim_id AND content_status = 0', 
+						array(':make_id'=> $make, ':model_id'=>$model, ':trim_id'=>$trim));
+		$sql->order('content_sort_order');
+
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+
+		$reviews = array();
+
+		if($group == 0)
+		{
+			// special group
+			
+			if(!$rec)
+				return false; 
+				
+			$reviews[] = array('attr' => 'content_id', 'value' => $rec['content_id'] );	// content_id useful for look up into attribute table
+			$reviews[] = array('attr' => 'make_name', 'value' => $rec['make_name'] );	
+			$reviews[] = array('attr' => 'model_name', 'value' => $rec['model_name'] );
+			$reviews[] = array('attr' => 'model_name', 'value' => $rec['trim_name'] );
+			
+			return $reviews;
+		}
+			
+		if(!$rec)
+		{
+			// now try for a trim of 0 which indicates a MAKE, MODEL Generic set of data (Ie, not trim specific)
+			
+			$sql = Yii::app()->db->createCommand();
+			$sql->select('content_id');
+			$sql->from('{{carro_content_master}}');
+			$sql->where('make_id=:make_id AND model_id=:model_id AND trim_id=0 AND content_status = 0', 
+							array(':make_id'=> $make, ':model_id'=>$model));
+			$sql->order('content_sort_order');
+			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+			
+			if(!$rec)
+				return false; 	// nothing left to do
+		}
+
+		$attribute_content_id = $rec['content_id'];	// got the master id for the attribute look up
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('attribute_name, attribute_value');
+		$sql->from('{{carro_content_attr}}');
+		$sql->where('attribute_content_id=:attribute_content_id AND attribute_group=:group_id AND attribute_status = 0', 
+						array(':attribute_content_id' => $attribute_content_id, ':group_id'=>$group));
+		$sql->order('attribute_sort_order');
+
+		$rows = $sql->queryall();
+	
+		if(count($rows) == 0)
+			return false;
+		
+		foreach($rows as $row)
+		{
+			$reviews[] = array('attr' => $row['attribute_name'], 'value' => $row['attribute_value'] );
+		}
+		
+		return $reviews;
+	}
+	
 	
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
