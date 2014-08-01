@@ -14,6 +14,7 @@
  * @author Thiago F Macedo <thiago@internetbudi.com.br>
  * @version 0.1
  */
+ 
 class cpf extends CValidator
 {
 

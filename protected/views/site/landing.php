@@ -164,90 +164,94 @@
 		<div class="landing_overview_below">
 			<?php echo Yii::t('LeadGen', 'At Carro, we offer a huge selection of new cars, trucks, SUVs, hybrids and more to choose from. Our dealer network is interested in offering you great deals on your new vehicle purchase. Dealers compete for your business, so take advantage of our no-haggle online quote process now!'); ?>
 		</div>
-				<!-- test for accordian / collapsable content -->
-
-		<div class="car-details" id="car-details">
 
 		<?php 
-	
-			$recs = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 1);
+			$detail_id = 0;		
+			$recs = $this->getReviewHeader(2014, $model->int_fabrikat, $model->int_modell, -1, true, $detail_id);
+
+			// hide or show the entire div, but always generate it so JS can muck with it.
+			
 			if($recs !== false)
 			{
-				foreach($recs as $rec)
-				{
-					echo "<div class=\"well\"><h3>{$rec['attr']}</h3>{$rec['value']}</div>";
-				}
+				$review_make = $recs['make'];
+				$review_model = $recs['model'];
+				$accordion_title = $review_make . ' ' . $review_model;
+				echo '<div class="car-details" id="car-details">';
+				
 			}
+			else
+			{
+				$accordion_title = 'Technical Data';
+				echo '<div class="car-details" id="car-details">';
+				echo "<div class=\"well\"><h3>Review Information</h3>No Information Available</div>";
+			}
+
+			echo CHtml::hiddenField('dtid' , $detail_id, array('id' => 'hdtid'));	// save for JS Use
+			
+			$recs = $this->getReviewDetail($detail_id, 1);	// 1 = review (pro/con/etc)
+
+			echo '<div class="review_section" id="review_section">'; 
+			
+			if($recs !== false)
+				foreach($recs as $rec)
+					echo "<div class=\"well\"><h3>{$rec['attr']}</h3>{$rec['value']}</div>";
 			else
 				echo '<div class="alert alert-danger" role="alert">No Review Data Available</div>';
+			echo '</div>';		// review_section
 
-		?>
 		
-		<?php $this->beginWidget('bootstrap.widgets.TbCollapse', array(
-                                'toggle'      => true, // show all bars
-                                'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian3'))
+			$this->beginWidget('bootstrap.widgets.TbCollapse', array(
+								'toggle'      => true, // show all bars
+								'htmlOptions' => array('class' => 'accordion', 'id'=>'accordian1'))
 							);
-
-			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 0);		// get header
-			if($rows !== false)
-			{
-				$accordion_title = $rows[1]['value'] . ' ' . $rows[2]['value'];
-			}
-			else
-				$accordion_title = "Technical Specs";
 			
 			echo '<div class="accordion-group">';
 			echo '<div class="accordion-heading">';
-			echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-0">';
-			echo '<h3><i class="icon icon-plus-sign"></i> '. $accordion_title . '</h3>';
+			echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse-0">';
+			echo '<h3><i class="icon icon-plus-sign"></i> <span id="accordion_title">'. $accordion_title . '</span> - ' . Yii::t("LeadGen", "Specifications") . '</h3>';
 			echo '</a>';
 			echo '</div>';
 			echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
 			echo '<div class="accordion-inner">';
 
-			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 4);
+			$rows = $this->getReviewDetail(0, 4);	// 4 = tech specs
 			
-			if($rows !== false)
-			{
-				echo '<table class="tech_attrs table table-hover table-striped">';
-				echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>Especificações Técnicas</strong></th></tr></thead>';
-				echo '<tbody>';
+			echo '<table class="tech_attrs table table-hover table-striped">';
+			echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>' . Yii::t('LeadGen', 'Technical Specifications') . '</strong></th></tr></thead>';
+			echo '<tbody class="tech_attrs_body" id="tech_attrs_body">';
 
+			if($rows !== false)
 				foreach($rows as $row)
 					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
-
-				echo '</tbody>';
-				echo '</table>';
-			}
 			else
-				echo '<div class="alert alert-danger" role="alert">No Technical Data Available</div>';
+				echo "<tr><td>" . Yii::t('LeadGen', 'No Technical Data Available'). "</td><td></td></tr>";
 
-			$rows = $this->getReviewData(2014, $model->int_fabrikat, $model->int_modell, -1, 2);
+			echo '</tbody>';
+			echo '</table>';
+
+			$rows = $this->getReviewDetail(0, 2);	// 2 = manufacturers specs
 			
+			echo '<table class="manuf_attrs table table-hover table-striped">'; 
+			echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>' . Yii::t('LeadGen', 'Manufacturer') . '</strong></th></tr></thead>';
+			echo '<tbody class="manuf_attrs_body" id="manuf_attrs_body">';
+
 			if($rows !== false)
-			{
-
-				echo '<table class="manuf_attrs table table-hover table-striped">';
-				echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>Manutenção</strong></th></tr></thead>';
-				echo '<tbody>';
-
 				foreach($rows as $row)
 					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
-
-				echo '</tbody>';
-				echo '</table>';
-			}
 			else
-				echo '<div class="alert alert-danger" role="alert">No Manufacturer Data Available</div>';
-		?>
+				echo "<tr><td>" . Yii::t('LeadGen', 'No Manufacturer Data Available'). "</td><td></td></tr>";
 
-		<?php
+			echo '</tbody>';
+			echo '</table>';
+			
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
-            $this->endWidget();
-		?>
 
+			$this->endWidget();
+			
+		?>
+		
 	</div> <!-- car details -->
 	</div><!-- landing overview -->
 		<!-- Special OEM PopUp -->
@@ -294,6 +298,10 @@ $cs->registerScript(
 	$("#car-details h3").click(function() {	// find glyph and toggle
 		$(this).find("i.icon").toggleClass("icon-minus-sign icon-plus-sign");
 	});
+	
+	// this needs work, the toggle class is fine but when a user hides the
+	// accordion it loses sync. So whenever hidded, the class should be rest to plus
+	// and the accordion should be closed!
 
 	function updateImages(data)
 	 {
@@ -318,7 +326,6 @@ $cs->registerScript(
 	
 	function updateCMSContent()
 	{
-
 		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
 			save_make = $("#LeadGen_int_fabrikat").val();
 		else
@@ -329,7 +336,7 @@ $cs->registerScript(
 		else
 			save_model = 0;	// default
 	
-		' .CHtml::ajax(
+		' . CHtml::ajax(
 				array(
 					'url' => Yii::app()->createUrl('site/cmscontent'), 
 					'type'=>'POST',           
@@ -340,11 +347,123 @@ $cs->registerScript(
 					)
 			) . 
 		'		
-
 	}
 	
-	function makeChanged() 
- 	{
+	function updateReviewHeader()
+	{
+		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
+			save_make = $("#LeadGen_int_fabrikat").val();
+		else
+		{
+			$("#review_section").html(""); //////// SHOULD BE HIDDEN MAYBE
+			return;
+		}
+
+		if($("#LeadGen_int_modell").val() != "" && $("#LeadGen_int_modell").val() != null) 
+			save_model = $("#LeadGen_int_modell").val();
+		else
+		{
+			$("#review_section").html("");  ////////////////////////////////SHOULD BE HIDDEN
+			return;
+		}
+		
+		' .CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/reviewheader'), 
+					'type'=>'POST',           
+					'dataType'=>'json',
+					'data'=>'js:{"ajax":true, "year": 2014, "make_id":save_make, "model_id":save_model }',
+					'success'=>'js:function(data) {
+							$("#hdtid").val(data.id);	// TEST FOR JAC J3
+							if(data.id != 0)
+							{					
+								$("#accordion_title").html(data.make + " " + data.model);
+								$("#car-details").removeClass("hide");	// make visible
+							}
+							else
+							{
+								// hide everything, nothing to do.
+								$("#car-details").addClass("hide");	// hide it all
+							}
+					}'
+					)
+			) . 
+		'		
+	}
+
+	function updateReviewDetails()
+	{
+
+	//if no detail id (or 0) then skip and hide the entire section
+	
+		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
+			save_make = $("#LeadGen_int_fabrikat").val();
+		else
+		{
+			$("#tech_attrs_body").html("");
+			$("#review_section").addClass("hide");	// make visible
+			return;
+		}
+
+		if($("#LeadGen_int_modell").val() != "" && $("#LeadGen_int_modell").val() != null) 
+			save_model = $("#LeadGen_int_modell").val();
+		else
+		{
+			$("#review_section").addClass("hide");	// make visible
+			$("#tech_attrs_body").html("");
+			return;
+		}
+
+// on each successful call do the same by enabling the proper div 
+// might be trick on the technical attributes since both are under one div.
+// likely just enable/disable the entire accordion if nothing found.
+// so set a flag to indicate some data exists if so then just enable the
+// accordian and the specific table. Note that data is pumped into 
+// the table body, but we need to hide/enable the entire table to make this work.
+
+
+		' . CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/reviewdetails'), 
+					'type'=>'POST',           
+					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":1 }',
+					'success'=>'js:function(html_data) {
+					
+						/////// CHECK FOR EMPTY, INDICATES SHOULD BE HIDDEN
+							$("#tech_attrs_body").html(html_data);
+							$("#review_section").removeClass("hide");	// make visible
+					}'
+					)
+			) . 
+		' ' . CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/reviewdetails'), 
+					'type'=>'POST',           
+					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":4 }',
+					'success'=>'js:function(html_data) {
+							$("#tech_attrs_body").html(html_data);
+							//$("#review_section").removeClass("hide");	// make visible
+							
+					}'
+					)
+			) . 		
+		' ' . CHtml::ajax(
+				array(
+					'url' => Yii::app()->createUrl('site/reviewdetails'), 
+					'type'=>'POST',           
+					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":2 }',
+					'success'=>'js:function(html_data) {
+							$("#manuf_attrs_body").html(html_data);
+							//$("#review_section").removeClass("hide");	// make visible
+							
+					}'
+					)
+			) . 		
+		'
+	}
+	
+	function refreshMake()
+	{
 		$("#show_makes").show();
 		$("#show_models").hide();
 
@@ -360,7 +479,6 @@ $cs->registerScript(
 					'data'=>'js:{ "ajax":true}',
 					'success'=>'js:function(data) {
 						updateImages(data);
-						updateCMSContent();
 						$("#LeadGen_int_modell").prop("disabled", true);
 					}'
 					)		
@@ -369,7 +487,7 @@ $cs->registerScript(
 		}
 		else
 		{
-			' .CHtml::ajax(
+			' . CHtml::ajax(
 					array(
 						'url' => Yii::app()->createUrl('site/photomakes'), 
 						'type'=>'POST',           
@@ -377,7 +495,6 @@ $cs->registerScript(
 						'data'=>'js:{ "ajax":true, "make_id":$("#LeadGen_int_fabrikat").val() }',
 						'success'=>'js:function(data) {
 							updateImages(data);
-							updateCMSContent();
 							$("#LeadGen_int_modell").prop("disabled", false);
 						}'
 						)
@@ -386,8 +503,9 @@ $cs->registerScript(
 		}
 	}
 	
-	function modelChanged()
+	function refreshModel()
 	{
+		
 		if($("#LeadGen_int_modell").val() == "" || $("#LeadGen_int_modell").val() == null) 
 		{
 			$("#show_makes").show();
@@ -409,8 +527,6 @@ $cs->registerScript(
 						$("#selected_model_txt").html(data.image_desc);
 						$("#selected_model_img").attr("alt", data.image_desc);
 						$("#LeadGen_int_modell").prop("disabled", false);
-						updateCMSContent();
-
 					 }'
 			   )
 			) .
@@ -420,6 +536,23 @@ $cs->registerScript(
 			$("#show_models").show();
 
 		}
+	}
+
+	function makeChanged() 
+ 	{
+		refreshMake();
+		updateCMSContent();
+		updateReviewHeader();	
+		updateReviewDetails();
+	}
+	
+	function modelChanged()
+	{
+
+		refreshModel();
+		updateCMSContent();
+		updateReviewHeader();
+		updateReviewDetails();
 	}
 	
 	function clickMakeModelImage(make_id, model_id)
@@ -523,12 +656,12 @@ $cs->registerScript(
 		'				
 			if(save_make == 199 && $("#hoem").val() != "true")	// JAC
 			{
-				$("#ModalOEM").modal("toggle");		// pop test
+				$("#ModalOEM").modal("toggle");		// modal
 				$("#hoem").val("true");
 			}
 		}
-		makeChanged();
-		modelChanged();	
+		refreshMake();
+		refreshModel();	
 		$("#city_helper").prop("disabled", true);
 		$("#save_zip").attr("disabled", "disabled");
 	});

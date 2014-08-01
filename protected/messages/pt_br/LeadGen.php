@@ -71,6 +71,11 @@ return array(
 	'Maria Delgado' => 'Camila Pereira',
 	
 	'Start saving today' => 'Consiga o Melhor Preço',
+	'No Technical Data Available' => '>>>>>TRANSLATE NEEDED for No Technical Data Available',
+	'No Manufacturer Data Available' => '>>>>>TRANSLATE NEEDED for No Manufacturer Data Available',
+	'Technical Specifications' => 'Especificações Técnicas',
+	'Manufacturer' => 'Manutenção',
+	'Specifications' => 'Especificações',
 
 	// 123 bullets
 	

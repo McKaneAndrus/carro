@@ -1171,21 +1171,13 @@ class SiteController extends Controller
 		return $results['content'];
 	}
 
-	/*
-	* returns the review data
-	*
-	* returns array of records as follows
-	*			array('attr' => 'Review Title/Heading', 'value' => 'Review text'),
-	* 	If NO results returns false
-	*/
-	
-	public function getReviewData($year, $make, $model, $trim, $group)
+	public function getReviewHeader($year, $make, $model, $trim, $back_fill, &$detail_id)
 	{
 		// ignoring year for now
-		// group == 0 is header, returns 2 special records, one with make,  one  with model, the other with the attributes Id
-
-		// group == 1 is the review data
-
+		// back_fill tells to look for a trim of '0' indication overall model info
+		
+		$detail_id = 0;
+		
 		if(!is_numeric($year))
 			return false;
 
@@ -1198,9 +1190,6 @@ class SiteController extends Controller
 		if(!is_numeric($trim))
 			return false;
 		
-		if(!is_numeric($group))
-			return false;
-
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('content_id, make_name, model_name, trim_name');
 		$sql->from('{{carro_content_master}}');
@@ -1210,46 +1199,65 @@ class SiteController extends Controller
 
 		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		$reviews = array();
-
-		if($group == 0)
-		{
-			// special group
-			
-			if(!$rec)
-				return false; 
-				
-			$reviews[] = array('attr' => 'content_id', 'value' => $rec['content_id'] );	// content_id useful for look up into attribute table
-			$reviews[] = array('attr' => 'make_name', 'value' => $rec['make_name'] );	
-			$reviews[] = array('attr' => 'model_name', 'value' => $rec['model_name'] );
-			$reviews[] = array('attr' => 'model_name', 'value' => $rec['trim_name'] );
-			
-			return $reviews;
-		}
+		$header = array();
 			
 		if(!$rec)
 		{
-			// now try for a trim of 0 which indicates a MAKE, MODEL Generic set of data (Ie, not trim specific)
-			
-			$sql = Yii::app()->db->createCommand();
-			$sql->select('content_id');
-			$sql->from('{{carro_content_master}}');
-			$sql->where('make_id=:make_id AND model_id=:model_id AND trim_id=0 AND content_status = 0', 
-							array(':make_id'=> $make, ':model_id'=>$model));
-			$sql->order('content_sort_order');
-			$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
-			
-			if(!$rec)
-				return false; 	// nothing left to do
+			if($back_fill !== false)
+			{
+				// now try for a trim of 0 which indicates a MAKE, MODEL Generic set of data (Ie, not trim specific)
+				
+				$sql = Yii::app()->db->createCommand();
+				$sql->select('content_id, make_name, model_name, trim_name');
+				$sql->from('{{carro_content_master}}');
+				$sql->where('make_id=:make_id AND model_id=:model_id AND trim_id=0 AND content_status = 0', 
+								array(':make_id'=> $make, ':model_id'=>$model));
+				$sql->order('content_sort_order');
+				$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+				
+				if(!$rec)
+					return false; 	// nothing left to do
+			}
+			else
+				return false;
 		}
 
-		$attribute_content_id = $rec['content_id'];	// got the master id for the attribute look up
+		$detail_id = $rec['content_id'];
 		
+		$header['id'] = $detail_id;
+		$header['make'] = $rec['make_name'];	
+		$header['model'] = $rec['model_name'];
+		$header['trim'] = $rec['trim_name'];
+		
+		return $header;
+	}
+	
+	/*
+	* returns the review data
+	*
+	* returns array of records as follows
+	*			array('attr' => 'Review Title/Heading', 'value' => 'Review text'),
+	* 	If NO results returns false
+	*/
+	
+	public function getReviewDetail($detail_id, $group)
+	{
+		// ignoring year for now
+		// group == 0 is header, returns 2 special records, one with make,  one  with model, the other with the attributes Id
+
+		// group == 1 is the review data
+
+		if(!is_numeric($detail_id))
+			return false;
+			
+		if($detail_id <= 0)	
+			return false;
+
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('attribute_name, attribute_value');
 		$sql->from('{{carro_content_attr}}');
 		$sql->where('attribute_content_id=:attribute_content_id AND attribute_group=:group_id AND attribute_status = 0', 
-						array(':attribute_content_id' => $attribute_content_id, ':group_id'=>$group));
+						array(':attribute_content_id' => $detail_id, ':group_id'=>$group));
 		$sql->order('attribute_sort_order');
 
 		$rows = $sql->queryall();
@@ -1269,6 +1277,91 @@ class SiteController extends Controller
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
 	*/
+	
+	
+	public function actionReviewHeader()
+	{
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['year']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!isset($_POST['make_id']))
+			throw new CHttpException(400, 'Invalid Request');
+		
+		if(!isset($_POST['model_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!isset($_POST['trim_id']))	// optional
+			$trim_id = -1;
+		else
+			$trim_id = $_POST['trim_id'];
+			
+		if(!isset($_POST['back_fill']))	// optional
+			$back_fill = 0;
+		else
+			$back_fill = $_POST['back_fill'];
+
+		$year = $_POST['year'];
+		$model_id = $_POST['model_id'];
+		$make_id = $_POST['make_id'];
+		
+		if(!is_numeric($year))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($make_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($model_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($trim_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($back_fill))
+			throw new CHttpException(400, 'Invalid Request');
+	
+		$detail_id = 0;
+		
+		$header = $this->getReviewHeader($year, $make_id, $model_id, $trim_id, $back_fill, $detail_id);
+			
+		if(!$header)	
+		{
+			$header = array();
+			$header['id'] = 0;
+			$header['make'] = "No Make Data";	
+			$header['model'] = "No Model Data";
+			$header['trim'] = "No Trim Data";
+		}
+
+		echo CJSON::encode($header);
+	}
+
+	public function actionReviewDetails()
+	{
+		if(!isset($_POST['ajax']))
+			throw new CHttpException(403, 'Not authorized');
+
+		if(!isset($_POST['detail_id']))
+			throw new CHttpException(400, 'Invalid Request');
+		
+		if(!isset($_POST['group_id']))
+			throw new CHttpException(400, 'Invalid Request');
+
+
+		$detail_id = $_POST['detail_id'];
+		$group_id = $_POST['group_id'];
+		
+		if(!is_numeric($detail_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+		if(!is_numeric($group_id))
+			throw new CHttpException(400, 'Invalid Request');
+
+			
+		echo "<tr><td>Some Attribute</td><td>Some Value</td></tr><tr><td>Some Attribute</td><td>Some Value</td></tr><tr><td>Some Attribute</td><td>Some Value</td></tr>";
+	}
 
 	/*
 	* Post Parameter info
@@ -1362,7 +1455,6 @@ class SiteController extends Controller
 			$pc = '';
 			
 		echo $pc;
-		
 	 }
 
 	/*
@@ -2249,7 +2341,7 @@ class SiteController extends Controller
 				'actions'=>array('landing', 'quote', 'confirmation', 
 				'models', 'colors', 'dealers', 'cities', 'error', 'postalcode', 
 				'photomakes', 'photomodel', 'phototrim', 'homepagephotos', 'makelogoimage',
-				'cmscontent', 'about', 'privacy'),  // added create to all users no login needed 
+				'cmscontent', 'reviewheader', 'reviewdetails', 'about', 'privacy'),  // added create to all users no login needed 
 				'users'=>array('*'),
 			),
 
