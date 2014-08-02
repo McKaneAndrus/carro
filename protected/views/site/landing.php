@@ -182,7 +182,7 @@
 			else
 			{
 				$accordion_title = 'Technical Data';
-				echo '<div class="car-details " id="car-details">';
+				echo '<div class="car-details hide" id="car-details">';
 			}
 
 			$recs = $this->getReviewDetail($detail_id, 1);	// 1 = review (pro/con/etc)
