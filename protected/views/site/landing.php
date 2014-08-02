@@ -186,8 +186,6 @@
 				echo "<div class=\"well\"><h3>Review Information</h3>No Information Available</div>";
 			}
 
-			echo CHtml::hiddenField('dtid' , $detail_id, array('id' => 'hdtid'));	// save for JS Use
-			
 			$recs = $this->getReviewDetail($detail_id, 1);	// 1 = review (pro/con/etc)
 
 			echo '<div class="review_section" id="review_section">'; 
@@ -224,7 +222,7 @@
 				foreach($rows as $row)
 					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
 			else
-				echo "<tr><td>" . Yii::t('LeadGen', 'No Technical Data Available'). "</td><td></td></tr>";
+				echo "<tr><td>" . Yii::t('LeadGen', 'No Data Available'). "</td><td></td></tr>";
 
 			echo '</tbody>';
 			echo '</table>';
@@ -239,7 +237,7 @@
 				foreach($rows as $row)
 					echo "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
 			else
-				echo "<tr><td>" . Yii::t('LeadGen', 'No Manufacturer Data Available'). "</td><td></td></tr>";
+				echo "<tr><td>" . Yii::t('LeadGen', 'No Data Available'). "</td><td></td></tr>";
 
 			echo '</tbody>';
 			echo '</table>';
@@ -355,7 +353,7 @@ $cs->registerScript(
 			save_make = $("#LeadGen_int_fabrikat").val();
 		else
 		{
-			$("#review_section").html(""); //////// SHOULD BE HIDDEN MAYBE
+			$("#car-details").addClass("hide");	// hide it all
 			return;
 		}
 
@@ -363,7 +361,7 @@ $cs->registerScript(
 			save_model = $("#LeadGen_int_modell").val();
 		else
 		{
-			$("#review_section").html("");  ////////////////////////////////SHOULD BE HIDDEN
+			$("#car-details").addClass("hide");	// hide it all
 			return;
 		}
 		
@@ -374,9 +372,11 @@ $cs->registerScript(
 					'dataType'=>'json',
 					'data'=>'js:{"ajax":true, "year": 2014, "make_id":save_make, "model_id":save_model }',
 					'success'=>'js:function(data) {
-							$("#hdtid").val(data.id);	// TEST FOR JAC J3
-							if(data.id != 0)
+							if(data.id != 0)	
 							{					
+								// if we have a good header we have some data... Some
+								
+								updateReviewDetails(data.id);		// must call here to keep synchronous 
 								$("#accordion_title").html(data.make + " " + data.model);
 								$("#car-details").removeClass("hide");	// make visible
 							}
@@ -391,47 +391,18 @@ $cs->registerScript(
 		'		
 	}
 
-	function updateReviewDetails()
+	function updateReviewDetails(detail_id)
 	{
-
-	//if no detail id (or 0) then skip and hide the entire section
-	
-		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
-			save_make = $("#LeadGen_int_fabrikat").val();
-		else
-		{
-			$("#tech_attrs_body").html("");
-			$("#review_section").addClass("hide");	// make visible
+		if(detail_id <= 0) 
 			return;
-		}
-
-		if($("#LeadGen_int_modell").val() != "" && $("#LeadGen_int_modell").val() != null) 
-			save_model = $("#LeadGen_int_modell").val();
-		else
-		{
-			$("#review_section").addClass("hide");	// make visible
-			$("#tech_attrs_body").html("");
-			return;
-		}
-
-// on each successful call do the same by enabling the proper div 
-// might be trick on the technical attributes since both are under one div.
-// likely just enable/disable the entire accordion if nothing found.
-// so set a flag to indicate some data exists if so then just enable the
-// accordian and the specific table. Note that data is pumped into 
-// the table body, but we need to hide/enable the entire table to make this work.
-
 
 		' . CHtml::ajax(
 				array(
 					'url' => Yii::app()->createUrl('site/reviewdetails'), 
 					'type'=>'POST',           
-					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":1 }',
+					'data'=>'js:{"ajax":true, "detail_id":detail_id, "group_id":1, "format":1 }',
 					'success'=>'js:function(html_data) {
-					
-						/////// CHECK FOR EMPTY, INDICATES SHOULD BE HIDDEN
-							$("#tech_attrs_body").html(html_data);
-							$("#review_section").removeClass("hide");	// make visible
+							$("#review_section").html(html_data);
 					}'
 					)
 			) . 
@@ -439,11 +410,9 @@ $cs->registerScript(
 				array(
 					'url' => Yii::app()->createUrl('site/reviewdetails'), 
 					'type'=>'POST',           
-					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":4 }',
+					'data'=>'js:{"ajax":true, "detail_id":detail_id, "group_id":4 }',
 					'success'=>'js:function(html_data) {
 							$("#tech_attrs_body").html(html_data);
-							//$("#review_section").removeClass("hide");	// make visible
-							
 					}'
 					)
 			) . 		
@@ -451,11 +420,9 @@ $cs->registerScript(
 				array(
 					'url' => Yii::app()->createUrl('site/reviewdetails'), 
 					'type'=>'POST',           
-					'data'=>'js:{"ajax":true, "detail_id":289, "group_id":2 }',
+					'data'=>'js:{"ajax":true, "detail_id":detail_id, "group_id":2 }',
 					'success'=>'js:function(html_data) {
 							$("#manuf_attrs_body").html(html_data);
-							//$("#review_section").removeClass("hide");	// make visible
-							
 					}'
 					)
 			) . 		
@@ -543,7 +510,6 @@ $cs->registerScript(
 		refreshMake();
 		updateCMSContent();
 		updateReviewHeader();	
-		updateReviewDetails();
 	}
 	
 	function modelChanged()
@@ -552,7 +518,6 @@ $cs->registerScript(
 		refreshModel();
 		updateCMSContent();
 		updateReviewHeader();
-		updateReviewDetails();
 	}
 	
 	function clickMakeModelImage(make_id, model_id)

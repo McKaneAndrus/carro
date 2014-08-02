@@ -1349,6 +1349,11 @@ class SiteController extends Controller
 		if(!isset($_POST['group_id']))
 			throw new CHttpException(400, 'Invalid Request');
 
+		if(!isset($_POST['format']))	// optional format, default table rows, otherwise bootstrap wells
+			$format = 0;
+		else
+			$format = 1;
+
 
 		$detail_id = $_POST['detail_id'];
 		$group_id = $_POST['group_id'];
@@ -1359,8 +1364,33 @@ class SiteController extends Controller
 		if(!is_numeric($group_id))
 			throw new CHttpException(400, 'Invalid Request');
 
+		$rows = $this->getReviewDetail($detail_id, $group_id);
 			
-		echo "<tr><td>Some Attribute</td><td>Some Value</td></tr><tr><td>Some Attribute</td><td>Some Value</td></tr><tr><td>Some Attribute</td><td>Some Value</td></tr>";
+		$html = '';
+			
+		if($format == 0)	  	// table rows as the default
+		{ 
+
+			// format is a key/value output as a 2 column table row. 
+			
+			if($rows !== false)
+				foreach($rows as $row)
+					$html .= "<tr><td>{$row['attr']}</td><td>{$row['value']}</td></tr>";
+			else
+				$html = "<tr><td>" . Yii::t('LeadGen', 'No Data Available'). "</td><td></td></tr>";
+		}
+		else
+		{
+			// bootstrap wells, attribute name as the Heading, value as the text
+
+			if($rows !== false)
+				foreach($rows as $row)
+					$html .= "<div class=\"well\"><h3>{$row['attr']}</h3>{$row['value']}</div>";
+			else
+				$html = '<div class="alert alert-danger" role="alert">' . Yii::t('LeadGen', 'No Data Available') . '</div>';
+		}
+			
+		echo $html;
 	}
 
 	/*
