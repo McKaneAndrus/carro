@@ -72,7 +72,7 @@ return array(
 	
 	'Start saving today' => 'Consiga o Melhor Preço',
 
-	'No Data Available' => '>>>>>TRANSLATE NEEDED for No Technical Data Available',
+	'No Data Available' => 'Não existem dados disponíveis',
 
 	'Technical Specifications' => 'Especificações Técnicas',
 	'Manufacturer' => 'Manutenção',

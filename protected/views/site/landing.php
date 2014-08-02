@@ -182,8 +182,7 @@
 			else
 			{
 				$accordion_title = 'Technical Data';
-				echo '<div class="car-details" id="car-details">';
-				echo "<div class=\"well\"><h3>Review Information</h3>No Information Available</div>";
+				echo '<div class="car-details " id="car-details">';
 			}
 
 			$recs = $this->getReviewDetail($detail_id, 1);	// 1 = review (pro/con/etc)
@@ -194,7 +193,8 @@
 				foreach($recs as $rec)
 					echo "<div class=\"well\"><h3>{$rec['attr']}</h3>{$rec['value']}</div>";
 			else
-				echo '<div class="alert alert-danger" role="alert">No Review Data Available</div>';
+				echo '<div class="alert alert-danger" role="alert">' . Yii::t('LeadGen', 'No Data Available') . '</div>';
+
 			echo '</div>';		// review_section
 
 		
