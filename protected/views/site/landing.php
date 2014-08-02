@@ -17,7 +17,7 @@
 
 			<?php 
 				if(!empty($model->attributes['int_fabrikat']))	// (int_fabrikat == make) post vars are saved from page to page in the state, so pick up from here if EVER set
-					$make = $model->attributes['int_fabrikat'];
+					$make = $model->attributes['int_fabrikat']; // sjg - may not be needed anymore...
 			?>
 			
 			<?php echo $form->error($model,'int_fabrikat'); ?>
@@ -169,6 +169,8 @@
 			$detail_id = 0;		
 			$recs = $this->getReviewHeader(2014, $model->int_fabrikat, $model->int_modell, -1, true, $detail_id);
 
+			// echo ">> Make : {$model->int_fabrikat} Model : {$model->int_modell} Detail Id : {$detail_id}";
+
 			// hide or show the entire div, but always generate it so JS can muck with it.
 			
 			if($recs !== false)
@@ -212,7 +214,7 @@
 			echo '<div id="collapse-0" class="accordion-body collapse">';	// 'collapse in' is expanded 'collapse' is that
 			echo '<div class="accordion-inner">';
 
-			$rows = $this->getReviewDetail(0, 4);	// 4 = tech specs
+			$rows = $this->getReviewDetail($detail_id, 4);	// 4 = tech specs
 			
 			echo '<table class="tech_attrs table table-hover table-striped">';
 			echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>' . Yii::t('LeadGen', 'Technical Specifications') . '</strong></th></tr></thead>';
@@ -227,7 +229,7 @@
 			echo '</tbody>';
 			echo '</table>';
 
-			$rows = $this->getReviewDetail(0, 2);	// 2 = manufacturers specs
+			$rows = $this->getReviewDetail($detail_id, 2);	// 2 = manufacturers specs
 			
 			echo '<table class="manuf_attrs table table-hover table-striped">'; 
 			echo '<thead class="gray-gradient "><tr><th colspan="2"><strong>' . Yii::t('LeadGen', 'Manufacturer') . '</strong></th></tr></thead>';
