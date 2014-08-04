@@ -105,6 +105,7 @@ class LeadGen extends CActiveRecord
 
 			array('int_mail', 'email', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Email Address')),
 			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>Yii::t('LeadGen','Invalid Phone Number')),
+			array('int_tel', 'ext.validators.PhoneValidator', 'on'=>'quote', 'areaCode' => true, 'message'=>Yii::t('LeadGen','Invalid FORMAT Phone Number')),	
 			
 			// add each string field, int_name, int_vname, etc so each can have their own error message
 		
