@@ -137,6 +137,7 @@ class PhoneValidator extends CValidator {
 			$this->errors[] = $this->message;
 			return false;
 		}
+			
 
 		return true;
 	}
