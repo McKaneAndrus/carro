@@ -42,6 +42,35 @@ class LeadGen extends CActiveRecord
 		return parent::beforeSave();
 	}
 	
+	
+	public function CEP_Validator($attribute, $params) 
+	{
+		// hard check some dumb user values
+		
+		$fails = array(
+				'00000-000',
+				'11111-111',
+				'22222-222', 
+				'33333-333', 
+				'44444-444', 
+				'55555-555', 
+				'66666-666', 
+				'77777-777', 
+				'88888-888', 
+				'99999-999',
+				'12345-678',
+				'12345-123'
+			);
+
+		if(!isset($params['message']))
+			$params['message'] = Yii::t('yii', '{attribute} is invalid.', array('{attribute}' => $attribute));
+	
+		if(in_array($this->int_plz, $fails))
+				$this->addError($attribute, $params['message']);            
+
+	}
+	
+	
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -57,6 +86,7 @@ class LeadGen extends CActiveRecord
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
 			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
+
 			
 			// Quote Page - Trim, Color, Email
 			
@@ -80,6 +110,8 @@ class LeadGen extends CActiveRecord
 		
 			// specific validation and regx for Brazil postal code is to validate numbers in the format of 00000-000
 
+	
+			array('int_plz', 'CEP_Validator', 'message'=>Yii::t('LeadGen','Invalid CEP Number')),
 			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>Yii::t('LeadGen','Invalid Format, use 00000-000')),
 			array('int_plz', 'length', 'max'=>9),
 			

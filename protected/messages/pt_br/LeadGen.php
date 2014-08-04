@@ -150,6 +150,7 @@ return array(
 	'Invalid Email Address' => 'Endereço de Email inválido',
 	'Invalid Phone Number' => 'Número de telefone inválido',
 	'Invalid CPF Number' => 'Número de CPF inválido',
+	'Invalid CEP Number' => 'Número de CEP inválido',
 	
 );
 ?>
