@@ -60,17 +60,28 @@
 			<fieldset id="zip_button">
 
 			<?php echo $form->labelEx($model,'int_plz'); ?>
-
 			<div class="input-append">
-			<?php echo $form->textField($model,'int_plz'); ?>
 
-			<?php echo TbHtml::button('x', array(
+			<?php // echo $form->textField($model,'int_plz'); ?>
+
+			<?php $this->widget('CMaskedTextField', array(
+									'model' => $model,
+									'attribute' => 'int_plz',
+									'mask' => '99999-999',
+									'charMap' => array('9' =>'[0-9]'),
+								));
+			?>
+			
+
+			<?php /*echo  TbHtml::button('x', array(
 						'color' => TbHtml::BUTTON_COLOR_DEFAULT,
 						'onclick'=> 'erasePostalCode();',
 						'tabindex' => '-1',
 						)); 
-				  echo TbHtml::button(Yii::t('LeadGen', 'Postal Code Help'), array(
-						'color' => 'custom',
+						*/
+						
+				  echo TbHtml::button('?' /*Yii::t('LeadGen', 'Postal Code Help')*/, array(
+					/*	'color' => 'custom',*/
 						'onclick'=> 'showPostalModal();',
 						'tabindex' => '-1'
 						)); ?>
