@@ -1888,7 +1888,7 @@ class SiteController extends Controller
 				
 					// update these fields so they can be used even if user changes values
 					
-					$this->pageTitle = $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell) . ' ' . Yii::t('LeadGen', 'GetGet Free New Car Quote') ;
+					$this->pageTitle = $this->GetMakeName($model->int_fabrikat) . ' ' . $this->GetModelName($model->int_modell) . ' ' . Yii::t('LeadGen', 'Get Free New Car Quote') ;
 
 					/* 
 					*  Save a cookie of make, model info if desired (mm_hist) may be useful later
