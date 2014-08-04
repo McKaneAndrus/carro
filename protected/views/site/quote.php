@@ -159,7 +159,7 @@
 							$this->widget('CMaskedTextField', array(
 								'model' => $model,
 								'attribute' => 'int_tel',
-								'mask' => '(99)? 999999999',
+								'mask' => '(99)? 9999xx9999',
 								'charMap' => array('x'=>'[0-9x\-\s]', '9' =>'[0-9]'),
 							));
 							echo $form->error($model,'int_tel');
