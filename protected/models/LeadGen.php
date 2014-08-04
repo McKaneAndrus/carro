@@ -130,7 +130,7 @@ class LeadGen extends CActiveRecord
 			array('int_text', 'length', 'max'=>255),			
 			array('int_name, int_vname, int_str', 'length', 'max'=>30),
 			array('int_plz', 'length', 'max'=>20),
-			array('int_tel', 'length', 'min' => 7, 'max'=>20), // minimum number of characters is 7
+			array('int_tel', 'length', 'min' => 9, 'max'=>15), // >>>>> VALIDATE THIS AGAIN
 			array('int_mail', 'length', 'max'=>64),
 			array('int_stadt', 'length', 'max'=>180),
 			array('int_staat', 'length', 'max'=>100),
