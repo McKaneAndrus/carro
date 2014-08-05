@@ -15,7 +15,6 @@ class LeadGen extends CActiveRecord
 	public $conquest_confirm = false;
 	public $conquest_primary_lead = -1;	// indicates no primary lead for a conquest
 	public $skipOEM = 'false';
-	public $CPF_Required = false;		// never need it unless the view wants tells us it got it
 	
 	/**
 	 * @return string the associated database table name
@@ -70,7 +69,7 @@ class LeadGen extends CActiveRecord
 
 	}
 	
-	
+		
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -97,7 +96,7 @@ class LeadGen extends CActiveRecord
 			array('int_tel', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Telephone Required')),
 
 			array('int_cpf', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','CPF Required')),
-			array('int_cpf',  'ext.validators.cpf', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid CPF Number')),	
+			array('int_cpf', 'ext.validators.cpf', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid CPF Number')),	
 
 			array('int_mail', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Email Required')),
 			array('int_stadt', 'required', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Please Select Your City')),
@@ -105,7 +104,7 @@ class LeadGen extends CActiveRecord
 
 			array('int_mail', 'email', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Email Address')),
 			array('int_tel', 'match', 'pattern' =>'/^[0-9+\(\)#\.\s\/ext-]+$/', 'message'=>Yii::t('LeadGen','Invalid Phone Number')),
-			array('int_tel', 'ext.validators.PhoneValidator', 'on'=>'quote', 'areaCode' => true, 'message'=>Yii::t('LeadGen','Invalid FORMAT Phone Number')),	
+			array('int_tel', 'ext.validators.PhoneValidator', 'on'=>'quote', 'areaCode' => true, 'message'=>Yii::t('LeadGen','Invalid Phone Number')),	
 			
 			// add each string field, int_name, int_vname, etc so each can have their own error message
 		
