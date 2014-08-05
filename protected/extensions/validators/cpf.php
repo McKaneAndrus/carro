@@ -54,12 +54,19 @@ class cpf extends CValidator
     // Função que valida o CPF
     private function validaCPF($cpf)
     {	// Verifiva se o número digitado contém todos os digitos
+
+		if($cpf == "N/A")		// magic code (hack) to allow a internal override of the valdation, can't be entered in the field
+			return true;
+
         $cpf = str_pad(preg_replace('/[^0-9_]/', '', $cpf), 11, '0', STR_PAD_LEFT);
 
         // valida número sequencial 1111... 22222 ......
         for ($x=0; $x<10; $x++)
             if ( $cpf == str_repeat($x, 11) )
                 return false;
+
+		if($cpf == "00396427454")		// magic code to allow a test or override of the valdation
+			return true;
 
         // Verifica se nenhuma das sequências abaixo foi digitada, caso seja, retorna falso
         if ( strlen($cpf) != 11 )
