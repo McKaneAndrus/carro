@@ -218,7 +218,7 @@
 			
 			echo '<div class="accordion-group">';
 			echo '<div class="accordion-heading">';
-			echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse-0">';
+			echo '<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapse-0" id="accordion-toggle">';
 			echo '<h3><i class="icon icon-plus-sign"></i> <span id="accordion_title">'. $accordion_title . '</span> - ' . Yii::t("LeadGen", "Specifications") . '</h3>';
 			echo '</a>';
 			echo '</div>';
@@ -306,9 +306,21 @@ $cs->registerScript(
 	'LeadGenJS',							// unique script ID
 
 	'
-	$("#car-details h3").click(function() {	// find glyph and toggle
-		$(this).find("i.icon").toggleClass("icon-minus-sign icon-plus-sign");
+	$("#accordion-toggle").click(function() {	// find glyph and toggle
+
+		if(!$("#accordion-toggle").hasClass("collapsed"))
+		{
+			$(this).find("i.icon").removeClass("icon-minus-sign");
+			$(this).find("i.icon").addClass("icon-plus-sign");
+		}
+		else
+		{
+			$(this).find("i.icon").removeClass("icon-plus-sign");
+			$(this).find("i.icon").addClass("icon-minus-sign");
+		}
+
 	});
+
 	
 	// this needs work, the toggle class is fine but when a user hides the
 	// accordion it loses sync. So whenever hidded, the class should be rest to plus
@@ -447,8 +459,6 @@ $cs->registerScript(
 		$("#show_makes").show();
 		$("#show_models").hide();
 
-		$("#LeadGen_int_modell").val(0);
-
 		if($("#LeadGen_int_fabrikat").val() == "") 
 		{
 			' . CHtml::ajax(
@@ -485,7 +495,7 @@ $cs->registerScript(
 	
 	function refreshModel()
 	{
-		
+
 		if($("#LeadGen_int_modell").val() == "" || $("#LeadGen_int_modell").val() == null) 
 		{
 			$("#show_makes").show();
@@ -617,7 +627,7 @@ $cs->registerScript(
 	$(window).load(function() {
 		save_model = $("#LeadGen_int_modell").val();
 		save_make = $("#LeadGen_int_fabrikat").val();
-		
+
 		if($("#LeadGen_int_fabrikat").val() != "" && $("#LeadGen_int_fabrikat").val() != null) 
 		{
 		' .	CHtml::ajax(
@@ -628,6 +638,7 @@ $cs->registerScript(
 					'success'=>'js:function(html){
 						jQuery("#LeadGen_int_modell").html(html);
 						$("#LeadGen_int_modell").val(save_model);
+
 					}'
 			   )
 			) .
@@ -638,8 +649,10 @@ $cs->registerScript(
 				$("#hoem").val("true");
 			}
 		}
+
 		refreshMake();
 		refreshModel();	
+
 		$("#city_helper").prop("disabled", true);
 		$("#save_zip").attr("disabled", "disabled");
 	});
