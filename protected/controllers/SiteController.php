@@ -311,6 +311,29 @@ class SiteController extends Controller
 	}
 
 	/*
+	* Given the make tells if the CPF is needed. This likely can
+	* be expanded to include other things if needed. For now 
+	* it's just a check for the CPF. 
+	*
+	* This only looks at the fab_cpf_required field, no status check
+	* 
+	* Returns true if CPF is required for a make, false if not
+	*/
+	
+	public function CPF_Required($make_id)
+	{
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('fab_require_cpf');
+		$sql->from('{{fabrikate}}');
+		$sql->where('fab_id=:make_id', array(':make_id' => $make_id));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+
+		if($rec['fab_require_cpf'] == 0)
+			return false;
+		return true;
+	}
+
+	/*
 	* Simple check to see if the prospect has been already added to the interstessten table.
 	* It looks for a matching email address, make, model to see if it has been added already
 	* 
