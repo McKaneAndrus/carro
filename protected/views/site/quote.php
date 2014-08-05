@@ -164,7 +164,7 @@
 							));
 							echo $form->error($model,'int_tel');
 
-							if(true)
+							if($this->CPF_Required($model->int_fabrikat))
 							{
 								echo $form->labelEx($model,'int_cpf');
 
@@ -175,11 +175,10 @@
 									'charMap' => array('9' =>'[0-9]'),
 								));
 								echo $form->error($model,'int_cpf');
-								$model->CPF_Required = true;
 							}
 							else
 							{
-								$model->CPF_Required = false;								
+								echo CHtml::hiddenField('LeadGen[int_cpf]' ,"N/A" , array('id' => 'int_cpf'));								
 							}
 
 
