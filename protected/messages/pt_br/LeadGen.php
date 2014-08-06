@@ -146,6 +146,7 @@ return array(
 	'First Name Required' => 'Nome Obrigatório',
 	'Email Required' => 'Email Obrigatório',
 	'CPF Required' => 'CPF Obrigatório',
+	'CEP Required' => 'CEP Obrigatório',
 	'Telephone Required' => 'Telefone Obrigatório',
 	'Invalid Email Address' => 'Endereço de Email inválido',
 	'Invalid Phone Number' => 'Número de telefone inválido',

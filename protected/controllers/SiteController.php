@@ -2332,6 +2332,9 @@ class SiteController extends Controller
 		* update the page_id, either case (new/update) should have all other fields stuffed here as well
 		*/
 
+var_dump($data);
+
+
 		if(is_array($data))
 		{
 			// may not have all of these at once, so stuff as they exist
@@ -2361,7 +2364,7 @@ class SiteController extends Controller
 			$sess->sess_step4 = 1;
 		
 		if(!$sess->save()) 
-			Yii::log("Can't Save Session Data to database",  CLogger::LEVEL_WARNING);
+			Yii::log("Can't Save Session Data to database : " . $sess->getErrors(),  CLogger::LEVEL_WARNING);
 	}
 	
 	/**

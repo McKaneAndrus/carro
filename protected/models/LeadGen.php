@@ -44,7 +44,8 @@ class LeadGen extends CActiveRecord
 	
 	public function CEP_Validator($attribute, $params) 
 	{
-		// hard check some dumb user values
+		// hard check some dumb user values. Most all will fail the DB Check
+		// but why waste a db call for the common fakes
 		
 		$fails = array(
 				'00000-000',
@@ -63,16 +64,42 @@ class LeadGen extends CActiveRecord
 
 		if(!isset($params['message']))
 			$params['message'] = Yii::t('yii', '{attribute} is invalid.', array('{attribute}' => $attribute));
-	
-		if(in_array($this->int_plz, $fails))
-				$this->addError($attribute, $params['message']);            
 
+		// keep the simple cases out without a db call, if in the above table, or an underscore (from mask) and finally a dbcall
+		// empty string might be same as 'required' but it's here just in case this gets called prior to the required test.
+		
+		if(in_array($this->int_plz, $fails) || strpos($this->int_plz, '_') || strlen($this->int_plz) == 0)
+			$this->addError($attribute, $params['message']);
+		elseif(!$this->PostalCodeExists($this->int_plz))            
+			$this->addError($attribute, $params['message']);
 	}
 	
+	/*
+	* Given a postal code string in the form of '00000-000' the value
+	* is checked in the extended postal code table
+	*
+	* if found returns true, false if not found (invalid)
+	*/
+	
+	public function PostalCodeExists($postal_code_str)
+	{
+		// expects postal code to be well formed as '00000-000' otherwise fail
+
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('code');
+		$sql->from('{{extended_postal_codes}}');									// will prepend country
+		$sql->where('code=:postal_code', array(':postal_code' => $postal_code_str));
+		$sql->limit(1);
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+	
+		return ($rec == false)? false : true;
+	}
+
 		
 	/**
 	 * @return array validation rules for model attributes.
 	 */
+	
 	public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that will receive user inputs.
@@ -84,7 +111,7 @@ class LeadGen extends CActiveRecord
 
 			array('int_fabrikat','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Make')),
 			array('int_modell','required', 'on'=>'landing', 'message'=>Yii::t('LeadGen','Please Select a Model')),
-			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'Please Enter a Postal Code')),
+			array('int_plz', 'required', 'on'=>'landing', 'message'=>Yii::t('LeadGen', 'CEP Required')),
 
 			
 			// Quote Page - Trim, Color, Email
