@@ -13,6 +13,7 @@ class SiteController extends Controller
 	const DEFAULT_MAIL_CAR_IMAGE_PATH = '../../..';				// path to car images from mail (config/mail.php) image path
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 	const DEFAULT_DUPE_CHECK_DAYS = 7;							// Length of time to check back for dupes (in the last X days check)
+	const DEFAULT_TRAFFIC_SRC_ID = 2;							// If the csrc parameter is invalid or not found use this as the default
 	
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
 	const QUOTE_PAGE_ID	= 1001;
@@ -310,6 +311,7 @@ class SiteController extends Controller
 		return false;	// if here then not found
 	}
 
+
 	/*
 	* Given the make tells if the CPF is needed. This likely can
 	* be expanded to include other things if needed. For now 
@@ -401,6 +403,40 @@ class SiteController extends Controller
 				return $postal_code_str;		
 			else
 				return '00000-000'; // NULL might be good, not sure yet...
+	}
+
+
+	/*
+	* Given a traffic source ID string map it to the
+	* required number for the lead. This essentially
+	* looks at the table for a string match to get the id. The
+	* typical source is the URL parameter 'csrc'
+	*
+	* Returns : an integer value of the ID, if invalid or not found
+	* then return the DEFAULT_TRAFFIC_SRC_ID value.
+	*/
+	
+	public function MapTrafficSourceId($src_id_str)
+	{
+		// skip the exercise if empty
+		
+		if($src_id_str =='' || $src_id_str == NULL)	// couple of common cases
+			return SELF::DEFAULT_TRAFFIC_SRC_ID;
+
+		// otherwise must check the DB
+		
+		$sql = Yii::app()->db->createCommand();
+		$sql->select('se_id');
+		$sql->from('{{suchmaschinen}}');
+		$sql->where('se_src_id=:src_id', array(':src_id' => $src_id_str));
+		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
+
+		// return the id or SELF::DEFAULT_SRC_ID if not found as the default value.
+		
+		if($rec === false)
+			return SELF::DEFAULT_TRAFFIC_SRC_ID;
+
+		return (int) $rec['se_id'];	// found it
 	}
 
 	/*
@@ -1869,7 +1905,6 @@ class SiteController extends Controller
 
 	public function actionLanding()
 	{
-		
 		if(isset($_POST['landing']))	// If here you came from the quote page using a back button (optional, not currently used)
 		{
 
@@ -2000,7 +2035,8 @@ class SiteController extends Controller
 								}
 								
 								$model->int_conquest_id = 0; // force always from here, source is non-conquest
-								
+
+								$model->int_suchmaschine = $this->MapTrafficSourceId(Yii::app()->request->getParam('csrc')); 	// map the traffic source
 
 								if(!$model->save())				// also updates active record with current record id, how nice!
 									Yii::log("Can't Save Prospect Record to database",  CLogger::LEVEL_WARNING);
@@ -2145,6 +2181,8 @@ class SiteController extends Controller
 									$model->setIsNewRecord(true); 	// just to be sure. I think new model defaults to NEW record
 
 									// set the source of prospect here, should be something to indicate it's a conquest
+
+									$model->int_suchmaschine = $this->MapTrafficSourceId(Yii::app()->request->getParam('csrc')); 	// map the traffic source
 									
 									if(!$model->save())				// also updates active record with current record id, how nice!
 										Yii::log("Can't Save Conquest Record to database",  CLogger::LEVEL_ERROR);
@@ -2332,10 +2370,7 @@ class SiteController extends Controller
 		* update the page_id, either case (new/update) should have all other fields stuffed here as well
 		*/
 
-var_dump($data);
-
-
-		if(is_array($data))
+ 		if(is_array($data))
 		{
 			// may not have all of these at once, so stuff as they exist
 
