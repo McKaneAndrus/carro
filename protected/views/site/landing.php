@@ -63,8 +63,6 @@
 			<?php echo $form->labelEx($model,'int_plz'); ?>
 			<div class="input-append">
 
-			<?php // echo $form->textField($model,'int_plz'); ?>
-
 			<?php $this->widget('CMaskedTextField', array(
 									'model' => $model,
 									'attribute' => 'int_plz',
