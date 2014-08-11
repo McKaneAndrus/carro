@@ -125,7 +125,7 @@
 								$special_dealer_select_list = array_keys($special_dealer_list);
 							
 								echo CHtml::checkBoxList('Inthae[special_dlrs]', $special_dealer_select_list, $special_dealer_list,
-								array('separator'=>'', 'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
+									array('separator'=>'', 'template'=>'<div class="quote_dealer"><div>{input}</div><div>{label}</div></div>')); 
 								echo '</div>';
 
 							}
