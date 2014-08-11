@@ -163,14 +163,6 @@
 			
 				if(($cms_content = $this->getCMSContent(array('site' => 0, 'page' => 0, 'element' => 0, 'make' => $model->int_fabrikat, 'model' => $model->int_modell), true)) !== false)
 					echo $cms_content;
-				else
-				{
-					echo '<div class="easy123"><ol>';
-					echo '<li>' . Yii::t('LeadGen', 'Select the make and model you are interest in and we will connect you with dealers in your neighborhood that will give you a great deal.') . '</li>';
-					echo '<li>' . Yii::t('LeadGen', 'Complete the email form and your selected dealers will contact you with their best internet pricing.') . '</li>';
-					echo '<li>' . Yii::t('LeadGen', 'Choose the deal you like best, visit the dealership and complete your new car purchase.') . ' </li>';
-					echo '</ol></div>';
-				}
 			?>
 		</div>
 		<div class="landing_overview_below">
@@ -180,11 +172,6 @@
 		<?php 
 			$detail_id = 0;		
 			$recs = $this->getReviewHeader(2014, $model->int_fabrikat, $model->int_modell, -1, true, $detail_id);
-
-			// echo ">> Make : {$model->int_fabrikat} Model : {$model->int_modell} Detail Id : {$detail_id}";
-
-			// hide or show the entire div, but always generate it so JS can muck with it.
-			
 			if($recs !== false)
 			{
 				$review_make = $recs['make'];
@@ -261,7 +248,6 @@
 			echo '</div>';
 
 			$this->endWidget();
-			
 		?>
 		
 	</div> <!-- car details -->
@@ -335,11 +321,6 @@ $cs->registerScript(
 		}
 
 	});
-
-	
-	// this needs work, the toggle class is fine but when a user hides the
-	// accordion it loses sync. So whenever hidded, the class should be rest to plus
-	// and the accordion should be closed!
 
 	function updateImages(data)
 	 {

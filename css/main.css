@@ -995,11 +995,6 @@ General Modal Defaults (bootstrap overrides)
 Footer
 ---------*/
 
-/*footer {
-    background: #474747 url('../images/footer-bg.png') repeat-x;
-    color: #fff;
-}*/
-
 .footer_wrapper {
     width: 940px;
     margin: 0 auto;
@@ -1032,9 +1027,8 @@ Footer
 .footer_wrapper div:first-child {
     border: 0;
     width: 320px;
-    font-size: 12px;
-    /* color: #ccc; */
-    padding: 10px; /*sjg*/
+    font-size: 16px;
+    padding: 10px;
 }
 
 .footer_wrapper div:first-child p {

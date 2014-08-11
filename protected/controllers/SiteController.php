@@ -1129,7 +1129,6 @@ class SiteController extends Controller
 			return false;	
 		}
 		
-		
 		// Get required params and bomb if not found
 		 
 		if(!isset($match_array['site']))
@@ -1232,7 +1231,8 @@ class SiteController extends Controller
 
 	public function getReviewHeader($year, $make, $model, $trim, $back_fill, &$detail_id)
 	{
-		// ignoring year for now
+		// We are ignoring year for now, must be sent as a number but not used in the queries at this point.
+		
 		// back_fill tells to look for a trim of '0' indication overall model info
 		
 		$detail_id = 0;
