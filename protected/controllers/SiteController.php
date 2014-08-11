@@ -14,6 +14,7 @@ class SiteController extends Controller
 	const DEFAULT_ANY_VALUE = -1;								// change with caution, hard coded value in javascript
 	const DEFAULT_DUPE_CHECK_DAYS = 7;							// Length of time to check back for dupes (in the last X days check)
 	const DEFAULT_TRAFFIC_SRC_ID = 2;							// If the csrc parameter is invalid or not found use this as the default
+	const DEFAULT_DEALER_DISTANCE = 100;						// Inital search distance
 	
 	const LANDING_PAGE_ID = 1000;								// Page Id's for logging
 	const QUOTE_PAGE_ID	= 1001;
@@ -867,13 +868,10 @@ class SiteController extends Controller
 	
 	public function GetNearestDealer($make, $postal_code_str, $dist, $limit = 10)
 	{
-
 		$postal_code_str = $this->NormalizePostalCode($postal_code_str);	// this is Brazil CEP code specific and must match our data
 
 		$q = 'CALL P_br_dealer_distance_ext_km(:make_id, :user_postal_code, :distance_km, :max_results)';
 		$cmd = Yii::app()->db->createCommand($q);
-		$cnt = 0;
-
 		$cmd->bindParam(':make_id', $make, PDO::PARAM_INT); // set the so we can look at dealers make!
 		$cmd->bindParam(':user_postal_code', $postal_code_str, PDO::PARAM_STR);
 		$cmd->bindParam(':distance_km', $dist, PDO::PARAM_INT);
@@ -901,7 +899,7 @@ class SiteController extends Controller
 	public function GetDealers($make, $postal_code_str, $limit)
 	{
 	
-		$dist = 100;	// 100 sq km box for the start, remember ordered by distance
+		$dist = self::DEFAULT_DEALER_DISTANCE;	// 100 sq km box for the start, remember ordered by distance
 		$cnt = 0;
 
 		do
@@ -2051,6 +2049,7 @@ class SiteController extends Controller
 
 								$dlr_id_list = array();
 								$rank = 0;
+
 								if(isset($_POST['Inthae']['special_dlrs']))
 								{
 									$sdl = $_POST['Inthae']['special_dlrs'];
@@ -2065,6 +2064,29 @@ class SiteController extends Controller
 										
 										if (!$prospect_sdlr->save()) 
 											Yii::log("Can't Save Special Dealer Data to database",  CLogger::LEVEL_WARNING);
+									}
+								}
+								else
+								{
+									// need to dig one up since they have selected none, we will grab one here
+									// this is a hack. What needs to happen is that the form should always send one
+									// Lots of javascript to deal with check box list. This for now is a patch
+									
+									$dealer = $this->GetNearestDealer($model->int_fabrikat, $model->int_plz, self::DEFAULT_DEALER_DISTANCE * 4, 1);
+									
+									if(count($dealer))
+									{
+										$dlr = $dealer[0]['hd_id'];							// dealer id
+										
+										$prospect_sdlr = new Inthae;	
+										$prospect_sdlr->ih_prospect_id = $model->int_id; 	// current models updated id
+										$prospect_sdlr->ih_dealer_id = $dlr;
+										$prospect_sdlr->ih_status = 0;						// database value for the order
+										
+										$dlr_id_list[] = $dlr; 								//	append to the list for later email
+										
+										if (!$prospect_sdlr->save()) 
+											Yii::log("Can't Save Forced Dealer Data to database",  CLogger::LEVEL_WARNING);
 									}
 								}
 
