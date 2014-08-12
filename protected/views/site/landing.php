@@ -452,8 +452,8 @@ $cs->registerScript(
 	{
 		$("#show_makes").show();
 		$("#show_models").hide();
-
-		if($("#LeadGen_int_fabrikat").val() == "") 
+ 
+ 		if($("#LeadGen_int_fabrikat").val() == "") 
 		{
 			' . CHtml::ajax(
 				array(
