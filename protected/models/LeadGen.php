@@ -134,10 +134,14 @@ class LeadGen extends CActiveRecord
 			array('int_tel', 'ext.validators.PhoneValidator', 'on'=>'quote', 'areaCode' => true, 'message'=>Yii::t('LeadGen','Invalid Phone Number')),	
 			
 			// add each string field, int_name, int_vname, etc so each can have their own error message
+
+
+			// /^[\sa-zA-Z\x80-\xff]+$/ -  this regx will allow only alpha and extended char set (UTF8 encoded) anchored beginning and ending of string
+			array('int_vname', 'match', 'pattern' =>'/^[\sa-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
+			array('int_name', 'match', 'pattern' =>'/^[\sa-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
 		
 			// specific validation and regx for Brazil postal code is to validate numbers in the format of 00000-000
 
-	
 			array('int_plz', 'CEP_Validator', 'message'=>Yii::t('LeadGen','Invalid CEP Number')),
 			array('int_plz', 'match', 'pattern' =>'/[0-9]{5}-[0-9]{3}/', 'message'=>Yii::t('LeadGen','Invalid Format, use 00000-000')),
 			array('int_plz', 'length', 'max'=>9),
