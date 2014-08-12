@@ -235,7 +235,6 @@ class SiteController extends Controller
 
 		if(is_numeric($trim_id))
 		{
-
 			$sql = Yii::app()->db->createCommand();
 			$sql->select('aus_id, aus_modell, aus_body_id, aus_doors');		// vehicle/trim_id
 			$sql->from('{{ausstattung}}');									// will prepend country
@@ -282,9 +281,11 @@ class SiteController extends Controller
 					$image_ydb = $p_year . '/' . $rec['aus_doors'] . $rec['aus_body_id'];
 
 					// if here we have valid records so we can get trim, make, model from them
-					
+				
 					foreach($image_suffix as $suffix)
 					{
+						// echo $file_check_path . strtoupper($rec2['fab_bez']) . '/' . strtoupper($rec1['mod_path']) . '/' . $image_ydb . $suffix);
+
 						if (file_exists($file_check_path . strtoupper($rec2['fab_bez']) . '/' . 
 										strtoupper($rec1['mod_path']) . '/' . $image_ydb . $suffix))
 						{
@@ -731,7 +732,7 @@ class SiteController extends Controller
 		$sql->where('aus_modell=:vehicle_model', array(':vehicle_model' => $model_id));
 		$sql->limit(5);		// get more then we think so empty images can be skipped
 		$make_trims = $sql->queryAll();
-		
+
 		$cnt = count($make_trims);
 		$image_data = array();
 		
