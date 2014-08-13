@@ -4,7 +4,7 @@ return array(
     'layoutPath' => 'application.views.layouts',
     'baseDirPath' => 'webroot.images.mail',
     'savePath' => 'webroot.assets.mail',
-    'testMode' => true,	// write eml file to savePath if true, path must exist and be writable or ERROR
+    'testMode' => false,	// write eml file to savePath if true, path must exist and be writable or ERROR
     'layout' => 'mail',
     'CharSet' => 'UTF-8',
     'AltBody' => Yii::t('YiiMailer','You need an HTML capable viewer to read this message.'),
