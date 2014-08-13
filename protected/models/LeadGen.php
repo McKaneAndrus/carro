@@ -34,8 +34,8 @@ class LeadGen extends CActiveRecord
 	
 	protected function beforeSave() 
 	{
-		$this->int_vname = ucfirst(strtolower($this->int_vname));
-		$this->int_name = ucfirst(strtolower($this->int_name));
+		$this->int_vname = ucwords(strtolower($this->int_vname));
+		$this->int_name = ucwords(strtolower($this->int_name));
 		$this->int_anlage = date("Y-m-d H:i:s"); // get current date hack to default it for the db
 				
 		return parent::beforeSave();
