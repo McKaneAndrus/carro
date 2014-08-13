@@ -137,8 +137,8 @@ class LeadGen extends CActiveRecord
 
 
 			// /^[\sa-zA-Z\x80-\xff]+$/ -  this regx will allow only alpha and extended char set (UTF8 encoded) anchored beginning and ending of string
-			array('int_vname', 'match', 'pattern' =>'/^[\sa-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
-			array('int_name', 'match', 'pattern' =>'/^[\sa-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
+			array('int_vname', 'match', 'pattern' =>'/^[\s\.\-\'a-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
+			array('int_name', 'match', 'pattern' =>'/^[\s\.\-\'a-zA-Z\x80-\xff]+$/', 'on'=>'quote', 'message'=>Yii::t('LeadGen','Invalid Characters')),
 		
 			// specific validation and regx for Brazil postal code is to validate numbers in the format of 00000-000
 
