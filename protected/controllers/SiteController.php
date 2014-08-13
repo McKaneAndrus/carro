@@ -1195,7 +1195,6 @@ class SiteController extends Controller
 				':str_key' => $str_key
 				);
 		$where = 'status = 0 AND site=:site AND page=:page AND element=:element AND make=:make AND model=:model AND str_key=:str_key';
-
 			
 		$sql = Yii::app()->db->createCommand();
 		$sql->select('content');
@@ -1323,15 +1322,31 @@ class SiteController extends Controller
 		if(count($rows) == 0)
 			return false;
 		
+		$cnt = 0;
 		foreach($rows as $row)
 		{
-			$reviews[] = array('attr' => $row['attribute_name'], 'value' => $row['attribute_value'] );
+			
+			$att = $row['attribute_name'];
+					
+			// Skip any negative reviews, rename the positive if we end up with no recs make sure we return false!
+					
+			if($att != 'Pontos Negativos')
+			{
+
+				if($att == 'Pontos Positivos')
+					$att = 'Destaques';
+
+				$reviews[] = array('attr' => $att, 'value' => $row['attribute_value'] );
+				$cnt++;
+			}
 		}
 		
-		return $reviews;
+		if($cnt > 0)
+			return $reviews;
+		else
+			return false;
 	}
-	
-	
+		
 	/*
 	* ==================== ALL ACTIONS BELOW ====================
 	*/
