@@ -423,7 +423,7 @@ class SiteController extends Controller
 		// skip the exercise if empty
 		
 		if($src_id_str =='' || $src_id_str == NULL)	// couple of common cases
-			return SELF::DEFAULT_TRAFFIC_SRC_ID;
+			return self::DEFAULT_TRAFFIC_SRC_ID;
 
 		// otherwise must check the DB
 		
@@ -433,10 +433,10 @@ class SiteController extends Controller
 		$sql->where('se_src_id=:src_id', array(':src_id' => $src_id_str));
 		$rec = $sql->queryRow();	 // false if nothing set, row record otherwise
 
-		// return the id or SELF::DEFAULT_SRC_ID if not found as the default value.
+		// return the id or self::DEFAULT_SRC_ID if not found as the default value.
 		
 		if($rec === false)
-			return SELF::DEFAULT_TRAFFIC_SRC_ID;
+			return self::DEFAULT_TRAFFIC_SRC_ID;
 
 		return (int) $rec['se_id'];	// found it
 	}
