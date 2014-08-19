@@ -25,13 +25,13 @@
     	height: 100%; }
 
     #logo {
-    	position: relative;
+    	position: absolute;
     	right: center; }
 
     @media screen and (max-width: 361px) {
     	.wrapper {
     		width: 100%;
-    		height: 100%;}
+    		height: 640px;}
 
     	.quote_mobile {
     		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
