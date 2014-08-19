@@ -12,14 +12,22 @@
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
     <style type="text/css">
-    	.wrapper {
-    	width: 500px;}
 
-    	.quote_mobile {
-    		background: url('red_shirt.jpg') no-repeat fixed;
-    		background-position: -50px;
+    //@media
+    .wrapper {
+    	width: 100%;
+    	height: 100%;}
 
-    	}
+    .quote_mobile {
+    	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
+    	background-position: -50px;
+    	width: 100%; }
+
+    #logo {
+    	width: 100%;
+    }
+
+
 
     
     
@@ -29,7 +37,7 @@
 <body>
 	<div class="wrapper">
 		<div class="quote_mobile">
-			<img src="achacarro_logo.png" id="logo">
+			<img src="/carro/images/achacarro_logo.png" id="logo">
 		</div>
 	</div>
 </body>
