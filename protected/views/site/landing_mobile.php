@@ -20,6 +20,7 @@
 
     .wrapper {
     	width: 100%;
+    }
 
     .quote_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
@@ -39,7 +40,6 @@
     		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     		background-size: 60%;
     		background-position: 50% 15%;
-    		width: 100%; }
 
     	#logo {
     		width: 100%;
