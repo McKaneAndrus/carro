@@ -11,6 +11,11 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
+	<script>
+	var heightDevice=$(window).height()
+	$(".wrapper").css("height", heightDevice);
+	</script>
+
     <style type="text/css">
 
     .wrapper {
