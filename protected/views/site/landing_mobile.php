@@ -18,9 +18,16 @@
 
     <style type="text/css">
 
+    body {
+    	position: absolute;
+    	text-align: center;
+    	height: 100%;
+    	width: 100%;
+    }
+
     .wrapper {
     	width: 100%;
-    	height: 640px;
+    	height: 100%;
     }
 
     .quote_mobile {
