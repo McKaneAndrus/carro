@@ -11,11 +11,6 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
-	<script>
-	var width=$(window).width();
-	var height=$(window).height()
-	</script>
-
     <style type="text/css">
 
     .wrapper {
@@ -41,11 +36,11 @@
     		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     		background-size: 60%;
     		background-position: 50% 15%;
+    	}
 
     	#logo {
     		width: 100%;
     	}
-    @
 	}
 
 
