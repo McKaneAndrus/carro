@@ -13,20 +13,38 @@
 
     <style type="text/css">
 
-    //@media
     .wrapper {
     	width: 100%;
     	height: 100%;}
 
     .quote_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
-    	background-position: 50px;
+    	background-position: 49px;
+    	background-size: 70%;
     	width: 100%;
     	height: 100%; }
 
     #logo {
-    	width: 100%;
-    }
+    	position: relative;
+    	right: center; }
+
+    @media screen and (max-width: 361px) {
+    	.wrapper {
+    		width: 100%;
+    		height: 100%;}
+
+    	.quote_mobile {
+    		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
+    		background-size: 60%;
+    		background-position: 0 15%;
+    		width: 100%;
+    		height: 100%; }
+
+    	#logo {
+    		width: 100%;
+    	}
+    @
+	}
 
 
 
