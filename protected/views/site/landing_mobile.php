@@ -40,8 +40,7 @@
     	height: 100% }
 
     #logo {
-    	position: absolute;
-    	right: center; }
+    	margin: 0 auto; }
 
     @media screen and (max-width: 361px) {
     	.wrapper {
