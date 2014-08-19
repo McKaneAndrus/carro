@@ -20,8 +20,9 @@
 
     .quote_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
-    	background-position: -50px;
-    	width: 100%; }
+    	background-position: 50px;
+    	width: 100%;
+    	height: 100%; }
 
     #logo {
     	width: 100%;
