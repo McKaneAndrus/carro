@@ -11,18 +11,21 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
+	<script>
+	var width=$(window).width();
+	var height=$(window).height()
+	</script>
+
     <style type="text/css">
 
     .wrapper {
     	width: 100%;
-    	height: 640px;}
 
     .quote_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     	background-position: 49px;
-    	background-size: 70%;
-    	width: 100%;
-    	height: 100%; }
+    	background-size: 90%;
+    	width: 100%; }
 
     #logo {
     	position: absolute;
@@ -30,15 +33,13 @@
 
     @media screen and (max-width: 361px) {
     	.wrapper {
-    		width: 100%;
-    		height: 640px;}
+    		width: 100%; }
 
     	.quote_mobile {
     		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     		background-size: 60%;
-    		background-position: 0 15%;
-    		width: 100%;
-    		height: 100%; }
+    		background-position: 50% 15%;
+    		width: 100%; }
 
     	#logo {
     		width: 100%;
