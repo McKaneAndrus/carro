@@ -26,7 +26,8 @@
     	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     	background-position: 49px;
     	background-size: 90%;
-    	width: 100%; }
+    	width: 100%;
+    	height: 100% }
 
     #logo {
     	position: absolute;
