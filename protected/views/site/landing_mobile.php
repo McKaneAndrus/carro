@@ -20,6 +20,7 @@
 
     .wrapper {
     	width: 100%;
+    	height: 640px;
     }
 
     .quote_mobile {
