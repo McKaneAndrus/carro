@@ -104,7 +104,7 @@
 			<div class="row">
 				<div class="center-block">
 				<div class="col-xs-12 mmzform">
-					<form role="form">
+					<!-- <form role="form">
 					  <div class="form-group center-block">
 					    <select class="form-control select-box">
 					      <option>Selecione uma Marca</option>
@@ -121,7 +121,7 @@
 					      <option>5</option>
 					    </select>
 					  </div>
-					</form>
+					</form> -->
 				</div>
 				</div>
 			</div>
