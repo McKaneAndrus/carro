@@ -20,20 +20,20 @@
 
     <style type="text/css">
 
-    body {
+/*    body {
     	position: absolute;
     	text-align: center;
     	height: 100%;
     	width: 100%;
     	top: 0;
     	bottom: 0;
-    }
+    }*/
 
-    .quote_mobile {
+   /* .quote_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat;
     	background-size: 90%;
     	width: 100%;
-    	height: 100% }
+    	height: 100% }*/
 
  /*   @media screen and (max-width: 361px) {
     	.container-fluid {
