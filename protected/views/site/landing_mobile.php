@@ -40,6 +40,7 @@
     	height: 120px;
     	width: 80%;
     	background-color: #D7D7D7;
+    	border-radius: 5px;
     	position: relative;
     	top: -10px;
     	z-index: 5;
@@ -48,8 +49,8 @@
     }
 
     .select-box {
-    	padding: 5px;
-    	margin: 5px;
+    	padding: 2px;
+    	margin: 8px;
     }
 
 /*    body {
@@ -99,9 +100,9 @@
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 mmzform">
+				<div class="col-xs-12">
 					<form role="form">
-					  <div class="form-group">
+					  <div class="form-group mmzform">
 					    <select class="form-control select-box">
 					      <option>Selecione uma Marca</option>
 					      <option>2</option>
