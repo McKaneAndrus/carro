@@ -23,6 +23,7 @@
 
     body {
     	background-color: #fff;
+    	text-align: center;
     }
 
     .center-block {
