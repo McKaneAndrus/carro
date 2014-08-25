@@ -50,6 +50,11 @@
 
     }
 
+    .mmzform2{
+    	width:200px;
+    	margin: 0 auto;
+    }
+
     .select-box {
     	padding: 2px;
     	margin: 15px auto;
@@ -102,8 +107,7 @@
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="center-block">
-				<div class="col-xs-12 mmzform">
+				<div class="col-xs-12 mmzform2">
 					<!-- <form role="form">
 					  <div class="form-group center-block">
 					    <select class="form-control select-box">
@@ -122,7 +126,6 @@
 					    </select>
 					  </div>
 					</form> -->
-				</div>
 				</div>
 			</div>
 		</div>
