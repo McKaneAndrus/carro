@@ -38,7 +38,7 @@
 
     .mmzform {
     	height: 120px;
-    	width: 60%;
+    	width: 100px;
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
