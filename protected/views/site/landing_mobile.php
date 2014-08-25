@@ -64,7 +64,7 @@
 				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12">poooooooop</div>
+				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="logo"></div>
 			</div>
 		</div>
 	</div>
