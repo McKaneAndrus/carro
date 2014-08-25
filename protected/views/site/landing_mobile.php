@@ -15,10 +15,15 @@
 
 	<script>
 	/*var heightDevice=$(window).height()
-	$(".container-fluid").css("height", heightDevice);*/
+	$(".container").css("height", heightDevice);*/
 	</script>
 
     <style type="text/css">
+
+    .background{
+    	width: 50%;
+    	height: 50%;
+    }
 
 /*    body {
     	position: absolute;
@@ -36,7 +41,7 @@
     	height: 100% }*/
 
  /*   @media screen and (max-width: 361px) {
-    	.container-fluid {
+    	.container {
     		width: 100%; }
 
     	.quote_mobile {
@@ -59,7 +64,7 @@
 </head>
 <body>
 	<div class="quote_mobile">
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
 				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
 			</div>
