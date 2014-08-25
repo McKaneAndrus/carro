@@ -32,18 +32,18 @@
 	}
 
     #background{
-    	width: 70%;
-    	height: 70%;
+    	width: 50%;
+    	height: 50%;
     }
 
     .mmzform {
-    	height: 50%;
+    	height: 120px;
     	width: 80%;
     	background-color: #D7D7D7;
     	position: relative;
     	top: -10px;
     	z-index: 5;
-    	margin: 0 auto;
+    	max-width: 100%;
 
     }
 
@@ -99,9 +99,10 @@
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 mmzform img-responsive">
+				<div class="col-xs-12 mmzform">
 					<form role="form">
-					  <div class="form-group center-block">
+					  <div class="form-group">
+					  	<div class="center-block">
 					    <select class="form-control select-box">
 					      <option>Selecione uma Marca</option>
 					      <option>2</option>
@@ -116,6 +117,7 @@
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
+						</div>
 					  </div>
 					</form>
 				</div>
