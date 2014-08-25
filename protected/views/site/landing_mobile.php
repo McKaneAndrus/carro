@@ -20,6 +20,10 @@
 
     <style type="text/css">
 
+    body {
+    	background-color: #fff;
+    }
+
     .center-block {
   		display: block;
   		margin-left: auto;
@@ -31,6 +35,12 @@
     	height: 70%;
     }
 
+    .mmzform {
+    	height: 50%;
+    	width: 80%;
+    	background-color: #D7D7D7;
+    }
+
 /*    body {
     	position: absolute;
     	text-align: center;
@@ -40,7 +50,7 @@
     	bottom: 0;
     }*/
 
-   /* .quote_mobile {
+   /* .landing_mobile {
     	background: url('/carro/images/red_shirt.jpg') no-repeat;
     	background-size: 90%;
     	width: 100%;
@@ -50,7 +60,7 @@
     	.container {
     		width: 100%; }
 
-    	.quote_mobile {
+    	.landing_mobile {
     		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
     		background-size: 60%;
     		background-position: 50% 15%;
@@ -69,13 +79,35 @@
    </style>
 </head>
 <body>
-	<div class="quote_mobile">
+	<div class="landing_mobile">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12 center-block"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive center-block"></div>
+				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 center-block"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
+				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 mmzform center-block img-responsive">
+					<form role="form">
+					  <div class="form-group">
+					    <select class="form-control">
+					      <option>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					    </select>
+					    <select class="form-control">
+					      <option>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					    </select>
+					  </div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
