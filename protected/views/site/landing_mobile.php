@@ -21,8 +21,8 @@
     <style type="text/css">
 
     .background{
-    	width: 50%;
-    	height: 50%;
+    	width: 30%;
+    	height: 30%;
     }
 
 /*    body {
@@ -66,7 +66,7 @@
 	<div class="quote_mobile">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12"><img src="/carro/images/achacarro_logo_open.png" id="logo" class="img-responsive"></div>
+				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive"></div>
