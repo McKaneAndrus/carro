@@ -40,10 +40,16 @@
     	height: 50%;
     	width: 80%;
     	background-color: #D7D7D7;
+    	position: relative;
+    	top: -10px;
+    	z-index: 5;
+    	margin: 0 auto;
+
     }
 
     .select-box {
     	padding: 5px;
+    	margin: 5px;
     }
 
 /*    body {
