@@ -30,8 +30,7 @@
     }
 
     .quote_mobile {
-    	background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
-    	background-position: 49px;
+    	background: url('/carro/images/red_shirt.jpg') no-repeat;
     	background-size: 90%;
     	width: 100%;
     	height: 100% }
