@@ -20,7 +20,7 @@
 
     <style type="text/css">
 
-    .background{
+    #background{
     	width: 30%;
     	height: 30%;
     }
