@@ -42,6 +42,10 @@
     	background-color: #D7D7D7;
     }
 
+    .select-box {
+    	padding: 5px;
+    }
+
 /*    body {
     	position: absolute;
     	text-align: center;
@@ -92,15 +96,15 @@
 				<div class="col-xs-12 mmzform img-responsive">
 					<form role="form">
 					  <div class="form-group center-block">
-					    <select class="form-control">
-					      <option>1</option>
+					    <select class="form-control select-box">
+					      <option>Selecione uma Marca</option>
 					      <option>2</option>
 					      <option>3</option>
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
-					    <select class="form-control">
-					      <option>1</option>
+					    <select class="form-control select-box">
+					      <option>Selecione um Modelo</option>
 					      <option>2</option>
 					      <option>3</option>
 					      <option>4</option>
