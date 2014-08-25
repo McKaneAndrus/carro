@@ -54,6 +54,7 @@
     	width:200px;
     	height:200px;
     	margin: 0 auto;
+    	background-color: black;
     }
 
     .select-box {
