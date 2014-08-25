@@ -38,14 +38,13 @@
 
     .mmzform {
     	height: 120px;
-    	width: 300px;
+    	width: 60%;
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
     	top: -10px;
     	z-index: 5;
     	max-width: 100%;
-    	display: block;
   		margin: 0 auto;
 
     }
