@@ -14,8 +14,8 @@
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
 	<script>
-	var heightDevice=$(window).height()
-	$(".container-fluid").css("height", heightDevice);
+	/*var heightDevice=$(window).height()
+	$(".container-fluid").css("height", heightDevice);*/
 	</script>
 
     <style type="text/css">
