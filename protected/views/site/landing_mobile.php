@@ -45,6 +45,9 @@
     	top: -10px;
     	z-index: 5;
     	max-width: 100%;
+    	display: block;
+  		margin-left: auto;
+  		margin-right: auto;
 
     }
 
