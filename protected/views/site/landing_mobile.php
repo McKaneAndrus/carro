@@ -21,8 +21,8 @@
     <style type="text/css">
 
     #background{
-    	width: 30%;
-    	height: 30%;
+    	width: 70%;
+    	height: 70%;
     }
 
 /*    body {
