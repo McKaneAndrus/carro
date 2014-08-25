@@ -51,9 +51,9 @@
     }
 
     .mmzform2{
-    	width:200px;
-    	height:200px;
     	margin: 0 auto;
+    	width:300px;
+    	height:200px;
     	background-color: black;
     }
 
@@ -109,7 +109,8 @@
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 mmzform2">
+				<div class="col-xs-12">
+					<div class="mmzform2"></div>
 					<!-- <form role="form">
 					  <div class="form-group center-block">
 					    <select class="form-control select-box">
