@@ -102,7 +102,6 @@
 				<div class="col-xs-12 mmzform">
 					<form role="form">
 					  <div class="form-group">
-					  	<div class="center-block">
 					    <select class="form-control select-box">
 					      <option>Selecione uma Marca</option>
 					      <option>2</option>
@@ -117,7 +116,6 @@
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
-						</div>
 					  </div>
 					</form>
 				</div>
