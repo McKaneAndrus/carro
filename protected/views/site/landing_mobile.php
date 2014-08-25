@@ -20,6 +20,12 @@
 
     <style type="text/css">
 
+    .center-block {
+  		display: block;
+  		margin-left: auto;
+ 		margin-right: auto;
+	}
+
     #background{
     	width: 70%;
     	height: 70%;
@@ -66,10 +72,10 @@
 	<div class="quote_mobile">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
+				<div class="col-xs-12 center-block"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive"></div>
+				<div class="col-xs-12 center-block"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive"></div>
 			</div>
 		</div>
 	</div>
