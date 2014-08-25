@@ -61,10 +61,10 @@
 	<div class="quote_mobile">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo"></div>
+				<div class="col-xs-12"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="logo"></div>
+				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive"></div>
 			</div>
 		</div>
 	</div>
