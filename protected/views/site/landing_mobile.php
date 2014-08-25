@@ -72,10 +72,10 @@
 	<div class="quote_mobile">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12 center-block"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive"></div>
+				<div class="col-xs-12 center-block"><img src="/carro/images/achacarro_logo.png" id="logo" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 center-block"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive"></div>
+				<div class="col-xs-12 center-block"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 		</div>
 	</div>
