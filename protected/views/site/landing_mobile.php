@@ -101,6 +101,7 @@
 				<div class="col-xs-12"><img src="/carro/images/red_shirt.jpg" id="background" class="img-responsive center-block"></div>
 			</div>
 			<div class="row">
+				<div class="center-block">
 				<div class="col-xs-12 mmzform">
 					<form role="form">
 					  <div class="form-group center-block">
@@ -120,6 +121,7 @@
 					    </select>
 					  </div>
 					</form>
+				</div>
 				</div>
 			</div>
 		</div>
