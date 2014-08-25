@@ -53,7 +53,7 @@
 
     .select-box {
     	padding: 2px;
-    	margin: 8px;
+    	margin: 0 auto;
     }
 
 /*    body {
