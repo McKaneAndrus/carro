@@ -52,6 +52,7 @@
 
     .mmzform2{
     	width:200px;
+    	height:200px;
     	margin: 0 auto;
     }
 
