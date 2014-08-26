@@ -43,18 +43,11 @@
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
-    	top: -10px;
+    	top: 20px;
     	z-index: 5;
     	max-width: 100%;
   		margin: 0 auto;
 
-    }
-
-    .mmzform2{
-    	margin: 0 auto;
-    	width:300px;
-    	height:200px;
-    	background-color: black;
     }
 
     .select-box {
