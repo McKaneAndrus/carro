@@ -130,7 +130,7 @@
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
-					    <select class="form-control select-box">
+					    <select class="form-control select-box" disabled="disabled">
 					      <option>Selecione um Modelo</option>
 					      <option>2</option>
 					      <option>3</option>
