@@ -109,7 +109,6 @@
 	    text-align: justify;
 	    font-size: 9px;
 	    min-width: 200px;
-	    margin: 0 auto;
 	}
 	#footerNav:after {
 	    content: '';
