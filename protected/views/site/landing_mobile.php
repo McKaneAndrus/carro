@@ -94,6 +94,7 @@
  		margin-bottom: 5px;
 	}
 	#footerNav {
+		width: 90%;
 	    text-align: justify;
 	    min-width: 200px;
 	    font-size: 8px;
@@ -101,7 +102,7 @@
 	#footerNav:after {
 	    content: '';
 	    display: inline-block;
-	    width: 90%;
+	    width: 100%;
 	}
 	#footerNav li {
 	    display: inline-block;
@@ -203,7 +204,6 @@
 				<div id="footerLine"></div>
 				<ul class="img-responsive" id="footerNav">
 					<li><img src="/carro/images/achacarro_logo_xs.png"></li>
-				    <li><a href="http://achacarro.com/carro">Home</a></li>
 				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
 				    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
 				    <li>Copyright © 2014 Revmaker</li>
