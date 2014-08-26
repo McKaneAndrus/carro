@@ -92,7 +92,6 @@
 
 	#footerLine {
 		width: 90%;
-		max-width: 100%;
 		background-color:#F61C2D;
 		height: 6px;
 		margin-left: auto;
@@ -103,18 +102,15 @@
 		width: 90%;
 	    text-align: justify;
 	    min-width: 200px;
-	    max-width: 100%;
 	    font-size: 9px;
 	}
 	#footerNav:after {
 	    content: '';
 	    display: inline-block;
-	    width: 90%%;
-	    max-width: 100%;
+	    width: 90%;
 	}
 	#footerNav li {
 	    display: inline-block;
-	    max-width: 100%;
 	}
 
 /*    body {
