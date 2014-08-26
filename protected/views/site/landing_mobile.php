@@ -225,11 +225,11 @@
 					<div id="footerLine" class="img-responsive center-block"></div>
 					<ul id="footerNav">
 						<li><img src="/carro/images/achacarro_logo_xs.png"></li>
-						<li><a href="http://achacarro.com/carro">Homeplease</a></li>
+						<li><a href="http://achacarro.com/carro">Home</a></li>
 					    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
 					    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
 					    <br/>
-					    <li>Copyright © 2014 Revmaker</li>
+					    <li>pplllCopyright © 2014 Revmaker</li>
 					</ul>
 				</div>
 			</div>
