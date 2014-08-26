@@ -92,7 +92,7 @@
 
 	.footer {
 		position: absolute;
-		bottom: 0;
+		bottom: 0px;
 	}
 
 	#footerLine {
@@ -107,6 +107,7 @@
 		width: 90%;
 	    text-align: justify;
 	    font-size: 9px;
+	    min-width: 200px;
 	}
 	#footerNav:after {
 	    content: '';
@@ -222,7 +223,7 @@
 			<div class="col-xs-12">
 				<div class="footer">
 					<div id="footerLine" class="img-responsive center-block"></div>
-					<ul class="img-responsive" id="footerNav">
+					<ul id="footerNav">
 						<li><img src="/carro/images/achacarro_logo_xs.png"></li>
 						<li><a href="http://achacarro.com/carro">Home</a></li>
 					    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
