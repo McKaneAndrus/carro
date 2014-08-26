@@ -38,21 +38,22 @@
     }
 
     .mmzform {
-    	height: 120px;
+    	height: 180px;
     	width: 60%;
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
-    	top: -30px;
+    	top: -10px;
     	z-index: 5;
     	max-width: 100%;
   		margin: 0 auto;
+  		padding: 5px;
 
     }
 
     .select-box {
     	padding: 2px;
-    	margin: 15px auto;
+    	margin: 0 auto;
     }
 
 /*    body {
