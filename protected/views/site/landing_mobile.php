@@ -198,7 +198,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" style="position: absolue; bottom: 0px">
+		<div class="row" style="position: absolue; bottom: 0px;">
 			<div class="col-xs-12">
 				<div id="footerLine"></div>
 				<ul class="img-responsive" id="footerNav">
