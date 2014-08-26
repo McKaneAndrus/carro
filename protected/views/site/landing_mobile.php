@@ -108,7 +108,7 @@
 		width: 95%;
 	    text-align: justify;
 	    font-size: 9px;
-	    min-width: 200px;
+	    min-width: 300px;
 	    max-width: 500px;
 	    margin-left: -10px;
 	}
