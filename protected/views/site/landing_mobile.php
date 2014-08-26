@@ -199,16 +199,16 @@
 				</div>
 			</div>
 		</div>
-		<!--<div class="row" style="position: absolute; bottom: 0px;">
+		<div class="row" style="position: absolute; bottom: 0px;">
 			<div class="col-xs-12">
-				<div id="footerLine"></div>
+				<div id="footerLine1"></div>
 				<ul class="img-responsive" id="footerNav">
 					<li><img src="/carro/images/achacarro_logo_xs.png"></li>
 				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
 				    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
 				    <li>Copyright © 2014 Revmaker</li>
 				</ul>
-			</div>-->
+			</div>
 		</div>
 	</div>
 
