@@ -91,7 +91,7 @@
 	}
 
 	#footerLine {
-		width: 90%;
+		width: 95%;
 		background-color:#F61C2D;
 		height: 6px;
 		margin-left: auto;
