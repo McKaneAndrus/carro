@@ -85,7 +85,9 @@
 
 	#footerLine {
 		width: 90%;
-		color: red;
+		background-color:#F61C2D;
+		height: 10px;
+
 	}
 	#footerNav {
 	    text-align: justify;
@@ -194,8 +196,8 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<hr id="footerLine">
-				<ul id="footerNav">
+				<div id="footerLine"></div>
+				<ul class="img-responsive center-block" id="footerNav">
 					<li><img src="/carro/images/achacarro_logo_sm.png"></li>
 				    <li><a href="http://achacarro.com/carro">Home</a></li>
 				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
