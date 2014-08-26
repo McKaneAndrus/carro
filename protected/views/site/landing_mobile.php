@@ -112,6 +112,12 @@
 	    display: inline-block;
 	}
 
+	@media (max-width: 360px){
+		.btn-custom { 
+			font-size: 12px;
+		}
+	}
+
 /*    body {
     	position: absolute;
     	text-align: center;
