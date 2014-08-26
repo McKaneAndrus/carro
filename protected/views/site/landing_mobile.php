@@ -56,6 +56,26 @@
     	margin: 5px auto;
     }
 
+    .btn-custom { 
+	background-color: hsl(360, 100%, 44%) !important; 
+	background-repeat: repeat-x; 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff4747", endColorstr="#e00000"); 
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#ff4747), to(#e00000)); 
+	background-image: -moz-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -ms-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff4747), color-stop(100%, #e00000)); 
+	background-image: -webkit-linear-gradient(top, #ff4747, #e00000); 
+	background-image: -o-linear-gradient(top, #ff4747, #e00000); 
+	background-image: linear-gradient(#ff4747, #e00000); 
+	border-color: #e00000 #e00000 hsl(360, 100%, 39%); 
+		
+	color: #fff !important; 
+	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
+    text-shadow: -1px -1px 0 rgba(0,0,0,.4);
+
+	-webkit-font-smoothing: antialiased; 
+	}
+
 /*    body {
     	position: absolute;
     	text-align: center;
@@ -137,6 +157,8 @@
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
+					    <input type="text" class="form-control" placeholder="Código Postal">
+					    <button class="custom-btn">Consiga</button>
 					  </div>
 					</form>
 					</div>
