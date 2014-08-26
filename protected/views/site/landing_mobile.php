@@ -170,7 +170,7 @@
 	</div>
 
 <script>
-enable=function(){
+function enable(){
 	alert("heyo");
 	if($("#makeSelect").val()!="Selecione uma Marca")
 		{	alert("homerfree");
