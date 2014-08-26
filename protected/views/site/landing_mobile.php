@@ -68,7 +68,7 @@
 	background-image: -o-linear-gradient(top, #ff4747, #e00000); 
 	background-image: linear-gradient(#ff4747, #e00000); 
 	border-color: #e00000 #e00000 hsl(360, 100%, 39%); 
-	margin-top: 5px;
+	margin-top: 15px;
 	color: #fff !important; 
 	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
@@ -127,7 +127,7 @@
 					<div class="mmzform">
 					<form role="form">
 					  <div class="form-group center-block">
-					    <select class="form-control select-box">
+					    <select class="form-control select-box" id="makeSelect">
 					      <option>Selecione uma Marca</option>
 					      <option>2</option>
 					      <option>3</option>
@@ -150,7 +150,7 @@
 					      <option>4</option>
 					      <option>5</option>
 					    </select>
-					    <select class="form-control select-box" disabled="disabled">
+					    <select class="form-control select-box" id="modelSelect" disabled="disabled">
 					      <option>Selecione um Modelo</option>
 					      <option>2</option>
 					      <option>3</option>
@@ -166,5 +166,13 @@
 			</div>
 		</div>
 	</div>
+
+<script>
+$(#makeSelect).onblur({
+	if($(#makeSelect).val()!="Selecione uma Marca")
+		{$(#modelSelect).prop('disabled', false);}
+})
+
+</script>
 </body>
 </html>
