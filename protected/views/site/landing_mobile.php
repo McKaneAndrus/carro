@@ -83,6 +83,24 @@
 	-webkit-font-smoothing: antialiased; 
 	}
 
+	#footerLine {
+		width: 90%;
+		color: red;
+	}
+	#footerNav {
+	    text-align: justify;
+	    min-width: 500px;
+	    font-size: 10px;
+	}
+	#footerNav:after {
+	    content: '';
+	    display: inline-block;
+	    width: 100%;
+	}
+	#footerNav li {
+	    display: inline-block;
+	}
+
 /*    body {
     	position: absolute;
     	text-align: center;
@@ -172,6 +190,18 @@
 					</form>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<hr id="footerLine">
+				<ul id="footerNav">
+					<li><img src="/carro/images/achacarro_logo_sm.png"></li>
+				    <li><a href="http://achacarro.com/carro">Home</a></li>
+				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
+				    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
+				    <li>Copyright © 2014 Revmaker</li>
+				</ul>
 			</div>
 		</div>
 	</div>
