@@ -110,7 +110,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="mmzform2"></div>
+					<div class="mmzform"></div>
 					<!-- <form role="form">
 					  <div class="form-group center-block">
 					    <select class="form-control select-box">
