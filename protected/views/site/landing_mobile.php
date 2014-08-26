@@ -95,8 +95,8 @@
 	}
 	#footerNav {
 	    text-align: justify;
-	    min-width: 300px;
-	    font-size: 10px;
+	    min-width: 200px;
+	    font-size: 8px;
 	}
 	#footerNav:after {
 	    content: '';
