@@ -19,7 +19,7 @@
 	/*var heightDevice=$(window).height()
 	$(".container").css("height", heightDevice);*/
 	alert("did I even do this?");
-	$("#makeSelect").onchange({
+	$("#makeSelect").onchange(function(){
 		alert("heyo");
 		if($("#makeSelect").val()!="Selecione uma Marca")
 			{	alert("homerfree");
