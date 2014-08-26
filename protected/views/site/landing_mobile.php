@@ -110,6 +110,7 @@
 	    font-size: 9px;
 	    min-width: 200px;
 	    max-width: 500px;
+	    margin-left: -10px;
 	}
 	#footerNav:after {
 	    content: '';
