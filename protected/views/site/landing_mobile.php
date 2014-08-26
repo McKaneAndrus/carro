@@ -129,7 +129,7 @@
 					<div class="mmzform">
 					<form role="form">
 					  <div class="form-group center-block">
-					    <select class="form-control select-box" id="makeSelect">
+					    <select class="form-control select-box" id="makeSelect" onchange="enable">
 					      <option>Selecione uma Marca</option>
 					      <option>2</option>
 					      <option>3</option>
@@ -170,8 +170,7 @@
 	</div>
 
 <script>
-alert("did I even do this?");
-$("#makeSelect").onchange(function(){
+enable=function(){
 	alert("heyo");
 	if($("#makeSelect").val()!="Selecione uma Marca")
 		{	alert("homerfree");
