@@ -35,6 +35,9 @@
  		margin-right: auto;
 	}
 
+	#logo {
+		margin-bottom: 25px;
+	}
     #background{
     	width: 50%;
     	height: 50%;
