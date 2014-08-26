@@ -43,7 +43,7 @@
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
-    	top: -10px;
+    	top: -15px;
     	z-index: 5;
     	max-width: 100%;
   		margin: 0 auto;
@@ -109,6 +109,22 @@
 					  <div class="form-group center-block">
 					    <select class="form-control select-box">
 					      <option>Selecione uma Marca</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
 					      <option>2</option>
 					      <option>3</option>
 					      <option>4</option>
