@@ -90,6 +90,11 @@
 	-webkit-font-smoothing: antialiased; 
 	}
 
+	.footer {
+		position: absolute;
+		bottom: 0;
+	}
+
 	#footerLine {
 		width: 95%;
 		background-color:#F61C2D;
@@ -97,15 +102,11 @@
 		margin-left: auto;
  		margin-right: auto;
  		margin-bottom: 5px;
- 		position: absolute;
- 		bottom: 20px;
 	}
 	#footerNav {
 		width: 90%;
 	    text-align: justify;
 	    font-size: 9px;
-	    position: absolute;
- 		bottom: -10px;
 	}
 	#footerNav:after {
 	    content: '';
@@ -219,15 +220,17 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<div id="footerLine" class="img-responsive center-block"></div>
-				<ul class="img-responsive" id="footerNav">
-					<li><img src="/carro/images/achacarro_logo_xs.png"></li>
-					<li><a href="http://achacarro.com/carro">Home</a></li>
-				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
-				    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
-				    <br/>
-				    <li>Copyright © 2014 Revmaker</li>
-				</ul>
+				<div class="footer">
+					<div id="footerLine" class="img-responsive center-block"></div>
+					<ul class="img-responsive" id="footerNav">
+						<li><img src="/carro/images/achacarro_logo_xs.png"></li>
+						<li><a href="http://achacarro.com/carro">Home</a></li>
+					    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
+					    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
+					    <br/>
+					    <li>Copyright © 2014 Revmaker</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
