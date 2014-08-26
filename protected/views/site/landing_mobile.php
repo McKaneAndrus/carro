@@ -95,7 +95,7 @@
 	}
 	#footerNav {
 	    text-align: justify;
-	    min-width: 500px;
+	    min-width: 300px;
 	    font-size: 10px;
 	}
 	#footerNav:after {
