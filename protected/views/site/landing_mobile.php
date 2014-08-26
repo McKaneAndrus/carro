@@ -116,6 +116,10 @@
 		.btn-custom { 
 			font-size: 12px;
 		}
+
+		.form-control {
+			font-size: 12px;
+		}
 	}
 
 /*    body {
