@@ -168,11 +168,11 @@
 	</div>
 
 <script>
-alert("did I even do this?")
+alert("did I even do this?");
 $(#makeSelect).onchange({
 	alert("heyo");
 	if($(#makeSelect).val()!="Selecione uma Marca")
-		{	alert(homerfree);
+		{	alert("homerfree");
 			$(#modelSelect).prop('disabled', false);}
 })
 
