@@ -26,6 +26,7 @@
     body {
     	background-color: #fff;
     	text-align: center;
+    	font-family: 'Roboto';
     }
 
     .center-block {
@@ -74,7 +75,8 @@
 	color: #fff !important; 
 	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-    font-family: 'Roboto', bold;
+    font-family: 'Roboto';
+    font-weight: 700;
 	-webkit-font-smoothing: antialiased; 
 	}
 
