@@ -112,11 +112,11 @@
 	    max-width: 500px;
 	    margin-left: -10px;
 	}
-	/*#footerNav:after {
+	#footerNav:after {
 	    content: '';
 	    display: inline-block;
 	    width: 100%;
-	}*/
+	}
 	#footerNav li {
 	    display: inline-block;
 	}
