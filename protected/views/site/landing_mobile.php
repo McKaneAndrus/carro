@@ -99,11 +99,11 @@
 	    /*min-width: 200px;*/
 	    font-size: 9px;
 	}
-	#footerNav:after {
+	/*#footerNav:after {
 	    content: '';
 	    display: inline-block;
 	    width: 90%%;
-	}
+	}*/
 	#footerNav li {
 	    display: inline-block;
 	}
