@@ -93,12 +93,12 @@
  		margin-right: auto;
  		margin-bottom: 5px;
 	}
-	#footerNav {
+	/*#footerNav {
 		width: 90%;
 	    text-align: justify;
-	    /*min-width: 200px;*/
+	    min-width: 200px;
 	    font-size: 9px;
-	}
+	}*/
 	/*#footerNav:after {
 	    content: '';
 	    display: inline-block;
