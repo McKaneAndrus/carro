@@ -68,7 +68,7 @@
 	background-image: -o-linear-gradient(top, #ff4747, #e00000); 
 	background-image: linear-gradient(#ff4747, #e00000); 
 	border-color: #e00000 #e00000 hsl(360, 100%, 39%); 
-		
+	margin-top: 5px;
 	color: #fff !important; 
 	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
@@ -158,7 +158,7 @@
 					      <option>5</option>
 					    </select>
 					    <input type="text" class="form-control" placeholder="Código Postal">
-					    <button class="btn btn-custom">Consiga</button>
+					    <button class="btn btn-custom">Consiga o Melhor Preco</button>
 					  </div>
 					</form>
 					</div>
