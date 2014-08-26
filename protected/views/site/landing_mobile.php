@@ -12,6 +12,8 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
 	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>-->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700,400italic' rel='stylesheet' type='text/css'>
+
 
 
 	<script>
@@ -72,7 +74,7 @@
 	color: #fff !important; 
 	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33); */
     text-shadow: -1px -1px 0 rgba(0,0,0,.4);
-
+    font-family: 'Roboto', bold;
 	-webkit-font-smoothing: antialiased; 
 	}
 
@@ -171,11 +173,8 @@
 
 <script>
 function enable(){
-	alert("heyo");
 	if($("#makeSelect").val()!="Selecione uma Marca")
-		{	alert("homerfree");
-			$("#modelSelect").prop("disabled", false);
-		}
+		{$("#modelSelect").prop("disabled", false);}
 	}
 
 </script>
