@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Acha Mobile</title>
+	<meta charset="utf-8" />
+   	<title>Acha Mobile</title>
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -27,6 +28,10 @@
     	max-width: 100%;
    		overflow-x: hidden !important;
 	}
+
+	body.ui-mobile-viewport, div.ui-mobile-viewport {
+    overflow-x: hidden;
+}
 
     body {
     	background-color: #fff;
