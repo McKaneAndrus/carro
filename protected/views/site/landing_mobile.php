@@ -18,14 +18,14 @@
 	alert("whyyyyyyy");
 	/*var heightDevice=$(window).height()
 	$(".container").css("height", heightDevice);*/
-	alert("did I even do this?");
+	/*alert("did I even do this?");
 	$('#makeSelect').onchange({
 		alert("heyo");
 		if($('#makeSelect').val()!="Selecione uma Marca")
 			{	alert("homerfree");
 				$('#modelSelect').prop('disabled', false);
 			}
-		})
+		})*/
 	</script>
 
     <style type="text/css">
