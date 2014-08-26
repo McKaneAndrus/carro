@@ -98,14 +98,14 @@
  		margin-right: auto;
  		margin-bottom: 5px;
  		position: absolute;
- 		bottom: 50px;
+ 		bottom: 20px;
 	}
 	#footerNav {
 		width: 90%;
 	    text-align: justify;
 	    font-size: 9px;
 	    position: absolute;
- 		bottom: 40px;
+ 		bottom: -10px;
 	}
 	#footerNav:after {
 	    content: '';
