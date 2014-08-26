@@ -23,6 +23,11 @@
 
     <style type="text/css">
 
+    html, body {
+    	max-width: 100%;
+   		overflow-x: hidden;
+	}
+
     body {
     	background-color: #fff;
     	text-align: center;
