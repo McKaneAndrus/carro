@@ -43,7 +43,7 @@
     	background-color: #D7D7D7;
     	border-radius: 5px;
     	position: relative;
-    	top: 20px;
+    	top: -30px;
     	z-index: 5;
     	max-width: 100%;
   		margin: 0 auto;
