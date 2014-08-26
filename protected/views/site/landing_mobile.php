@@ -93,17 +93,19 @@
  		margin-right: auto;
  		margin-bottom: 5px;
 	}
-	/*#footerNav {
+	#footerNav {
 		width: 90%;
 	    text-align: justify;
 	    min-width: 200px;
+	    max-width: 100%
 	    font-size: 9px;
-	}*/
-	/*#footerNav:after {
+	}
+	#footerNav:after {
 	    content: '';
 	    display: inline-block;
 	    width: 90%%;
-	}*/
+	    max-width: 100%;
+	}
 	#footerNav li {
 	    display: inline-block;
 	}
@@ -201,7 +203,7 @@
 		</div>
 		<div class="row" style="position: absolute; bottom: 0px;">
 			<div class="col-xs-12">
-				<div id="footerLine1"></div>
+				<div id="footerLine"></div>
 				<ul class="img-responsive" id="footerNav">
 					<li><img src="/carro/images/achacarro_logo_xs.png"></li>
 				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
