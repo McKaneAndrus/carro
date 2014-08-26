@@ -23,7 +23,9 @@
 		alert("heyo");
 		if($('#makeSelect').val()!="Selecione uma Marca")
 			{	alert("homerfree");
-				$('#modelSelect').prop('disabled', false);}
+				$('#modelSelect').prop('disabled', false);
+			}
+		})
 	</script>
 
     <style type="text/css">
