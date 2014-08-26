@@ -96,13 +96,13 @@
 	#footerNav {
 		width: 90%;
 	    text-align: justify;
-	    min-width: 200px;
-	    font-size: 8px;
+	    /*min-width: 200px;*/
+	    font-size: 9px;
 	}
 	#footerNav:after {
 	    content: '';
 	    display: inline-block;
-	    width: 100%;
+	    width: 90%%;
 	}
 	#footerNav li {
 	    display: inline-block;
