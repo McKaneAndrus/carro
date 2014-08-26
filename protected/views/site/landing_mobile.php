@@ -27,11 +27,10 @@
     html, body {
     	max-width: 100%;
    		overflow-x: hidden !important;
+   		height: 100%;
 	}
 
-	body.ui-mobile-viewport, div.ui-mobile-viewport {
-    overflow-x: hidden;
-}
+
 
     body {
     	background-color: #fff;
@@ -136,47 +135,10 @@
 		.form-control {
 			font-size: 12px;
 		}
-	}
-
-/*    body {
-    	position: absolute;
-    	text-align: center;
-    	height: 100%;
-    	width: 100%;
-    	top: 0;
-    	bottom: 0;
-    }*/
-
-   /* .landing_mobile {
-    	background: url('/carro/images/red_shirt.jpg') no-repeat;
-    	background-size: 90%;
-    	width: 100%;
-    	height: 100% }*/
-
- /*   @media screen and (max-width: 361px) {
-    	.container {
-    		width: 100%; }
-
-    	.landing_mobile {
-    		background: url('/carro/images/red_shirt.jpg') no-repeat fixed;
-    		background-size: 60%;
-    		background-position: 50% 15%;
-    	}
-
-    	#logo {
-    		width: 100%;
-    	}
-	}*/
-
-
-
-    
-    
-    
+	} 
    </style>
-
-
 </head>
+
 <body>
 	<div class="landing_mobile">
 		<div class="container">
