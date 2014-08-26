@@ -158,7 +158,7 @@
 					      <option>5</option>
 					    </select>
 					    <input type="text" class="form-control" placeholder="Código Postal">
-					    <button class="custom-btn">Consiga</button>
+					    <button class="btn btn-custom">Consiga</button>
 					  </div>
 					</form>
 					</div>
