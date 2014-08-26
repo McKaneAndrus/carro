@@ -15,6 +15,7 @@
 
 
 	<script>
+	alert("whyyyyyyy");
 	/*var heightDevice=$(window).height()
 	$(".container").css("height", heightDevice);*/
 	</script>
@@ -112,6 +113,8 @@
     
     
    </style>
+
+
 </head>
 <body>
 	<div class="landing_mobile">
@@ -166,15 +169,16 @@
 			</div>
 		</div>
 	</div>
-</body>
+
 <script>
 alert("did I even do this?");
-jQuery('#makeSelect').onchange({
+$('#makeSelect').onchange({
 	alert("heyo");
-	if(jQuery('#makeSelect').val()!="Selecione uma Marca")
+	if($('#makeSelect').val()!="Selecione uma Marca")
 		{	alert("homerfree");
-			jQuery('#modelSelect').prop('disabled', false);}
+			$('#modelSelect').prop('disabled', false);}
 })
 
 </script>
+</body>
 </html>
