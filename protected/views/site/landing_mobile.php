@@ -109,8 +109,7 @@
 	    text-align: justify;
 	    font-size: 9px;
 	    min-width: 200px;
-	    margin-left: auto;
- 		margin-right: auto;
+	    margin: 0 auto;
 	}
 	#footerNav:after {
 	    content: '';
