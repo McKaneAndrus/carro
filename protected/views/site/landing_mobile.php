@@ -87,6 +87,7 @@
 
 	#footerLine {
 		width: 90%;
+		max-width: 100%;
 		background-color:#F61C2D;
 		height: 6px;
 		margin-left: auto;
@@ -108,6 +109,7 @@
 	}
 	#footerNav li {
 	    display: inline-block;
+	    max-width: 100%;
 	}
 
 /*    body {
