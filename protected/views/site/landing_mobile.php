@@ -176,7 +176,7 @@ function enable(){
 		{	alert("homerfree");
 			$("#modelSelect").prop("disabled", false);
 		}
-	})
+	}
 
 </script>
 </body>
