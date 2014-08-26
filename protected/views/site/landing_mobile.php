@@ -97,7 +97,7 @@
 		width: 90%;
 	    text-align: justify;
 	    min-width: 200px;
-	    max-width: 100%
+	    max-width: 100%;
 	    font-size: 9px;
 	}
 	#footerNav:after {
