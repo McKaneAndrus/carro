@@ -101,7 +101,7 @@
 	#footerNav:after {
 	    content: '';
 	    display: inline-block;
-	    width: 100%;
+	    width: 90%;
 	}
 	#footerNav li {
 	    display: inline-block;
