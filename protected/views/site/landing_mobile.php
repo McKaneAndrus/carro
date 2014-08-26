@@ -105,7 +105,7 @@
  		margin-bottom: 5px;
 	}
 	#footerNav {
-		width: 90%;
+		width: 95%;
 	    text-align: justify;
 	    font-size: 9px;
 	    min-width: 200px;
@@ -113,7 +113,7 @@
 	#footerNav:after {
 	    content: '';
 	    display: inline-block;
-	    width: 90%;
+	    width: 95%;
 	}
 	#footerNav li {
 	    display: inline-block;
