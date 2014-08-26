@@ -97,11 +97,15 @@
 		margin-left: auto;
  		margin-right: auto;
  		margin-bottom: 5px;
+ 		position: absolute;
+ 		bottom: 50px;
 	}
 	#footerNav {
 		width: 90%;
 	    text-align: justify;
 	    font-size: 9px;
+	    position: absolute;
+ 		bottom: 40px;
 	}
 	#footerNav:after {
 	    content: '';
@@ -213,7 +217,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" style="position: absolute; bottom: 0px;">
+		<div class="row">
 			<div class="col-xs-12">
 				<div id="footerLine" class="img-responsive center-block"></div>
 				<ul class="img-responsive" id="footerNav">
