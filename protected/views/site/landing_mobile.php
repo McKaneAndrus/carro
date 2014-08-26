@@ -34,7 +34,9 @@
     	font-family: 'Roboto';
     }
 
-
+    a {
+    	color: #F61C2D;
+    }
 
     .center-block {
   		display: block;
