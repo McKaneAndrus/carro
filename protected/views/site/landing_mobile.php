@@ -168,9 +168,11 @@
 	</div>
 
 <script>
-$(#makeSelect).onblur({
+$(#makeSelect).onchange({
+	alert("heyo");
 	if($(#makeSelect).val()!="Selecione uma Marca")
-		{$(#modelSelect).prop('disabled', false);}
+		{	alert(homerfree);
+			$(#modelSelect).prop('disabled', false);}
 })
 
 </script>
