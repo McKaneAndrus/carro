@@ -87,8 +87,9 @@
 		width: 90%;
 		background-color:#F61C2D;
 		height: 6px;
-		margin: 0 auto;
-
+		margin-left: auto;
+ 		margin-right: auto;
+ 		margin-bottom: 5px;
 	}
 	#footerNav {
 	    text-align: justify;
