@@ -218,7 +218,9 @@
 				<div id="footerLine" class="img-responsive"></div>
 				<ul class="img-responsive" id="footerNav">
 					<li><img src="/carro/images/achacarro_logo_xs.png"></li>
+					<li><a href="http://achacarro.com/carro">Home</a></li>
 				    <li><a href="http://achacarro.com/carro/about">Quem Somos</a></li>
+				    <br/>
 				    <li><a href="http://achacarro.com/carro/privacy">Politica de Privacidade</a></li>
 				    <li>Copyright © 2014 Revmaker</li>
 				</ul>
