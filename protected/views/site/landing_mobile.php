@@ -166,16 +166,15 @@
 			</div>
 		</div>
 	</div>
-
+</body>
 <script>
 alert("did I even do this?");
-$(#makeSelect).onchange({
+jQuery('#makeSelect').onchange({
 	alert("heyo");
-	if($(#makeSelect).val()!="Selecione uma Marca")
+	if(jQuery('#makeSelect').val()!="Selecione uma Marca")
 		{	alert("homerfree");
-			$(#modelSelect).prop('disabled', false);}
+			jQuery('#modelSelect').prop('disabled', false);}
 })
 
 </script>
-</body>
 </html>
