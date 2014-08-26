@@ -222,7 +222,7 @@
 		</div>
 		<div class="footer">
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-lg-12">
 					<div id="footerLine" class="img-responsive center-block"></div>
 					<ul class="img-responsive" id="footerNav">
 						<li><img src="/carro/images/achacarro_logo_xs.png"></li>
